@@ -22,7 +22,6 @@ import android.widget.Toast;
 public class SplashScreen extends AppCompatActivity {
 
 ConstraintLayout img;
-AnimationSet as;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,27 +30,11 @@ AnimationSet as;
         img = findViewById(R.id.zoomOutLayout);
 
 
-
-        as = new AnimationSet(true);
-        as.setFillEnabled(true);
-        as.setFillAfter(true);
-
-
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        TranslateAnimation ta = new TranslateAnimation(0, -1 * metrics.widthPixels + metrics.widthPixels/2, 0, -1 * metrics.heightPixels + metrics.heightPixels/2);
-        ta.setDuration(1500);
-        as.addAnimation(ta);
-
         ScaleAnimation sa = new ScaleAnimation(1.0f, 0.6f, 1.0f, 0.6f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        sa.setFillAfter(true);
         sa.setDuration(1500);
-        as.addAnimation(sa);
 
-
-
-
-         //Animation zoomMoveAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_out_move_up);
-
-        img.startAnimation(as);
+        img.startAnimation(sa);
         Toast.makeText(SplashScreen.this, getString(R.string.connection_str), Toast.LENGTH_SHORT).show();
 
         // we move to the next page after animation
