@@ -14,55 +14,53 @@
         android:layout_height="wrap_content">
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
+        <ImageView
+            android:id="@+id/main_background"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/mn_back"
+            tools:layout_editor_absoluteX="-16dp"
+            tools:layout_editor_absoluteY="0dp" />
 
-            <ImageView
-                android:id="@+id/logo_splash_img"
-                android:layout_width="162dp"
-                android:layout_height="107dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:contentDescription="Logo"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0"
-                app:srcCompat="@drawable/logo" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/logo_splash_img"
+            android:layout_width="162dp"
+            android:layout_height="107dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="56dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:contentDescription="Logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.499"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/main_background"
+            app:srcCompat="@drawable/logo" />
 
         <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="279dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="8dp"
+            android:id="@+id/idAndInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/background_light"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="@+id/main_background"
+            app:layout_constraintHorizontal_bias="0.519"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+            app:layout_constraintTop_toBottomOf="@+id/logo_splash_img">
 
             <TextView
                 android:id="@+id/id_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
                 android:text="ID: "
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
                 android:textSize="25sp" />
 
             <EditText
@@ -74,43 +72,62 @@
                 android:ems="10"
                 android:focusable="auto"
                 android:hint="@string/idhint_str"
-                android:inputType="number" />
+                android:inputType="number"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
 
         </LinearLayout>
 
-        <CheckBox
-            android:id="@+id/remember_chk"
-            android:layout_width="146dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/saveid_str"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-        <CheckBox
-            android:id="@+id/autologin_chk"
+        <LinearLayout
+            android:id="@+id/buttonAndChecks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            android:text="@string/autolog_str"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/main_background"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.524"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/remember_chk" />
+            app:layout_constraintTop_toBottomOf="@+id/idAndInput"
+            app:layout_constraintVertical_bias="0.025">
 
-        <Button
-            android:id="@+id/submit_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:layout_marginBottom="32dp"
-            android:text="@string/apprvbutton_str"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.499"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/autologin_chk"
-            app:layout_constraintVertical_bias="1.0" />
+            <Button
+                android:id="@+id/submit_id"
+                android:layout_width="130dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:background="@color/common_google_signin_btn_text_dark_default"
+                android:text="@string/apprvbutton_str" />
+
+            <LinearLayout
+                android:id="@+id/rememberAndAutolog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/remember_chk"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/common_google_signin_btn_text_dark_default"
+                    android:text="@string/saveid_str" />
+
+                <CheckBox
+                    android:id="@+id/autologin_chk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/common_google_signin_btn_text_dark_default"
+                    android:text="@string/autolog_str" />
+            </LinearLayout>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
