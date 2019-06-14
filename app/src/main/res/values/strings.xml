@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Süt Topla</string>
+    <string name="connection_str">Bağlantı Kuruluyor</string>
+    <string name="apprvbutton_str">Onayla</string>
+    <string name="saveid_str">Hatırla</string>
+    <string name="autolog_str">Otomatik giriş yap</string>
+    <string name="title_activity_missionselect">Görev Seçimi</string>
+    <string name="title_activity_login_screen">Giriş Ekranı</string>
+    <string name="choosemission_str">Görev Seç: </string>
+    <string name="configfilename_str">config.txt</string>
+    <string name="error_file_str">Dosya Bozuk</string>
+    <string name="connection_err_str">Erişim Sağlanamadı.Yenileyin."</string>
+    <string name="connected_str">Bağlandı</string>
+    <string name="id_match_error">Böyle bir id bulunamadı. Tekrar Deneyin.</string>
+    <string name="autolog_making_str">Otomatik giriş yapıldı. Veriler Çekiliyor.</string>
+    <string name="log_making_str">Giriş yapıldı. Veriler Çekiliyor.</string>
+    <string name="back_err_str">Buradan geri gidemezsiniz.</string>
+    <string name="refresh_button_descrip">Yenileme Butonu</string>
+    <string name="to_exit_str">Çıkmak için bir kez daha basın.</string>
+    <string name="idhint_str">0123456..</string>
+    <string name="splash_back_str">Arkaplan</string>
+    <string name="logo_zoomout_str">Küçülen logo</string>
+</resources>

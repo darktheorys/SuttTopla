@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "641279312605",
+    "firebase_url": "https://suttopla.firebaseio.com",
+    "project_id": "suttopla",
+    "storage_bucket": "suttopla.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641279312605:android:d3d044dab054972a",
+        "android_client_info": {
+          "package_name": "com.brkomrs.sttopla"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "641279312605-r918lvt6fq3m7cpaehelhsb0chetp2uq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.brkomrs.sttopla",
+            "certificate_hash": "0fc09db51fcaabdc667276f8970ec69f980421a3"
+          }
+        },
+        {
+          "client_id": "641279312605-ptt41k8g8jml6aa39t254d5jnq8nbifg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2geKjjIIDaQrEqCHSWMYhzKWQrC3QW4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "641279312605-ptt41k8g8jml6aa39t254d5jnq8nbifg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
