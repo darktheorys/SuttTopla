@@ -20,4 +20,5 @@
     <string name="idhint_str">0123456..</string>
     <string name="splash_back_str">Arkaplan</string>
     <string name="logo_zoomout_str">Küçülen logo</string>
+    <string name="not_submit_str">Göndermeden çıkmak için tekrar geri basın.</string>
 </resources>

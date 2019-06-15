@@ -36,9 +36,9 @@ public class MissionSelectScreen extends AppCompatActivity{
         configfile = new File(MissionSelectScreen.this.getFilesDir(),getString(R.string.configfilename_str));
 
         ArrayList<DutyInf> duties = new ArrayList<>();
-        duties.add(new DutyInf("A", 123, "11.11.11"));
-        duties.add(new DutyInf("B", 12333, "11.11.11"));
-        duties.add(new DutyInf("C", 1233, "11.11.11"));
+        duties.add(new DutyInf("A", 123, "dumb_date-1.2.1990"));
+        duties.add(new DutyInf("B", 12333, "dumb_date-12.1.1998"));
+        duties.add(new DutyInf("C", 1233, "dumb_date-15.6.2019"));
 
         //id change button send to login screen
         changeID.setOnClickListener(new View.OnClickListener() {
