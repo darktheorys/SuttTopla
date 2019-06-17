@@ -150,21 +150,20 @@
 
     <LinearLayout
         android:id="@+id/body_lay"
-        android:layout_width="666dp"
+        android:layout_width="match_parent"
         android:layout_height="157dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
         android:layout_marginBottom="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/truck_milk_lay"
-        app:layout_constraintVertical_bias="0.18">
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:id="@+id/tests_lay"
@@ -237,6 +236,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/more6_str" />
+
                 </RadioGroup>
 
                 <RadioGroup
@@ -259,6 +259,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/alcohol_e_str" />
+
                 </RadioGroup>
 
                 <RadioGroup
@@ -291,55 +292,85 @@
                     android:orientation="horizontal">
 
                     <RadioButton
-                        android:id="@+id/above95_radio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/above95_str" />
-
-                    <RadioButton
                         android:id="@+id/below95_radio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/below95_str" />
 
+                    <RadioButton
+                        android:id="@+id/above95_radio"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/above95_str" />
+
                 </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/temp_spin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="invisible" />
+
+                <Spinner
+                    android:id="@+id/alcohol_type_spin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="invisible" />
+
+                <Spinner
+                    android:id="@+id/spinner4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="invisible" />
+
+                <Spinner
+                    android:id="@+id/refrac_temp_spin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="invisible" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <TextView
+        <EditText
             android:id="@+id/comment_tv"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
             android:hint="@string/comment_str"
-            android:minWidth="200dp"
-            android:minHeight="50dp" />
+            android:inputType="textMultiLine"
+            android:maxLength="500" />
+
     </LinearLayout>
 
     <Button
         android:id="@+id/submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginBottom="16dp"
         android:background="@color/common_google_signin_btn_text_dark_default"
         android:text="@string/apprvbutton_str"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/body_lay"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <RadioGroup
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -347,33 +378,77 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         app:layout_constraintEnd_toStartOf="@+id/submit_button"
-        app:layout_constraintHorizontal_bias="0.186"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/body_lay">
 
-        <RadioButton
-            android:id="@+id/leave_milk_radio"
+        <RadioGroup
+            android:id="@+id/taken_amount_lay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/leave_milk_str" />
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+            android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/all_milk_radio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/all_milk_str" />
+            <RadioButton
+                android:id="@+id/leave_milk_radio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_weight="1"
+                android:text="@string/leave_milk_str" />
 
-        <RadioButton
-            android:id="@+id/some_milk_radio"
+            <RadioButton
+                android:id="@+id/all_milk_radio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_weight="1"
+                android:text="@string/all_milk_str" />
+
+            <RadioButton
+                android:id="@+id/some_milk_radio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/some_milk_str" />
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/amount_detail_lay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/some_milk_str" />
-    </RadioGroup>
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+            android:orientation="horizontal"
+            android:visibility="invisible">
+
+            <RadioButton
+                android:id="@+id/other_radio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_weight="1"
+                android:text="@string/other_reason_str" />
+
+            <RadioButton
+                android:id="@+id/bad_milk_radio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/bad_milk_str" />
+        </RadioGroup>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
