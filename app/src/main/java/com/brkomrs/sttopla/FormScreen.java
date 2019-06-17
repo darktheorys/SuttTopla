@@ -21,9 +21,9 @@ public class FormScreen extends AppCompatActivity {
         Intent i = getIntent();
         duty = (DutyInf) i.getSerializableExtra("duty");
 
-        TextView tw = findViewById(R.id.duty_name);
+        //TextView tw = findViewById(R.id.duty_name);
 
-        tw.setText(duty.getDate());
+        //tw.setText(duty.getDate());
 
 
     }
