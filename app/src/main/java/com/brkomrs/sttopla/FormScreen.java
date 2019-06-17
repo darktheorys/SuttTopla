@@ -1,6 +1,9 @@
 package com.brkomrs.sttopla;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +12,7 @@ import android.view.View;
 
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
@@ -27,7 +31,8 @@ public class FormScreen extends AppCompatActivity {
     private Spinner milktype;
     private Spinner milktemp,refracTemp;
     private DutyInf duty;
-
+    private RadioButton antibiotic,leaveMilk;
+    private LinearLayout testLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +44,11 @@ public class FormScreen extends AppCompatActivity {
         //TextView tw = findViewById(R.id.duty_name);
         //tw.setText(duty.getDate());
 
+
+        testLayout = findViewById(R.id.tests_lay);
+
+        antibiotic = findViewById(R.id.antibiotic_e_radio);
+        leaveMilk = findViewById(R.id.leave_milk_radio);
 
         //temp spinner, if user chooses more than 6 degree this will show up
         final ArrayList<String> milktemps = new ArrayList<>();
@@ -120,13 +130,11 @@ public class FormScreen extends AppCompatActivity {
         milktype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                LinearLayout lay = findViewById(R.id.tests_lay);
-                if(i == 0 || i == 1 || i == 2){
-
-                    lay.setVisibility(View.VISIBLE);
+                if((i == 0 || i == 1 || i == 2 ) && !leaveMilk.isChecked()) {
+                    testLayout.setVisibility(View.VISIBLE);
                 }
                 else{
-                    lay.setVisibility(View.INVISIBLE);
+                    testLayout.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -174,10 +182,14 @@ public class FormScreen extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 RadioButton checked = findViewById(i);
+
                 if(checked.getText().toString().equalsIgnoreCase(getString(R.string.leave_milk_str))){
+
+                    testLayout.setVisibility(View.INVISIBLE);
                     detail.setVisibility(View.VISIBLE);
                 }else{
                     detail.setVisibility(View.INVISIBLE);
+                    testLayout.setVisibility(View.VISIBLE);
                 }
 
 
@@ -185,6 +197,26 @@ public class FormScreen extends AppCompatActivity {
         });
 
 
+        Button submit = findViewById(R.id.submit_button);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog();
+            }
+        });
+
+
+    }
+
+    private void openDialog() {
+        if(antibiotic.isChecked() && !leaveMilk.isChecked() ){
+            Toast.makeText(FormScreen.this, "Antibiyotikli bir ürünü alamazsınız.", Toast.LENGTH_LONG).show();
+        }else{
+            Dialog beforesub = new Dialog(FormScreen.this);
+            beforesub.setContentView(R.layout.before_submission);
+            beforesub.setTitle("Göndermeden önce..");
+            beforesub.show();
+        }
     }
 
 

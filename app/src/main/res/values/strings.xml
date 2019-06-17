@@ -48,4 +48,9 @@
     <string name="some_milk_str">Sütün bir kısmını aldım.</string>
     <string name="other_reason_str" >Diğer Sebepler(Not Yazdım)</string>
     <string name="bad_milk_str">Bozuk Ürün</string>
+    <string name="yes_str">Evet, Onaylıyorum.</string>
+    <string name="isClear1_str">Soğutma tankı temiz mi?</string>
+    <string name="isClear2_str">Pompa ve hortum temiz mi?</string>
+    <string name="isClear3_str">Baskül temiz mi?</string>
+    <string name="isClear4_str">Merkez temiz mi?</string>
 </resources>
