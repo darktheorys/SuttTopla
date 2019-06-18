@@ -60,7 +60,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="ID: "
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textColor="@android:color/background_dark"
                 android:textSize="25sp" />
 
             <EditText
@@ -73,7 +73,7 @@
                 android:focusable="auto"
                 android:hint="@string/idhint_str"
                 android:inputType="number"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+                android:textColor="@android:color/background_dark" />
 
         </LinearLayout>
 
@@ -100,7 +100,8 @@
                 android:layout_width="130dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
-                android:background="@color/common_google_signin_btn_text_dark_default"
+                android:layout_marginLeft="8dp"
+                android:background="@android:color/background_light"
                 android:text="@string/apprvbutton_str" />
 
             <LinearLayout
@@ -116,7 +117,7 @@
                     android:id="@+id/remember_chk"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/common_google_signin_btn_text_dark_default"
+                    android:background="@android:color/background_light"
                     android:text="@string/saveid_str" />
 
                 <CheckBox
@@ -124,7 +125,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:background="@color/common_google_signin_btn_text_dark_default"
+                    android:background="@android:color/background_light"
                     android:text="@string/autolog_str" />
             </LinearLayout>
         </LinearLayout>

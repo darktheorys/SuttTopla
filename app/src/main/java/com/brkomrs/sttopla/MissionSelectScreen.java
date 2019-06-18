@@ -6,39 +6,50 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
-
 import android.widget.ArrayAdapter;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import com.brkomrs.sttopla.data.DutyInf;
-import com.brkomrs.sttopla.data.FarmInf;
-
+import com.brkomrs.sttopla.database.DutyInf;
+import com.brkomrs.sttopla.database.DutyInfDao;
+import org.greenrobot.greendao.query.QueryBuilder;
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MissionSelectScreen extends AppCompatActivity{
     private File configfile = null;
+    List<DutyInf>  duties;
     private Spinner spin;
-    ArrayAdapter<DutyInf> dataAdapterMissions;
+    private long id;
+    private Button goSelected;
+    private SwipeRefreshLayout swipes;
+    private ArrayAdapter<DutyInf> dataAdapterMissions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_missionselect);
 
-        Button goSelected = findViewById(R.id.go_duty_btn);
+        swipes = findViewById(R.id.swipe);
+
+        //getting user id from previous activity to get true duties from database
+        String user = getIntent().getStringExtra("user_id");
+        if (user != null  && !user.equals("")) {
+            id = Long.parseLong(user);
+        }else{
+            Log.e("aslfkşsakf","@@@@@@@@@@@@@@@@qq");
+        }
+
+
+        goSelected = findViewById(R.id.go_duty_btn);
         spin = findViewById(R.id.mission_spin);
         Button changeID = findViewById(R.id.changeid_btn);
         configfile = new File(MissionSelectScreen.this.getFilesDir(),getString(R.string.configfilename_str));
 
-        ArrayList<DutyInf> duties = new ArrayList<>();
-        duties.add(new DutyInf("A", 123, "dumb_date-1.2.1990"));
-        duties.add(new DutyInf("B", 12333, "dumb_date-12.1.1998"));
-        duties.add(new DutyInf("C", 1233, "dumb_date-15.6.2019"));
+        //getting duties for entrance
+        getDuties();
 
         //id change button send to login screen
         changeID.setOnClickListener(new View.OnClickListener() {
@@ -49,21 +60,55 @@ public class MissionSelectScreen extends AppCompatActivity{
         });
 
 
-        dataAdapterMissions = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, duties);
-        dataAdapterMissions.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spin.setAdapter(dataAdapterMissions);
 
+        //going next activity with selected duty
         goSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MissionSelectScreen.this, FormScreen.class);
-                Bundle b = new Bundle();
-                b.putSerializable("duty", (Serializable) spin.getSelectedItem());
-                i.putExtras(b);
+                i.putExtra("duty_id", duties.get(spin.getSelectedItemPosition()).getDutyId().toString());
                 startActivity(i);
             }
         });
 
+
+        //swipe arrangement
+        swipes.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getDuties();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipes.setRefreshing(false);
+                    }
+                }, 4000);
+            }
+        });
+
+
+
+    }
+
+    //duty getter fuction
+    private void getDuties() {
+        duties = new ArrayList<>();
+        if(LoginScreen.haveConnection(MissionSelectScreen.this)){
+            QueryBuilder<DutyInf> qb = ((dbHelper)getApplication()).getDaoSession().getDutyInfDao().queryBuilder();
+            List<DutyInf> temp = qb.where(DutyInfDao.Properties.User.eq(id)).list();
+            for (DutyInf each : temp){
+                if (!each.getDone()) duties.add(each);
+            }
+            dataAdapterMissions = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, duties);
+            dataAdapterMissions.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spin.setAdapter(dataAdapterMissions);
+        }else{
+            Toast.makeText(MissionSelectScreen.this, getString(R.string.connection_err_str), Toast.LENGTH_SHORT).show();
+        }
+
+        if(duties.size() == 0){
+            goSelected.setEnabled(false);
+        }
 
     }
 
@@ -99,6 +144,7 @@ public class MissionSelectScreen extends AppCompatActivity{
         }, 4000);
 
     }
+
 
 
 

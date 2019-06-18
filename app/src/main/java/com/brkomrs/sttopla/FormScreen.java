@@ -2,51 +2,109 @@ package com.brkomrs.sttopla;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Layout;
+import android.util.Log;
 import android.view.View;
 
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.brkomrs.sttopla.data.DutyInf;
+import com.brkomrs.sttopla.database.DaoSession;
+import com.brkomrs.sttopla.database.DutyInf;
+import com.brkomrs.sttopla.database.DutyInfDao;
+import com.brkomrs.sttopla.database.FarmInf;
+import com.brkomrs.sttopla.database.FarmInfDao;
+import com.brkomrs.sttopla.database.MilkInf;
+import com.brkomrs.sttopla.database.TankInf;
+import com.brkomrs.sttopla.database.TankInfDao;
+import com.brkomrs.sttopla.database.TruckInf;
+import com.brkomrs.sttopla.database.TruckInfDao;
 
+import org.greenrobot.greendao.query.QueryBuilder;
+
+import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.List;
+
 public class FormScreen extends AppCompatActivity {
     private Spinner alcohol_type;
     private Spinner milktype;
-    private Spinner milktemp,refracTemp;
-    private DutyInf duty;
+    private CheckBox c1,c2,c3,c4,c5;
+    private Spinner milktemp_spin,refracTemp_spin;
+    private String duty_id_str = "";
+    private long duty_id;
     private RadioButton antibiotic,leaveMilk;
+    private RadioGroup detail,taken_amount,alcohol_radio;
     private LinearLayout testLayout;
-
+    private List<CheckBox> check_boxes_truck;
+    private DaoSession ses;
+    private long farmid,userid,truck_id;
+    private int tank_n;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_screen);
-        Intent i = getIntent();
-        duty = (DutyInf) i.getSerializableExtra("duty");
+        //getting duty id from previous page
+        duty_id_str = getIntent().getStringExtra("duty_id");
+        if(duty_id_str != null && !duty_id_str.equals("")){
+            duty_id = Long.parseLong(duty_id_str);
+        }
 
-        //TextView tw = findViewById(R.id.duty_name);
-        //tw.setText(duty.getDate());
+        ses = ((dbHelper) getApplication()).getDaoSession();
+
+        QueryBuilder<DutyInf> dt = ses.getDutyInfDao().queryBuilder();
+        List<DutyInf> ls = dt.where(DutyInfDao.Properties.DutyId.eq(duty_id)).list();
+        if(ls.size() > 0){
+            userid = ls.get(0).getUser();
+            farmid = ls.get(0).getFarm_id();
+        }
+
+        QueryBuilder<TruckInf> other = ses.getTruckInfDao().queryBuilder();
+        List<TruckInf> truck = other.where(TruckInfDao.Properties.User.eq(userid)).list();
+        if(truck.size() > 0){
+            tank_n = truck.get(0).getN_tank();
+            truck_id = truck.get(0).getTruckId();
+        }
+
+        if(tank_n == 4);
+        List<CheckBox> check_boxes_truck = new ArrayList<>();
+        c1 = findViewById(R.id.tank1_chk);
+        c2 = findViewById(R.id.tank2_chk);
+        c3 = findViewById(R.id.tank3_chk);
+        c4 = findViewById(R.id.tank4_chk);
+        c5 = findViewById(R.id.tank5_chk);
+        check_boxes_truck.add(c1);
+        check_boxes_truck.add(c2);
+        check_boxes_truck.add(c3);
+        check_boxes_truck.add(c4);
+        check_boxes_truck.add(c5);
+
+        for(int i = 0; i < tank_n ; i++){
+            check_boxes_truck.get(i).setVisibility(View.VISIBLE);
+        }
+
+
+
+
+        TextView tw = findViewById(R.id.duty_id_tv);
+        String text = "Görev id: "+ duty_id_str;
+        tw.setText(text);
 
 
         testLayout = findViewById(R.id.tests_lay);
-
         antibiotic = findViewById(R.id.antibiotic_e_radio);
         leaveMilk = findViewById(R.id.leave_milk_radio);
 
@@ -60,10 +118,10 @@ public class FormScreen extends AppCompatActivity {
         milktemps.add("9");
         milktemps.add("9.5");
         milktemps.add("10");
-        milktemp = findViewById(R.id.temp_spin);
+        milktemp_spin = findViewById(R.id.temp_spin);
         ArrayAdapter<String> dataAdapterMilkTemps = new ArrayAdapter<>(FormScreen.this, android.R.layout.simple_spinner_item, milktemps);
         dataAdapterMilkTemps.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        milktemp.setAdapter(dataAdapterMilkTemps);
+        milktemp_spin.setAdapter(dataAdapterMilkTemps);
 
         //temp spinner, if user chooses more than 6 degree this will show up
         final ArrayList<String> refracTemps = new ArrayList<>();
@@ -78,10 +136,10 @@ public class FormScreen extends AppCompatActivity {
         refracTemps.add("6");
 
 
-        refracTemp = findViewById(R.id.refrac_temp_spin);
+        refracTemp_spin = findViewById(R.id.refrac_temp_spin);
         ArrayAdapter<String> dataAdapterRefracTemps = new ArrayAdapter<>(FormScreen.this, android.R.layout.simple_spinner_item, refracTemps);
         dataAdapterRefracTemps.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        refracTemp.setAdapter(dataAdapterRefracTemps);
+        refracTemp_spin.setAdapter(dataAdapterRefracTemps);
 
 
         final RadioGroup temp_radio = findViewById(R.id.radiotemp_lay);
@@ -90,9 +148,9 @@ public class FormScreen extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 RadioButton checked = findViewById(i);
                 if(checked.getText().toString().equalsIgnoreCase(getString(R.string.more6_str))){
-                    milktemp.setVisibility(View.VISIBLE);
+                    milktemp_spin.setVisibility(View.VISIBLE);
                 }else{
-                    milktemp.setVisibility(View.INVISIBLE);
+                    milktemp_spin.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -103,9 +161,9 @@ public class FormScreen extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 RadioButton checked = findViewById(i);
                 if(checked.getText().toString().equalsIgnoreCase(getString(R.string.below95_str))){
-                    refracTemp.setVisibility(View.VISIBLE);
+                    refracTemp_spin.setVisibility(View.VISIBLE);
                 }else{
-                    refracTemp.setVisibility(View.INVISIBLE);
+                    refracTemp_spin.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -159,7 +217,7 @@ public class FormScreen extends AppCompatActivity {
         dataAdapterAlcoholTypes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         alcohol_type.setAdapter(dataAdapterAlcoholTypes);
 
-        final RadioGroup alcohol_radio = findViewById(R.id.radioalcohol_lay);
+        alcohol_radio = findViewById(R.id.radioalcohol_lay);
         alcohol_radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -176,20 +234,21 @@ public class FormScreen extends AppCompatActivity {
 
 
         //the taken amount of milk radio buttons
-        final RadioGroup detail = findViewById(R.id.amount_detail_lay);
-        final RadioGroup taken_amount = findViewById(R.id.taken_amount_lay);
+        detail = findViewById(R.id.amount_detail_lay);
+        taken_amount = findViewById(R.id.taken_amount_lay);
         taken_amount.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 RadioButton checked = findViewById(i);
-
                 if(checked.getText().toString().equalsIgnoreCase(getString(R.string.leave_milk_str))){
-
                     testLayout.setVisibility(View.INVISIBLE);
                     detail.setVisibility(View.VISIBLE);
                 }else{
                     detail.setVisibility(View.INVISIBLE);
-                    testLayout.setVisibility(View.VISIBLE);
+                    int pos = milktype.getSelectedItemPosition();
+                    if(pos == 1 || pos == 0 || pos == 2){
+                        testLayout.setVisibility(View.VISIBLE);
+                    }
                 }
 
 
@@ -208,14 +267,114 @@ public class FormScreen extends AppCompatActivity {
 
     }
 
+    private void makeSubmission() {
+
+
+        MilkInf milk = new MilkInf();
+        RadioButton alc = findViewById(R.id.alcohol_e_radio);
+        if(alc.isChecked()){
+            milk.setAlcohol(true);
+            milk.setAlcoholtype(alcohol_type.getSelectedItem().toString());
+        }
+        TextView tv = findViewById(R.id.comment_tv);
+        TextView tvL = findViewById(R.id.liter_input);
+        milk.setComment(tv.getText().toString());
+        milk.setAntibiotic_inf(antibiotic.isChecked());
+        milk.setDuty(duty_id);
+        milk.setFarm(farmid);
+
+        if(!tvL.getText().toString().equals("")){
+            milk.setLiter(Integer.parseInt(tvL.getText().toString()));
+        }
+
+        milk.setMilkId(null);
+        milk.setMilktype(milktype.getSelectedItem().toString());
+        RadioButton milktemp = findViewById(R.id.deg46_radio);
+        if(milktemp.isChecked()){
+            milk.setTemp("4-6 Derece");
+        }else{
+            milk.setTemp(milktemp_spin.getSelectedItem().toString());
+        }
+        RadioButton refractemp = findViewById(R.id.below95_radio);
+        if(refractemp.isChecked()){
+            milk.setR_temp(refracTemp_spin.getSelectedItem().toString());
+        }else{
+            milk.setR_temp("9.5'dan fazla");
+        }
+
+
+
+
+
+        QueryBuilder<TankInf> fortanks = ses.getTankInfDao().queryBuilder();
+        List<TankInf> tanks = fortanks.where(TankInfDao.Properties.Truck.eq(truck_id)).list();
+        for (TankInf tank : tanks){
+            if (tank.getTankN() == 1){
+                if(c1.isChecked()){
+                    milk.setTank1(tank.getTankId());
+                }
+            }else if(tank.getTankN() == 2){
+                if(c2.isChecked()){
+                    milk.setTank2(tank.getTankId());
+                }
+            }else if(tank.getTankN() == 3){
+                if(c3.isChecked()){
+                    milk.setTank3(tank.getTankId());
+                }
+            }else if(tank.getTankN() == 4){
+                if(c4.isChecked()){
+                    milk.setTank4(tank.getTankId());
+                }
+            }else if(tank.getTankN() == 5){
+                if(c5.isChecked()){
+                    milk.setTank5(tank.getTankId());
+                }
+            }
+        }
+
+
+
+    }
+
     private void openDialog() {
         if(antibiotic.isChecked() && !leaveMilk.isChecked() ){
             Toast.makeText(FormScreen.this, "Antibiyotikli bir ürünü alamazsınız.", Toast.LENGTH_LONG).show();
         }else{
-            Dialog beforesub = new Dialog(FormScreen.this);
+            final Dialog beforesub = new Dialog(FormScreen.this);
             beforesub.setContentView(R.layout.before_submission);
             beforesub.setTitle("Göndermeden önce..");
             beforesub.show();
+            QueryBuilder<FarmInf> farm_q = ses.getFarmInfDao().queryBuilder();
+            final List<FarmInf> taken_farm = farm_q.where(FarmInfDao.Properties.FarmID.eq(farmid)).list();
+            final CheckBox isClean1 = beforesub.findViewById(R.id.isClean1_chk);
+            final CheckBox isClean2 = beforesub.findViewById(R.id.isClean2_chk);
+            final CheckBox isClean3 = beforesub.findViewById(R.id.isClean3_chk);
+            final CheckBox isClean4 = beforesub.findViewById(R.id.isClean4_chk);
+            Button last_sub = beforesub.findViewById(R.id.last_submission_button);
+            last_sub.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    makeSubmission();
+
+                    if(taken_farm.size() > 0){
+                        taken_farm.get(0).setIsEnvClean(isClean4.isChecked());
+                        taken_farm.get(0).setIsPumpClean(isClean2.isChecked());
+                        taken_farm.get(0).setIsWeighterClean(isClean3.isChecked());
+                        taken_farm.get(0).setIsTankClean(isClean1.isChecked());
+                    }
+                    beforesub.hide();
+
+                    QueryBuilder<DutyInf> dt = ses.getDutyInfDao().queryBuilder();
+                    List<DutyInf> dutlist = dt.where(DutyInfDao.Properties.DutyId.eq(duty_id)).list();
+                    if(dutlist.size() > 0){
+                        dutlist.get(0).setDone(true);
+                    }
+                    Intent i = new Intent(FormScreen.this, MissionSelectScreen.class);
+                    startActivity(i);
+                    finish();
+                }
+            });
+
         }
     }
 

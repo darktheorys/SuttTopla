@@ -57,6 +57,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="28dp"
                 android:background="@android:drawable/checkbox_off_background"
+                android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@+id/tank2_chk"
                 app:layout_constraintTop_toTopOf="@+id/truck_img" />
 
@@ -68,6 +69,7 @@
                 android:layout_marginLeft="24dp"
                 android:layout_marginTop="28dp"
                 android:background="@android:drawable/checkbox_off_background"
+                android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@+id/tank3_chk"
                 app:layout_constraintTop_toTopOf="@+id/truck_img" />
 
@@ -79,6 +81,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="28dp"
                 android:background="@android:drawable/checkbox_off_background"
+                android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@+id/tank4_chk"
                 app:layout_constraintTop_toTopOf="@+id/truck_img" />
 
@@ -90,6 +93,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="28dp"
                 android:background="@android:drawable/checkbox_off_background"
+                android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@+id/tank5_chk"
                 app:layout_constraintTop_toTopOf="@+id/truck_img" />
 
@@ -101,274 +105,74 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="28dp"
                 android:background="@android:drawable/checkbox_off_background"
+                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/truck_img" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
-            android:id="@+id/milktype_liter_lay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/milk_type_tw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/milk_type_sty"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
-
-            <Spinner
-                android:id="@+id/milk_type_spin"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/liter_tw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/amount_str"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
-
-            <EditText
-                android:id="@+id/liter_input"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="5"
-                android:hint="@string/number_str"
-                android:inputType="number" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/body_lay"
-        android:layout_width="match_parent"
-        android:layout_height="157dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/truck_milk_lay"
-        app:layout_constraintVertical_bias="0.0">
-
-        <LinearLayout
-            android:id="@+id/tests_lay"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/temp_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/temp_str"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused" />
-
-                <TextView
-                    android:id="@+id/alcohol_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/alcohol_str"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused" />
-
-                <TextView
-                    android:id="@+id/antibiotic_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/antibiotic_str"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused" />
-
-                <TextView
-                    android:id="@+id/refrac_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/refrac_str"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <RadioGroup
-                    android:id="@+id/radiotemp_lay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/deg46_radio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/deg46_str" />
-
-                    <RadioButton
-                        android:id="@+id/more6_radio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/more6_str" />
-
-                </RadioGroup>
-
-                <RadioGroup
-                    android:id="@+id/radioalcohol_lay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/alcohol_ne_radio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/alcohol_ne_str" />
-
-                    <RadioButton
-                        android:id="@+id/alcohol_e_radio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/alcohol_e_str" />
-
-                </RadioGroup>
-
-                <RadioGroup
-                    android:id="@+id/antibiotic_radio_lay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/antibiotic_ne_radio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/antibiotic_n_str" />
-
-                    <RadioButton
-                        android:id="@+id/antibiotic_e_radio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/antibiotic_e_str" />
-                </RadioGroup>
-
-                <RadioGroup
-                    android:id="@+id/refrac_radio_lay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/below95_radio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/below95_str" />
-
-                    <RadioButton
-                        android:id="@+id/above95_radio"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="@string/above95_str" />
-
-                </RadioGroup>
-
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/duty_id_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="30dp"
+                android:layout_weight="1"
+                android:background="@android:color/background_light"
+                android:text="@string/title_activity_missionselect"
+                android:textSize="24sp" />
 
-                <Spinner
-                    android:id="@+id/temp_spin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:visibility="invisible" />
+            <LinearLayout
+                android:id="@+id/milktype_liter_lay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:background="@android:color/background_light"
+                android:orientation="horizontal">
 
-                <Spinner
-                    android:id="@+id/alcohol_type_spin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:visibility="invisible" />
-
-                <Spinner
-                    android:id="@+id/spinner4"
+                <TextView
+                    android:id="@+id/milk_type_tw"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:visibility="invisible" />
+                    android:background="@android:color/background_light"
+                    android:text="@string/milk_type_sty" />
 
                 <Spinner
-                    android:id="@+id/refrac_temp_spin"
-                    android:layout_width="match_parent"
+                    android:id="@+id/milk_type_spin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/liter_tw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="1"
+                    android:text="@string/amount_str"
+                    android:textColor="@android:color/background_dark" />
+
+                <EditText
+                    android:id="@+id/liter_input"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:visibility="invisible" />
-
+                    android:ems="5"
+                    android:hint="@string/number_str"
+                    android:inputType="number"
+                    android:maxLength="6" />
             </LinearLayout>
-
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/comment_tv"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-            android:hint="@string/comment_str"
-            android:inputType="textMultiLine"
-            android:maxLength="500" />
-
     </LinearLayout>
-
-    <Button
-        android:id="@+id/submit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/common_google_signin_btn_text_dark_default"
-        android:text="@string/apprvbutton_str"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -378,10 +182,219 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@+id/submit_button"
+        app:layout_constraintBottom_toBottomOf="@+id/main_background"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/body_lay">
+        app:layout_constraintTop_toBottomOf="@+id/truck_milk_lay">
+
+        <LinearLayout
+            android:id="@+id/body_lay"
+            android:layout_width="666dp"
+            android:layout_height="180dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/tests_lay"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/background_light"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/background_light"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/temp_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/temp_str"
+                        android:textColor="@android:color/background_dark" />
+
+                    <TextView
+                        android:id="@+id/alcohol_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/alcohol_str"
+                        android:textColor="@android:color/background_dark" />
+
+                    <TextView
+                        android:id="@+id/antibiotic_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/antibiotic_str"
+                        android:textColor="@android:color/background_dark" />
+
+                    <TextView
+                        android:id="@+id/refrac_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/refrac_str"
+                        android:textColor="@android:color/background_dark" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <RadioGroup
+                        android:id="@+id/radiotemp_lay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/deg46_radio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@android:color/background_light"
+                            android:text="@string/deg46_str" />
+
+                        <RadioButton
+                            android:id="@+id/more6_radio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/more6_str" />
+
+                    </RadioGroup>
+
+                    <RadioGroup
+                        android:id="@+id/radioalcohol_lay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/alcohol_ne_radio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/alcohol_ne_str" />
+
+                        <RadioButton
+                            android:id="@+id/alcohol_e_radio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/alcohol_e_str" />
+
+                    </RadioGroup>
+
+                    <RadioGroup
+                        android:id="@+id/antibiotic_radio_lay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/antibiotic_ne_radio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/antibiotic_n_str" />
+
+                        <RadioButton
+                            android:id="@+id/antibiotic_e_radio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/antibiotic_e_str" />
+                    </RadioGroup>
+
+                    <RadioGroup
+                        android:id="@+id/refrac_radio_lay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/below95_radio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/below95_str" />
+
+                        <RadioButton
+                            android:id="@+id/above95_radio"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="@string/above95_str" />
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <Spinner
+                        android:id="@+id/temp_spin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="invisible" />
+
+                    <Spinner
+                        android:id="@+id/alcohol_type_spin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="invisible" />
+
+                    <Spinner
+                        android:id="@+id/spinner4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="invisible" />
+
+                    <Spinner
+                        android:id="@+id/refrac_temp_spin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="invisible" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/comment_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:background="@android:color/darker_gray"
+                android:hint="@string/comment_str"
+                android:inputType="textMultiLine"
+                android:maxWidth="200dp"
+                android:maxLength="500" />
+
+        </LinearLayout>
 
         <RadioGroup
             android:id="@+id/taken_amount_lay"
@@ -392,13 +405,14 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+            android:background="@android:color/background_light"
             android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/leave_milk_radio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_weight="1"
                 android:text="@string/leave_milk_str" />
@@ -407,6 +421,7 @@
                 android:id="@+id/all_milk_radio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_weight="1"
                 android:text="@string/all_milk_str" />
@@ -429,7 +444,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+            android:background="@android:color/background_light"
             android:orientation="horizontal"
             android:visibility="invisible">
 
@@ -437,6 +452,7 @@
                 android:id="@+id/other_radio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_weight="1"
                 android:text="@string/other_reason_str" />
@@ -445,10 +461,23 @@
                 android:id="@+id/bad_milk_radio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
                 android:layout_weight="1"
                 android:text="@string/bad_milk_str" />
         </RadioGroup>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/design_default_color_primary_dark"
+        android:text="@string/apprvbutton_str"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
