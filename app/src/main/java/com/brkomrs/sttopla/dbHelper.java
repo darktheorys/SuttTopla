@@ -13,6 +13,7 @@ public class dbHelper extends Application {
     public void onCreate() {
         super.onCreate();
         daoSession = new DaoMaster(new DbOpenHelper(this, "sut_toplama.db").getWritableDb()).newSession();
+
     }
 
 

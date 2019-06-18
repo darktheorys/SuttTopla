@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import com.brkomrs.sttopla.database.DutyInf;
 import com.brkomrs.sttopla.database.DutyInfDao;
+
 import org.greenrobot.greendao.query.QueryBuilder;
 import java.io.File;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class MissionSelectScreen extends AppCompatActivity{
     private File configfile = null;
     List<DutyInf>  duties;
     private Spinner spin;
-    private long id;
+    private long user_id;
     private Button goSelected;
     private SwipeRefreshLayout swipes;
     private ArrayAdapter<DutyInf> dataAdapterMissions;
@@ -37,7 +38,7 @@ public class MissionSelectScreen extends AppCompatActivity{
         //getting user id from previous activity to get true duties from database
         String user = getIntent().getStringExtra("user_id");
         if (user != null  && !user.equals("")) {
-            id = Long.parseLong(user);
+            user_id = Long.parseLong(user);
         }else{
             Log.e("aslfkşsakf","@@@@@@@@@@@@@@@@qq");
         }
@@ -92,10 +93,11 @@ public class MissionSelectScreen extends AppCompatActivity{
 
     //duty getter fuction
     private void getDuties() {
+
         duties = new ArrayList<>();
         if(LoginScreen.haveConnection(MissionSelectScreen.this)){
             QueryBuilder<DutyInf> qb = ((dbHelper)getApplication()).getDaoSession().getDutyInfDao().queryBuilder();
-            List<DutyInf> temp = qb.where(DutyInfDao.Properties.User.eq(id)).list();
+            List<DutyInf> temp = qb.where(DutyInfDao.Properties.User.eq(user_id)).list();
             for (DutyInf each : temp){
                 if (!each.getDone()) duties.add(each);
             }

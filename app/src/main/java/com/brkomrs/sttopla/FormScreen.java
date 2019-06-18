@@ -3,10 +3,8 @@ package com.brkomrs.sttopla;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 
 import android.widget.AdapterView;
@@ -35,7 +33,6 @@ import com.brkomrs.sttopla.database.TruckInfDao;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,11 +60,17 @@ public class FormScreen extends AppCompatActivity {
             duty_id = Long.parseLong(duty_id_str);
         }
 
+        //session getter
         ses = ((dbHelper) getApplication()).getDaoSession();
+
 
         QueryBuilder<DutyInf> dt = ses.getDutyInfDao().queryBuilder();
         List<DutyInf> ls = dt.where(DutyInfDao.Properties.DutyId.eq(duty_id)).list();
         if(ls.size() > 0){
+            if(ls.get(0).getDone()){
+                Toast.makeText(FormScreen.this, "Zaten Yapılmış Görev Seçtiniz.", Toast.LENGTH_SHORT).show();
+                finish();
+            }
             userid = ls.get(0).getUser();
             farmid = ls.get(0).getFarm_id();
         }
@@ -268,9 +271,8 @@ public class FormScreen extends AppCompatActivity {
     }
 
     private void makeSubmission() {
-
-
         MilkInf milk = new MilkInf();
+
         RadioButton alc = findViewById(R.id.alcohol_e_radio);
         if(alc.isChecked()){
             milk.setAlcohol(true);
@@ -302,10 +304,6 @@ public class FormScreen extends AppCompatActivity {
             milk.setR_temp("9.5'dan fazla");
         }
 
-
-
-
-
         QueryBuilder<TankInf> fortanks = ses.getTankInfDao().queryBuilder();
         List<TankInf> tanks = fortanks.where(TankInfDao.Properties.Truck.eq(truck_id)).list();
         for (TankInf tank : tanks){
@@ -332,7 +330,8 @@ public class FormScreen extends AppCompatActivity {
             }
         }
 
-
+        ses.getMilkInfDao().insert(milk);
+        Toast.makeText(FormScreen.this,"Kaydedildi.!", Toast.LENGTH_LONG).show();
 
     }
 
@@ -366,11 +365,15 @@ public class FormScreen extends AppCompatActivity {
 
                     QueryBuilder<DutyInf> dt = ses.getDutyInfDao().queryBuilder();
                     List<DutyInf> dutlist = dt.where(DutyInfDao.Properties.DutyId.eq(duty_id)).list();
+
                     if(dutlist.size() > 0){
-                        dutlist.get(0).setDone(true);
+                        DutyInf duty = new DutyInf();
+                        duty.setDutyId(duty_id);
+                        duty.setDone(true);
+                        duty.setFarm_id(dutlist.get(0).getFarm_id());
+                        duty.setUser(dutlist.get(0).getUser());
+                        ses.update(duty);
                     }
-                    Intent i = new Intent(FormScreen.this, MissionSelectScreen.class);
-                    startActivity(i);
                     finish();
                 }
             });

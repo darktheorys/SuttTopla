@@ -8,21 +8,21 @@ public class MilkInf {
     @org.greenrobot.greendao.annotation.Id (autoincrement = true)
     private Long milkId;
 
-    private long farm;
-    private long tank1;
-    private long tank2;
-    private long tank3;
-    private long tank4;
-    private long tank5;
-    private long duty;
-    private String milktype;
-    private int liter;
-    private boolean antibiotic_inf;
-    private String temp;
-    private String r_temp;
-    private boolean alcohol;
-    private String alcoholtype;
-    private String comment;
+    private long farm = 0;
+    private long tank1= 0;
+    private long tank2= 0;
+    private long tank3= 0;
+    private long tank4= 0;
+    private long tank5= 0;
+    private long duty= 0;
+    private String milktype = "NoN";
+    private int liter = 0;
+    private boolean antibiotic_inf = false;
+    private String temp = "-";
+    private String r_temp ="-";
+    private boolean alcohol = false;
+    private String alcoholtype = "NoN";
+    private String comment = "NoN";
     @Generated(hash = 479902092)
     public MilkInf(Long milkId, long farm, long tank1, long tank2, long tank3,
             long tank4, long tank5, long duty, String milktype, int liter,

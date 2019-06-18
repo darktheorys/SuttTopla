@@ -11,10 +11,10 @@ public class TankInf {
 
     @org.greenrobot.greendao.annotation.Id (autoincrement = true)
     private Long tankId;
-    private long truck;
-    private int tankN;
-    private int limit;
-    private int fullness;
+    private long truck = 0;
+    private int tankN = 0;
+    private int limit = 0;
+    private int fullness = 0;
     @Generated(hash = 1389288355)
     public TankInf(Long tankId, long truck, int tankN, int limit, int fullness) {
         this.tankId = tankId;

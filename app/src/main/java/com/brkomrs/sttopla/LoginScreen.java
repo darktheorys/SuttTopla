@@ -16,28 +16,19 @@ import android.content.Intent;
 import android.widget.EditText;
 
 
-import com.brkomrs.sttopla.database.DaoMaster;
 import com.brkomrs.sttopla.database.DaoSession;
-import com.brkomrs.sttopla.database.DbOpenHelper;
 import com.brkomrs.sttopla.database.DutyInf;
-import com.brkomrs.sttopla.database.DutyInfDao;
 import com.brkomrs.sttopla.database.FarmInf;
-import com.brkomrs.sttopla.database.FarmInfDao;
-import com.brkomrs.sttopla.database.MilkInfDao;
 import com.brkomrs.sttopla.database.TankInf;
-import com.brkomrs.sttopla.database.TankInfDao;
 import com.brkomrs.sttopla.database.TruckInf;
 import com.brkomrs.sttopla.database.UserInf;
 import com.brkomrs.sttopla.database.UserInfDao;
 
-import org.greenrobot.greendao.database.Database;
-import org.greenrobot.greendao.database.DatabaseOpenHelper;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.io.File;
@@ -67,7 +58,7 @@ public class LoginScreen extends AppCompatActivity {
         configfile = new File(path, getString(R.string.configfilename_str));
 
         //creation of helper db file, it is for understanding of existent database
-        db = new File(path,"db.txt");
+        db = new File(path,"db");
 
         //connection of database session
         daoSession = ((dbHelper) getApplication()).getDaoSession();
@@ -126,17 +117,17 @@ public class LoginScreen extends AppCompatActivity {
 
 
             //duty adding
-            addDuty(1,1);
-            addDuty(1,2);
-            addDuty(2,1);
-            addDuty(2,2);
-            addDuty(2,3);
-            addDuty(3,1);
-            addDuty(3,2);
-            addDuty(3,3);
-            addDuty(1,3);
-            addDuty(4,4);
-            addDuty(4,2);
+            addDuty(1,1,false);
+            addDuty(1,2,false);
+            addDuty(2,1,false);
+            addDuty(2,2,false);
+            addDuty(2,3,false);
+            addDuty(3,1,false);
+            addDuty(3,2,false);
+            addDuty(3,3,false);
+            addDuty(1,3,false);
+            addDuty(4,4,false);
+            addDuty(4,2,false);
 
 
 
@@ -248,7 +239,7 @@ public class LoginScreen extends AppCompatActivity {
 
                             //sending information to next page
                             Intent i = new Intent(LoginScreen.this, MissionSelectScreen.class);
-                            i.putExtra("user_id",id_str);
+                            i.putExtra("user_id",id_inp.getText().toString());
                             startActivity(i);
                         }else{
                             Toast.makeText(LoginScreen.this, getString(R.string.id_match_error) ,Toast.LENGTH_LONG).show();
@@ -397,11 +388,12 @@ public class LoginScreen extends AppCompatActivity {
      * @param farmid
      * @param userid
      */
-    public void addDuty(long farmid, long userid){
+    public void addDuty(long farmid, long userid, boolean bool){
         DutyInf duty = new DutyInf();
         duty.setDutyId(null);
         duty.setFarm_id(farmid);
         duty.setUser(userid);
+        duty.setDone(bool);
         daoSession.getDutyInfDao().insert(duty);
     }
 
