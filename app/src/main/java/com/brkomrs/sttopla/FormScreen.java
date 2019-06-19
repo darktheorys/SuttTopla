@@ -151,7 +151,6 @@ public class FormScreen extends AppCompatActivity {
                     c1.setVisibility(View.VISIBLE);
                     c3.setVisibility(View.VISIBLE);
                     c4.setVisibility(View.VISIBLE);
-                    c5.setVisibility(View.VISIBLE);
                     if(tank_n == 5) c5.setVisibility(View.VISIBLE);
                 }
             }
@@ -172,7 +171,6 @@ public class FormScreen extends AppCompatActivity {
                     c1.setVisibility(View.VISIBLE);
                     c2.setVisibility(View.VISIBLE);
                     c4.setVisibility(View.VISIBLE);
-                    c5.setVisibility(View.VISIBLE);
                     if(tank_n == 5) c5.setVisibility(View.VISIBLE);
                 }
             }
@@ -193,7 +191,6 @@ public class FormScreen extends AppCompatActivity {
                     c1.setVisibility(View.VISIBLE);
                     c2.setVisibility(View.VISIBLE);
                     c3.setVisibility(View.VISIBLE);
-                    c5.setVisibility(View.VISIBLE);
                     if(tank_n == 5) c5.setVisibility(View.VISIBLE);
                 }
             }
@@ -417,13 +414,18 @@ public class FormScreen extends AppCompatActivity {
 
         int tankN = c1.isChecked()?1:c2.isChecked()?2:c3.isChecked()?3:c4.isChecked()?4:c5.isChecked()?5:0;
         TankInf tank = helperFunctions.getTank(ses, truck_id, tankN);
-        milk.setTank_id(tank.getTankId());
+        if(leaveMilk_radio.isChecked()){
+            milk.setTank_id(0);
+        }else{
+            milk.setTank_id(tank.getTankId());
+        }
+
         milk.setTankN(tankN);
 
 
 
-        int total = Integer.parseInt(tank1Inp.getText().toString()) + Integer.parseInt(tank2Inp.getText().toString()) + Integer.parseInt(tank3Inp.getText().toString()) +
-                Integer.parseInt(tank4Inp.getText().toString()) + Integer.parseInt(tank5Inp.getText().toString());
+        int total = Integer.parseInt("0" + tank1Inp.getText().toString()) + Integer.parseInt("0" + tank2Inp.getText().toString()) + Integer.parseInt("0" + tank3Inp.getText().toString()) +
+                Integer.parseInt("0" + tank4Inp.getText().toString()) + Integer.parseInt("0" + tank5Inp.getText().toString());
         //getting tank inputs
         milk.setTank_liter(total);
 
@@ -448,9 +450,9 @@ public class FormScreen extends AppCompatActivity {
         } else if (((!c1.isChecked() && !c2.isChecked() && !c3.isChecked() && !c4.isChecked() && !c5.isChecked()) && !leaveMilk_radio.isChecked()) || (leaveMilk_radio.isChecked() && (!other_comm.isChecked() && !bad_milk.isChecked()))
                 || (other_comm.isChecked() && comment.getText().toString().equals(""))) {
             Toast.makeText(FormScreen.this, getString(R.string.empty_area_err_str), Toast.LENGTH_LONG).show();
-        } else if (!checkTankLimits()) {
+        } else if (!bad_milk.isChecked() && !checkTankLimits() ) {
             Toast.makeText(FormScreen.this, getString(R.string.tank_limit_exceeded_str), Toast.LENGTH_LONG).show();
-        } else if(!checkMilkTypes()){
+        } else if(!bad_milk.isChecked() && !checkMilkTypes()){
             Toast.makeText(FormScreen.this, getString(R.string.milk_not_comp_str), Toast.LENGTH_LONG).show();
         }else if(someMilkRem.isChecked()){
             makeSubmission();
