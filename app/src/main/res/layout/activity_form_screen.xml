@@ -416,7 +416,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:checkedButton="@id/below95_radio"
+                        android:checkedButton="@id/above95_radio"
                         android:orientation="horizontal">
 
                         <RadioButton

@@ -24,17 +24,12 @@ import android.widget.Toast;
 
 import com.brkomrs.sttopla.database.DaoSession;
 import com.brkomrs.sttopla.database.DutyInf;
-import com.brkomrs.sttopla.database.DutyInfDao;
 import com.brkomrs.sttopla.database.FarmInf;
-import com.brkomrs.sttopla.database.FarmInfDao;
 import com.brkomrs.sttopla.database.MilkInf;
 import com.brkomrs.sttopla.database.TankInf;
-import com.brkomrs.sttopla.database.TankInfDao;
 import com.brkomrs.sttopla.database.TruckInf;
 import com.brkomrs.sttopla.database.UserInf;
 import com.brkomrs.sttopla.necessary.helperFunctions;
-
-import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -432,10 +427,10 @@ public class FormScreen extends AppCompatActivity {
         milk.setLeave_milk(leaveMilk_radio.isChecked());
 
         ses.getMilkInfDao().insert(milk);
-
-        Toast.makeText(FormScreen.this, "Kaydedildi.!", Toast.LENGTH_LONG).show();
+        Toast.makeText(FormScreen.this, "Kaydedildi.!", Toast.LENGTH_SHORT).show();
 
     }
+
 
     private void openDialog() {
         RadioButton other_comm = findViewById(R.id.other_radio);
@@ -450,7 +445,7 @@ public class FormScreen extends AppCompatActivity {
         } else if (((!c1.isChecked() && !c2.isChecked() && !c3.isChecked() && !c4.isChecked() && !c5.isChecked()) && !leaveMilk_radio.isChecked()) || (leaveMilk_radio.isChecked() && (!other_comm.isChecked() && !bad_milk.isChecked()))
                 || (other_comm.isChecked() && comment.getText().toString().equals(""))) {
             Toast.makeText(FormScreen.this, getString(R.string.empty_area_err_str), Toast.LENGTH_LONG).show();
-        } else if (!bad_milk.isChecked() && !checkTankLimits() ) {
+        } else if (!bad_milk.isChecked() && !checkTankLimitsAndUpdateTank() ) {
             Toast.makeText(FormScreen.this, getString(R.string.tank_limit_exceeded_str), Toast.LENGTH_LONG).show();
         } else if(!bad_milk.isChecked() && !checkMilkTypes()){
             Toast.makeText(FormScreen.this, getString(R.string.milk_not_comp_str), Toast.LENGTH_LONG).show();
@@ -503,24 +498,22 @@ public class FormScreen extends AppCompatActivity {
         int tankN = c1.isChecked()?1:c2.isChecked()?2:c3.isChecked()?3:c4.isChecked()?4:c5.isChecked()?5:0;
         TankInf tank= helperFunctions.getTank(ses, truck_id, tankN);
         RadioButton alcohol_e = findViewById(R.id.alcohol_e_radio);
-        RadioButton below95 = findViewById(R.id.below95_radio);
+        RadioButton above95 = findViewById(R.id.above95_radio);
         RadioButton bw46 = findViewById(R.id.deg46_radio);
         MilkInf milk = helperFunctions.getMilk(ses, tank.getTankId());
         if (milk != null) {
-            if(milk.getAlcoholtype().equalsIgnoreCase(alcohol_type.getSelectedItem().toString()) && milk.getMilktype().equalsIgnoreCase(milktype.getSelectedItem().toString()) &&
-                    (milk.getAlcohol() == alcohol_e.isChecked()) &&
-                    (milk.getR_temp().equalsIgnoreCase(refracTemp_spin.getSelectedItem().toString()) || milk.getR_temp().equalsIgnoreCase(">9.5") && below95.isChecked()) &&
-                    (milk.getTemp().equalsIgnoreCase(milktemp_spin.getSelectedItem().toString()) || milk.getTemp().equalsIgnoreCase("4-6") && bw46.isChecked())){
+            if((milk.getAlcoholtype().equalsIgnoreCase(alcohol_type.getSelectedItem().toString()) || (!milk.getAlcohol() && !alcohol_e.isChecked())) && milk.getMilktype().equalsIgnoreCase(milktype.getSelectedItem().toString()) &&
+                    (milk.getR_temp().equalsIgnoreCase(refracTemp_spin.getSelectedItem().toString()) || (milk.getR_temp().equalsIgnoreCase(">9.5") && above95.isChecked())) &&
+                    (milk.getTemp().equalsIgnoreCase(milktemp_spin.getSelectedItem().toString()) || (milk.getTemp().equalsIgnoreCase("4-6") && bw46.isChecked()))){
                 return true;
-            }
+            }else return false;
 
-            }
-        return false;
+            }else return true;
     }
 
 
     //a checker method for tanks
-    private boolean checkTankLimits() {
+    private boolean checkTankLimitsAndUpdateTank() {
         int tankN = c1.isChecked()?1:c2.isChecked()?2:c3.isChecked()?3:c4.isChecked()?4:c5.isChecked()?5:0;
         TankInf each = helperFunctions.getTank(ses, truck_id, tankN);
         TankInf tank = new TankInf();
@@ -528,12 +521,11 @@ public class FormScreen extends AppCompatActivity {
         tank.setTruck(truck_id);
         tank.setLimit(each.getLimit());
         tank.setTankN(each.getTankN());
-        String str = tank1Inp.getText().toString();
-        if (!str.equals("")) {
-            if (each.getLimit() >= each.getFullness() + Integer.parseInt(str)) {
-                tank.setFullness(each.getFullness() + Integer.parseInt(str));
-            }else return false;
-        }
+        int total = Integer.parseInt("0" + tank1Inp.getText().toString()) + Integer.parseInt("0" + tank2Inp.getText().toString()) + Integer.parseInt("0" + tank3Inp.getText().toString()) +
+                Integer.parseInt("0" + tank4Inp.getText().toString()) + Integer.parseInt("0" + tank5Inp.getText().toString());
+        if (each.getLimit() >= each.getFullness() + total) {
+                tank.setFullness(each.getFullness() +total);
+        }else return false;
         ses.update(tank);
         return true;
     }

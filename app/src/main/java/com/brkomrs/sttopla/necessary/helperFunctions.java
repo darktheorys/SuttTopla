@@ -3,16 +3,19 @@ package com.brkomrs.sttopla.necessary;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.brkomrs.sttopla.R;
 import com.brkomrs.sttopla.database.*;
 
 import org.greenrobot.greendao.query.QueryBuilder;
+import org.greenrobot.greendao.query.WhereCondition;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -257,12 +260,13 @@ public class helperFunctions {
      */
     public static TankInf getTank(DaoSession ses, long truck_id, int tankN){
         QueryBuilder<TankInf> q = ses.getTankInfDao().queryBuilder();
-        List<TankInf> list = q.where(TankInfDao.Properties.Truck.eq(truck_id)).where(TankInfDao.Properties.TankN.eq(tankN)).list();
-        if (list.size() > 0 ){
-            return list.get(0);
-        }else{
-            return null;
+        List<TankInf> list = q.where(TankInfDao.Properties.Truck.eq(truck_id)).list();
+        for (TankInf each : list){
+            if(each.getTankN() == tankN){
+                return each;
+            }
         }
+        return null;
     }
 
     /**
