@@ -289,11 +289,8 @@ public class helperFunctions {
      */
     public static MilkInf getMilk(DaoSession ses, long tank_id){
         QueryBuilder<MilkInf> q = ses.getMilkInfDao().queryBuilder();
-        List<MilkInf> list = q.where(MilkInfDao.Properties.Tank1.eq(tank_id)).list();
-        list.addAll(q.where(MilkInfDao.Properties.Tank2.eq(tank_id)).list());
-        list.addAll(q.where(MilkInfDao.Properties.Tank3.eq(tank_id)).list());
-        list.addAll(q.where(MilkInfDao.Properties.Tank4.eq(tank_id)).list());
-        list.addAll(q.where(MilkInfDao.Properties.Tank5.eq(tank_id)).list());
+        List<MilkInf> list = q.where(MilkInfDao.Properties.Tank_id.eq(tank_id)).list();
+
         if (list.size() > 0 ){
             return list.get(0);
         }else{
