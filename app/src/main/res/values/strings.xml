@@ -53,4 +53,15 @@
     <string name="isClear2_str">Pompa ve hortum temiz mi?</string>
     <string name="isClear3_str">Baskül temiz mi?</string>
     <string name="isClear4_str">Merkez temiz mi?</string>
+    <string name="duty_id_str">Görev id:</string>
+    <string name="already_done_str">Zaten Yapılmış Görev Seçtiniz.</string>
+    <string name="duty_id_extra_str">duty_id</string>
+    <string name="user_id_extra_str">user_id</string>
+    <string name="tank1_str">Tank 1</string>
+    <string name="tank2_str">Tank 2</string>
+    <string name="tank3_str">Tank 3</string>
+    <string name="tank4_str">Tank 4</string>
+    <string name="tank5_str">Tank 5</string>
+    <string name="antibiotic_err">Antibiyotikli bir ürünü alamazsınız.</string>
+    <string name="empty_area_err_str">Boş alan bıraktınız. Lütfen tamamlayın.</string>
 </resources>

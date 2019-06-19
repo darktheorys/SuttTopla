@@ -16,18 +16,24 @@ public class MilkInf {
     private long tank5= 0;
     private long duty= 0;
     private String milktype = "NoN";
-    private int liter = 0;
+    private int tank1_liter = 0;
+    private int tank2_liter = 0;
+    private int tank3_liter = 0;
+    private int tank4_liter = 0;
+    private int tank5_liter = 0;
+    private boolean leave_milk = false;
     private boolean antibiotic_inf = false;
     private String temp = "-";
     private String r_temp ="-";
     private boolean alcohol = false;
     private String alcoholtype = "NoN";
     private String comment = "NoN";
-    @Generated(hash = 479902092)
+    @Generated(hash = 330444235)
     public MilkInf(Long milkId, long farm, long tank1, long tank2, long tank3,
-            long tank4, long tank5, long duty, String milktype, int liter,
-            boolean antibiotic_inf, String temp, String r_temp, boolean alcohol,
-            String alcoholtype, String comment) {
+            long tank4, long tank5, long duty, String milktype, int tank1_liter,
+            int tank2_liter, int tank3_liter, int tank4_liter, int tank5_liter,
+            boolean leave_milk, boolean antibiotic_inf, String temp, String r_temp,
+            boolean alcohol, String alcoholtype, String comment) {
         this.milkId = milkId;
         this.farm = farm;
         this.tank1 = tank1;
@@ -37,7 +43,12 @@ public class MilkInf {
         this.tank5 = tank5;
         this.duty = duty;
         this.milktype = milktype;
-        this.liter = liter;
+        this.tank1_liter = tank1_liter;
+        this.tank2_liter = tank2_liter;
+        this.tank3_liter = tank3_liter;
+        this.tank4_liter = tank4_liter;
+        this.tank5_liter = tank5_liter;
+        this.leave_milk = leave_milk;
         this.antibiotic_inf = antibiotic_inf;
         this.temp = temp;
         this.r_temp = r_temp;
@@ -102,12 +113,6 @@ public class MilkInf {
     public void setMilktype(String milktype) {
         this.milktype = milktype;
     }
-    public int getLiter() {
-        return this.liter;
-    }
-    public void setLiter(int liter) {
-        this.liter = liter;
-    }
     public boolean getAntibiotic_inf() {
         return this.antibiotic_inf;
     }
@@ -143,6 +148,42 @@ public class MilkInf {
     }
     public void setComment(String comment) {
         this.comment = comment;
+    }
+    public int getTank1_liter() {
+        return this.tank1_liter;
+    }
+    public void setTank1_liter(int tank1_liter) {
+        this.tank1_liter = tank1_liter;
+    }
+    public int getTank2_liter() {
+        return this.tank2_liter;
+    }
+    public void setTank2_liter(int tank2_liter) {
+        this.tank2_liter = tank2_liter;
+    }
+    public int getTank3_liter() {
+        return this.tank3_liter;
+    }
+    public void setTank3_liter(int tank3_liter) {
+        this.tank3_liter = tank3_liter;
+    }
+    public int getTank4_liter() {
+        return this.tank4_liter;
+    }
+    public void setTank4_liter(int tank4_liter) {
+        this.tank4_liter = tank4_liter;
+    }
+    public int getTank5_liter() {
+        return this.tank5_liter;
+    }
+    public void setTank5_liter(int tank5_liter) {
+        this.tank5_liter = tank5_liter;
+    }
+    public boolean getLeave_milk() {
+        return this.leave_milk;
+    }
+    public void setLeave_milk(boolean leave_milk) {
+        this.leave_milk = leave_milk;
     }
    
     

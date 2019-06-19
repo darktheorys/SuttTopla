@@ -1,6 +1,5 @@
 package com.brkomrs.sttopla.database;
 
-import java.io.Serializable;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 
@@ -27,7 +26,7 @@ public class DutyInf{
     }
     @Override
     public String toString() {
-        return "Görev ID: " + getDutyId();
+        return "Görev ID: " + getDutyId() + " - Çiftlik ID: " + getFarm_id();
     }
     public Long getDutyId() {
         return this.dutyId;

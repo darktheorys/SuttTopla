@@ -3,7 +3,6 @@ package com.brkomrs.sttopla;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ArrayAdapter;
@@ -19,55 +18,52 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.brkomrs.sttopla.necessary.helperFunctions;
+
 public class MissionSelectScreen extends AppCompatActivity{
-    private File configfile = null;
-    List<DutyInf>  duties;
+    private List<DutyInf>  duties;
     private Spinner spin;
     private long user_id;
     private Button goSelected;
     private SwipeRefreshLayout swipes;
-    private ArrayAdapter<DutyInf> dataAdapterMissions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_missionselect);
 
+        //getters for widgets
         swipes = findViewById(R.id.swipe);
-
-        //getting user id from previous activity to get true duties from database
-        String user = getIntent().getStringExtra("user_id");
-        if (user != null  && !user.equals("")) {
-            user_id = Long.parseLong(user);
-        }else{
-            Log.e("aslfkşsakf","@@@@@@@@@@@@@@@@qq");
-        }
-
-
         goSelected = findViewById(R.id.go_duty_btn);
         spin = findViewById(R.id.mission_spin);
         Button changeID = findViewById(R.id.changeid_btn);
-        configfile = new File(MissionSelectScreen.this.getFilesDir(),getString(R.string.configfilename_str));
-
-        //getting duties for entrance
-        getDuties();
 
         //id change button send to login screen
         changeID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goChangeId();
+                //arrangement of config file
+                File configfile = new File(MissionSelectScreen.this.getFilesDir(),getString(R.string.configfilename_str));
+                goChangeId(configfile);
             }
         });
 
+        //getting user id from previous activity to get true duties from database
+        String userid_temp_str = getIntent().getStringExtra(getString(R.string.user_id_extra_str));
+        if (userid_temp_str != null  && !userid_temp_str.equals("")) {
+            user_id = Long.parseLong(userid_temp_str);
+        }
 
+
+        //getting duties for entrance
+        getUndoneDutiesToSpinner();
 
         //going next activity with selected duty
         goSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MissionSelectScreen.this, FormScreen.class);
-                i.putExtra("duty_id", duties.get(spin.getSelectedItemPosition()).getDutyId().toString());
+                i.putExtra(getString(R.string.duty_id_extra_str), duties.get(spin.getSelectedItemPosition()).getDutyId().toString());
                 startActivity(i);
             }
         });
@@ -77,13 +73,13 @@ public class MissionSelectScreen extends AppCompatActivity{
         swipes.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getDuties();
+                getUndoneDutiesToSpinner();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         swipes.setRefreshing(false);
                     }
-                }, 4000);
+                }, 2000);
             }
         });
 
@@ -92,22 +88,27 @@ public class MissionSelectScreen extends AppCompatActivity{
     }
 
     //duty getter fuction
-    private void getDuties() {
-
+    private void getUndoneDutiesToSpinner() {
         duties = new ArrayList<>();
-        if(LoginScreen.haveConnection(MissionSelectScreen.this)){
+        ArrayAdapter<DutyInf> dataAdapterMissions;
+        if(helperFunctions.haveConnection(MissionSelectScreen.this)){
             QueryBuilder<DutyInf> qb = ((dbHelper)getApplication()).getDaoSession().getDutyInfDao().queryBuilder();
+            //all duties for given id
             List<DutyInf> temp = qb.where(DutyInfDao.Properties.User.eq(user_id)).list();
             for (DutyInf each : temp){
+                //adding undone duties
                 if (!each.getDone()) duties.add(each);
             }
+            //setting spinner
             dataAdapterMissions = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, duties);
             dataAdapterMissions.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spin.setAdapter(dataAdapterMissions);
         }else{
+            //conn error
             Toast.makeText(MissionSelectScreen.this, getString(R.string.connection_err_str), Toast.LENGTH_SHORT).show();
         }
 
+        //if no duty remaining
         if(duties.size() == 0){
             goSelected.setEnabled(false);
         }
@@ -115,14 +116,13 @@ public class MissionSelectScreen extends AppCompatActivity{
     }
 
 
-    private void goChangeId(){
-
-        String[] str = LoginScreen.readNLineFromFile(configfile,2);
-        LoginScreen.writeToFile(configfile, str[0], false);
-        LoginScreen.writeToFile(configfile, "false", true);
+    private void goChangeId(File f){
+        //resetting saved id
+        helperFunctions.writeToFile(f, "", false);
+        //setting autologin disabled
+        helperFunctions.writeToFile(f, "false", true);
         finish();
         startActivity(new Intent(MissionSelectScreen.this, LoginScreen.class));
-
     }
 
 
@@ -143,7 +143,7 @@ public class MissionSelectScreen extends AppCompatActivity{
             public void run() {
                 temp++;
             }
-        }, 4000);
+        }, 2000);
 
     }
 

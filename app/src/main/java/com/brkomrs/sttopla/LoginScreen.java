@@ -2,10 +2,6 @@ package com.brkomrs.sttopla;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -14,43 +10,39 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.content.Intent;
 import android.widget.EditText;
-
-
 import com.brkomrs.sttopla.database.DaoSession;
-import com.brkomrs.sttopla.database.DutyInf;
-import com.brkomrs.sttopla.database.FarmInf;
-import com.brkomrs.sttopla.database.TankInf;
-import com.brkomrs.sttopla.database.TruckInf;
 import com.brkomrs.sttopla.database.UserInf;
 import com.brkomrs.sttopla.database.UserInfDao;
-
 import org.greenrobot.greendao.query.QueryBuilder;
-
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.List;
-import java.util.Scanner;
 import java.io.File;
 
+import com.brkomrs.sttopla.necessary.helperFunctions;
+
 public class LoginScreen extends AppCompatActivity {
-    private String id_str;
-    private boolean autolog = false;
     public File configfile,db;
     private CheckBox remember_chk,autolog_chk;
     private Button submit_btn;
     private EditText id_inp;
     private SwipeRefreshLayout swipe;
     private DaoSession daoSession;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
+        //connection of database session
+        daoSession = ((dbHelper) getApplication()).getDaoSession();
+
+        //widget getters
+        id_inp = findViewById(R.id.id_input);
         swipe = findViewById(R.id.swipe);
         submit_btn = findViewById(R.id.submit_id);
         remember_chk = findViewById(R.id.remember_chk);
         autolog_chk = findViewById(R.id.autologin_chk);
+        //button is disabled at first
         submit_btn.setEnabled(false);
         //construction of id.txt file, to save
         //path of current installation
@@ -60,13 +52,10 @@ public class LoginScreen extends AppCompatActivity {
         //creation of helper db file, it is for understanding of existent database
         db = new File(path,"db");
 
-        //connection of database session
-        daoSession = ((dbHelper) getApplication()).getDaoSession();
-
-        //if db.txt is not existing, then we create one, usually after clean installation
+        //if db is not existing, then we create one, usually after clean installation
         if(!db.exists()){
             try {
-                if(db.createNewFile()) writeToFile(db,"db_created", false);
+                if(db.createNewFile()) helperFunctions.writeToFile(db,getString(R.string.connected_str), false);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -74,72 +63,88 @@ public class LoginScreen extends AppCompatActivity {
             // setting database from scratch after installation
 
             //adding users
-            addUser("burak","ömür", "email1", "phone1");
-            addUser("mazlum","yıldırım", "email2", "phone2");
-            addUser("ramazan","yurt", "email3", "phone3");
-            addUser("doğukan","yıldırım", "email4", "phone4");
-            addUser("temp","user","sdf","fsld");
+            helperFunctions.addUser(daoSession,"burak","ömür", "email1", "phone1");
+            helperFunctions.addUser(daoSession,"mazlum","yıldırım", "email2", "phone2");
+            helperFunctions.addUser(daoSession,"ramazan","yurt", "email3", "phone3");
+            helperFunctions.addUser(daoSession,"doğukan","yıldırım", "email4", "phone4");
+            helperFunctions.addUser(daoSession,"temp","user","sdf","fsld");
 
             //adding trucks
-            addTruck(4,"16abc32",1);
-            addTruck(5,"34asf78",2);
-            addTruck(4,"26vgd77",3);
-            addTruck(5,"67asd54",4);
+            helperFunctions.addTruck(daoSession,4,"16abc32",1);
+            helperFunctions.addTruck(daoSession,5,"34asf78",2);
+            helperFunctions.addTruck(daoSession,4,"26vgd77",3);
+            helperFunctions.addTruck(daoSession,5,"67asd54",4);
 
             //adding farms
-            addFarm("Alibaba");
-            addFarm("Sütaş Ana Çiftlik");
-            addFarm("Samsun Merkez");
-            addFarm("Karacabey");
+            helperFunctions.addFarm(daoSession,"Alibaba");
+            helperFunctions.addFarm(daoSession,"Sütaş Ana Çiftlik");
+            helperFunctions.addFarm(daoSession,"Samsun Merkez");
+            helperFunctions.addFarm(daoSession,"Karacabey");
 
             //addding tanks
-            addTank(200,1, 1);
-            addTank(200,2, 1);
-            addTank(200,3, 1);
-            addTank(200,4, 1);
+            helperFunctions.addTank(daoSession,200,1, 1);
+            helperFunctions.addTank(daoSession,200,2, 1);
+            helperFunctions.addTank(daoSession,200,3, 1);
+            helperFunctions.addTank(daoSession,200,4, 1);
 
-            addTank(200,1, 2);
-            addTank(200,2, 2);
-            addTank(200,3, 2);
-            addTank(200,4, 2);
-            addTank(200,5, 2);
+            helperFunctions.addTank(daoSession,200,1, 2);
+            helperFunctions.addTank(daoSession,200,2, 2);
+            helperFunctions.addTank(daoSession,200,3, 2);
+            helperFunctions.addTank(daoSession,200,4, 2);
+            helperFunctions.addTank(daoSession,200,5, 2);
 
-            addTank(200,1, 3);
-            addTank(200,2, 3);
-            addTank(200,3, 3);
-            addTank(200,4, 3);
+            helperFunctions.addTank(daoSession,200,1, 3);
+            helperFunctions.addTank(daoSession,200,2, 3);
+            helperFunctions.addTank(daoSession,200,3, 3);
+            helperFunctions.addTank(daoSession,200,4, 3);
 
-            addTank(200,1, 4);
-            addTank(200,2, 4);
-            addTank(200,3, 4);
-            addTank(200,4, 4);
-            addTank(200,5, 4);
+            helperFunctions.addTank(daoSession,200,1, 4);
+            helperFunctions.addTank(daoSession,200,2, 4);
+            helperFunctions.addTank(daoSession,200,3, 4);
+            helperFunctions.addTank(daoSession,200,4, 4);
+            helperFunctions.addTank(daoSession,200,5, 4);
 
 
             //duty adding
-            addDuty(1,1,false);
-            addDuty(1,2,false);
-            addDuty(2,1,false);
-            addDuty(2,2,false);
-            addDuty(2,3,false);
-            addDuty(3,1,false);
-            addDuty(3,2,false);
-            addDuty(3,3,false);
-            addDuty(1,3,false);
-            addDuty(4,4,false);
-            addDuty(4,2,false);
+            helperFunctions.addDuty(daoSession,1,1,false);
+            helperFunctions.addDuty(daoSession,1,2,false);
+            helperFunctions.addDuty(daoSession,2,1,false);
+            helperFunctions.addDuty(daoSession,2,2,false);
+            helperFunctions.addDuty(daoSession,2,3,false);
+            helperFunctions.addDuty(daoSession,3,1,false);
+            helperFunctions.addDuty(daoSession,3,2,false);
+            helperFunctions.addDuty(daoSession,3,3,false);
+            helperFunctions.addDuty(daoSession,1,3,false);
+            helperFunctions.addDuty(daoSession,4,4,false);
+            helperFunctions.addDuty(daoSession,4,2,false);
 
 
+        }
+        //retrieving data from configfile
+        checkConfigFile(configfile);
 
-            // end of database
-            Toast.makeText(LoginScreen.this,"DB Created", Toast.LENGTH_LONG).show();
-
+        //at the beginning of app
+        //it automatically checks for connection, and moves forward
+        loginActions(helperFunctions.haveConnection(LoginScreen.this));
+        //Swipe refresh initialization, and its delay
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loginActions(helperFunctions.haveConnection(LoginScreen.this));
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipe.setRefreshing(false);
+                    }
+                }, 2000);
+            }
+        });
         }
 
 
+    private void checkConfigFile(File config) {
         //getting saved id from file
-        id_inp = findViewById(R.id.id_input);
-        String[] fromFile = readNLineFromFile(configfile, 3);
+        String[] fromFile = helperFunctions.readNLineFromFile(config, 2);
         //if saved text is not "", then we must have saved an id.
         if(!fromFile[0].equalsIgnoreCase("")){
             remember_chk.setChecked(true);
@@ -153,50 +158,6 @@ public class LoginScreen extends AppCompatActivity {
         }else{
             remember_chk.setChecked(false);
         }
-
-            //at the beginning of app
-            //it automatically checks for connection, and moves forward
-            moveForward(haveConnection(LoginScreen.this));
-            //Swipe refresh initialization, and its delay
-            swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                moveForward(haveConnection(LoginScreen.this));
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipe.setRefreshing(false);
-                    }
-                }, 4000);
-            }
-        });
-        }
-
-    /**
-     *  Connection checker
-     * @return Return if android can access internet or not
-     * @param con context of caller
-     */
-    public static boolean haveConnection(Context con) {
-
-        boolean wifi = false;
-        boolean mobile = false;
-        ConnectivityManager cn = (ConnectivityManager) con.getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo[] ni_arr = null;
-        try {
-            ni_arr = cn.getAllNetworkInfo();
-        } catch (Exception e) {
-            Toast.makeText(con, con.getString(R.string.connection_err_str), Toast.LENGTH_SHORT).show();
-        }
-        for (NetworkInfo inf : ni_arr) {
-            if (inf.getTypeName().equalsIgnoreCase("WIFI")) {
-                if (inf.isConnected()) wifi = true;
-            } else if (inf.getTypeName().equalsIgnoreCase("Mobile")) {
-                if (inf.isConnected()) mobile = true;
-            }
-        }
-
-        return wifi || mobile;
     }
 
 
@@ -206,48 +167,51 @@ public class LoginScreen extends AppCompatActivity {
      * also autologs if checkbox is checked
      * @param conn boolean to know if connection exists
      */
-    private void moveForward(boolean conn) {
+    private void loginActions(boolean conn) {
              if (!conn) {
-                Toast.makeText(LoginScreen.this, getString(R.string.connection_err_str), Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginScreen.this, getString(R.string.connection_err_str), Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(LoginScreen.this, getString(R.string.connected_str), Toast.LENGTH_SHORT).show();
+                //enabling button
                 submit_btn.setEnabled(true);
-
                 submit_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        //saving entered id
+                        String id_str = id_inp.getText().toString();
 
                         // after clicking submit button, the followings happen
                         //if valid id is entered, it goes to mission page
                         //if not valit it shows an error and waits for another id
-                        if(getValidity()){
-                            Toast.makeText(LoginScreen.this, getString(R.string.log_making_str) ,Toast.LENGTH_LONG).show();
+                        if(getValidity(id_str)){
+                            Toast.makeText(LoginScreen.this, getString(R.string.log_making_str) ,Toast.LENGTH_SHORT).show();
                             //if remember checkbox is checked, then we save id in the textEdit to the file.
                             // if not checked then, it saved empty string to file, replaces previous savings
+
                             if (remember_chk.isChecked()) {
-                                id_str = id_inp.getText().toString();
-                                writeToFile(configfile,id_str,false);
+                                helperFunctions.writeToFile(configfile,id_str,false);
                             }else{
-                                writeToFile(configfile,"",false);
+                                //writing empty to file as flag
+                                helperFunctions.writeToFile(configfile,"",false);
                             }
 
                             //if autolog checkbox is checked, then it writes true to the second line of file
                             // else it writes false
-                            autolog = autolog_chk.isChecked();
-                            writeToFile(configfile,autolog? "true" : "false", true);
+                            helperFunctions.writeToFile(configfile,autolog_chk.isChecked()? "true" : "false", true);
+                            //finishing activity
                             finish();
 
                             //sending information to next page
                             Intent i = new Intent(LoginScreen.this, MissionSelectScreen.class);
-                            i.putExtra("user_id",id_inp.getText().toString());
+                            i.putExtra(getString(R.string.user_id_extra_str), id_str);
                             startActivity(i);
                         }else{
                             Toast.makeText(LoginScreen.this, getString(R.string.id_match_error) ,Toast.LENGTH_LONG).show();
                             id_inp.setText("");
                         }
-
                     }
                 });
+                //making autologin
                  if(autolog_chk.isChecked()){
                      submit_btn.performClick();
                  }
@@ -257,82 +221,19 @@ public class LoginScreen extends AppCompatActivity {
 
 
     //database getter place
-    private boolean getValidity(){
+    public boolean getValidity(String id){
         QueryBuilder<UserInf> query = daoSession.getUserInfDao().queryBuilder();
-        List<UserInf> c_user = query.where(UserInfDao.Properties.UserId.eq(id_inp.getText().toString())).list();
-        if(c_user.size() == 0){
-            return false;
-        }
-        else{
+        List<UserInf> c_user = query.where(UserInfDao.Properties.UserId.eq(id)).list();
+
+        //if a user exists it returns true
+        if(c_user.size() > 0){
             return true;
         }
-
-    }
-    /**
-     *  It writes given string to given file in given mode
-     * @param f File to write
-     * @param data String to write
-     * @param append    Write mode, if true doesnot clear file
-     */
-    public static void writeToFile(File f, Object data, boolean append) {
-        PrintStream stream;
-        if(append){
-            try {
-                stream = new PrintStream(new FileOutputStream(f, true));
-                stream.println(data);
-                stream.close();
-            } catch (Exception e) {
-
-            }
-        }else{
-            try {
-                stream = new PrintStream(f);
-                stream.println(data);
-                stream.close();
-            } catch (Exception e) {
-
-            }
+        else{
+            return false;
         }
-
-
     }
 
-    /**
-     * Reads N distinct line from given file
-     * @param f  File to read lines
-     * @param n  Line Number that we read from file
-     * @return  array with n elements that has strings
-     */
-    public static String[] readNLineFromFile(File f, int n) {
-        String[] toRet = new String[n];
-        Scanner scanfile = null;
-        try{
-            scanfile = new Scanner(f);
-        }catch (Exception e){
-
-        }
-        for(int i = 0; i < n ; i++){
-            boolean hasNext = false;
-            try{
-                hasNext = scanfile.hasNextLine();
-
-            }catch (Exception e){
-
-            }
-            if(hasNext){
-                toRet[i] = scanfile.nextLine();
-            }else{
-                toRet[i] = "";
-            }
-        }
-        try{
-            scanfile.close();
-        }catch (Exception e){
-
-        }
-
-        return toRet;
-    }
 
     //to exit user push back button two times
     // temp value makes count
@@ -343,92 +244,14 @@ public class LoginScreen extends AppCompatActivity {
             finish();
         }
         temp--;
-        Toast.makeText(LoginScreen.this, getString(R.string.to_exit_str) ,Toast.LENGTH_LONG).show();
+        Toast.makeText(LoginScreen.this, getString(R.string.to_exit_str) ,Toast.LENGTH_SHORT).show();
         //if in 4 seconds, user cannot press second time, it resets counter to prevent misdoings
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 temp++;
             }
-        }, 4000);
+        }, 2000);
     }
-
-
-    /**
-     * Adding new user to database
-     * @param userName
-     * @param userSurname
-     * @param email
-     * @param phone
-     */
-    public void addUser(String userName, String userSurname, String email, String phone){
-        UserInf user = new UserInf();
-        user.setUserId(null);
-        user.setUserPhone(phone);
-        user.setUserEmail(email);
-        user.setUserName(userName);
-        user.setUserSurname(userSurname);
-        daoSession.getUserInfDao().insert(user);
-
-    }
-
-    /**
-     * Adding new farm to database
-     * @param farmname
-     */
-    public void addFarm(String farmname){
-        FarmInf farm = new FarmInf();
-        farm.setFarmID(null);
-        farm.setFarmName(farmname);
-        daoSession.getFarmInfDao().insert(farm);
-    }
-
-    /**
-     * Adding new duty to database
-     * @param farmid
-     * @param userid
-     */
-    public void addDuty(long farmid, long userid, boolean bool){
-        DutyInf duty = new DutyInf();
-        duty.setDutyId(null);
-        duty.setFarm_id(farmid);
-        duty.setUser(userid);
-        duty.setDone(bool);
-        daoSession.getDutyInfDao().insert(duty);
-    }
-
-    /**
-     * Adding new tank to database
-     * @param limit
-     * @param tankn
-     * @param truck_id
-     */
-    public void addTank(int limit, int tankn, long truck_id){
-        TankInf tank = new TankInf();
-        tank.setFullness(0);
-        tank.setLimit(limit);
-        tank.setTankId(null);
-        tank.setTankN(tankn);
-        tank.setTruck(truck_id);
-        daoSession.getTankInfDao().insert(tank);
-    }
-
-    /**
-     * Adding new track to database
-     * @param tankn
-     * @param plate
-     * @param user_id
-     */
-    public void addTruck(int tankn, String plate, long user_id){
-        TruckInf truck = new TruckInf();
-        truck.setN_tank(tankn);
-        truck.setPlate(plate);
-        truck.setTruckId(null);
-        truck.setUser(user_id);
-        daoSession.getTruckInfDao().insert(truck);
-    }
-
-
-
     }
 

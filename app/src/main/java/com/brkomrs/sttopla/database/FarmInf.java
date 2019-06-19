@@ -9,11 +9,11 @@ public class FarmInf {
     @org.greenrobot.greendao.annotation.Id (autoincrement = true)
     private Long farmID;
 
-    private boolean isTankClean;
-    private boolean isPumpClean;
-    private boolean isEnvClean;
-    private boolean isWeighterClean;
-    private String farmName;
+    private boolean isTankClean = false;
+    private boolean isPumpClean = false;
+    private boolean isEnvClean = false;
+    private boolean isWeighterClean = false;
+    private String farmName = "";
     @Generated(hash = 1895313793)
     public FarmInf(Long farmID, boolean isTankClean, boolean isPumpClean,
             boolean isEnvClean, boolean isWeighterClean, String farmName) {
