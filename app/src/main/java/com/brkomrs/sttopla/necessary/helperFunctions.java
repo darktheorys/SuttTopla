@@ -255,9 +255,9 @@ public class helperFunctions {
      * @param truck_id
      * @return
      */
-    public static TankInf getTank(DaoSession ses, long truck_id){
+    public static TankInf getTank(DaoSession ses, long truck_id, int tankN){
         QueryBuilder<TankInf> q = ses.getTankInfDao().queryBuilder();
-        List<TankInf> list = q.where(TankInfDao.Properties.Truck.eq(truck_id)).list();
+        List<TankInf> list = q.where(TankInfDao.Properties.Truck.eq(truck_id)).where(TankInfDao.Properties.TankN.eq(tankN)).list();
         if (list.size() > 0 ){
             return list.get(0);
         }else{
@@ -280,6 +280,28 @@ public class helperFunctions {
             return null;
         }
     }
+
+    /**
+     * To get milk from database for a given id
+     * @param ses
+     * @param tank_id
+     * @return
+     */
+    public static MilkInf getMilk(DaoSession ses, long tank_id){
+        QueryBuilder<MilkInf> q = ses.getMilkInfDao().queryBuilder();
+        List<MilkInf> list = q.where(MilkInfDao.Properties.Tank1.eq(tank_id)).list();
+        list.addAll(q.where(MilkInfDao.Properties.Tank2.eq(tank_id)).list());
+        list.addAll(q.where(MilkInfDao.Properties.Tank3.eq(tank_id)).list());
+        list.addAll(q.where(MilkInfDao.Properties.Tank4.eq(tank_id)).list());
+        list.addAll(q.where(MilkInfDao.Properties.Tank5.eq(tank_id)).list());
+        if (list.size() > 0 ){
+            return list.get(0);
+        }else{
+            return null;
+        }
+    }
+
+
 
 
 

@@ -6,8 +6,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Layout;
-import android.util.Log;
 import android.view.View;
 
 import android.widget.AdapterView;
@@ -44,16 +42,16 @@ import java.util.List;
 public class FormScreen extends AppCompatActivity {
     private Spinner alcohol_type;
     private Spinner milktype;
-    private CheckBox c1,c2,c3,c4,c5;
-    private Spinner milktemp_spin,refracTemp_spin;
+    private CheckBox c1, c2, c3, c4, c5;
+    private Spinner milktemp_spin, refracTemp_spin;
     private long duty_id;
-    private RadioButton antibiotic_e_radio,leaveMilk_radio;
-    private RadioGroup detail_radiogroup,taken_amount_radiogroup,alcohol_radiogroup, temp_radiogroup, tempR_radiogroup, antibiotic_radiogroup;
+    private RadioButton antibiotic_e_radio, leaveMilk_radio;
+    private RadioGroup detail_radiogroup, taken_amount_radiogroup, alcohol_radiogroup, temp_radiogroup, tempR_radiogroup, antibiotic_radiogroup;
     private LinearLayout testLayout;
     private DaoSession ses;
-    private long farmid,userid,truck_id;
+    private long farmid, userid, truck_id;
     private int tank_n;
-    private TextView tank1Inp,tank2Inp,tank3Inp,tank4Inp,tank5Inp;
+    private TextView tank1Inp, tank2Inp, tank3Inp, tank4Inp, tank5Inp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +86,7 @@ public class FormScreen extends AppCompatActivity {
 
         //getting duty id from previous page
         String duty_id_temp_str = getIntent().getStringExtra(getString(R.string.duty_id_extra_str));
-        if(duty_id_temp_str != null && !duty_id_temp_str.equals("")){
+        if (duty_id_temp_str != null && !duty_id_temp_str.equals("")) {
             duty_id = Long.parseLong(duty_id_temp_str);
         }
 
@@ -98,7 +96,6 @@ public class FormScreen extends AppCompatActivity {
         DutyInf duty_obj = helperFunctions.getDuty(ses, duty_id);
         UserInf user_obj = helperFunctions.getUser(ses, duty_obj.getUser());
         TruckInf truck_obj = helperFunctions.getTruck(ses, user_obj.getUserId());
-        TankInf tank_obj = helperFunctions.getTank(ses, truck_obj.getTruckId());
 
         userid = duty_obj.getUser();
         farmid = duty_obj.getFarm_id();
@@ -113,7 +110,7 @@ public class FormScreen extends AppCompatActivity {
         check_boxes_truck.add(c4);
         check_boxes_truck.add(c5);
         //making visible
-        for(int i = 0; i < tank_n ; i++){
+        for (int i = 0; i < tank_n; i++) {
             check_boxes_truck.get(i).setVisibility(View.VISIBLE);
         }
 
@@ -121,10 +118,21 @@ public class FormScreen extends AppCompatActivity {
         c1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) tank1Inp.setVisibility(View.VISIBLE);
+                if (b) {
+                    tank1Inp.setVisibility(View.VISIBLE);
+                    c2.setVisibility(View.GONE);
+                    c3.setVisibility(View.GONE);
+                    c4.setVisibility(View.GONE);
+                    c5.setVisibility(View.GONE);
+                }
                 else {
                     tank1Inp.setVisibility(View.GONE);
                     tank1Inp.setText("");
+                    c2.setVisibility(View.VISIBLE);
+                    c3.setVisibility(View.VISIBLE);
+                    c4.setVisibility(View.VISIBLE);
+                    if(tank_n == 5) c5.setVisibility(View.VISIBLE);
+
                 }
             }
         });
@@ -133,41 +141,81 @@ public class FormScreen extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     tank2Inp.setVisibility(View.VISIBLE);
-
-                }
-                else {
+                    c1.setVisibility(View.GONE);
+                    c3.setVisibility(View.GONE);
+                    c4.setVisibility(View.GONE);
+                    c5.setVisibility(View.GONE);
+                } else {
                     tank2Inp.setVisibility(View.GONE);
                     tank2Inp.setText("");
+                    c1.setVisibility(View.VISIBLE);
+                    c3.setVisibility(View.VISIBLE);
+                    c4.setVisibility(View.VISIBLE);
+                    c5.setVisibility(View.VISIBLE);
+                    if(tank_n == 5) c5.setVisibility(View.VISIBLE);
                 }
             }
         });
         c3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) tank3Inp.setVisibility(View.VISIBLE);
+                if (b) {
+                    tank3Inp.setVisibility(View.VISIBLE);
+                    c1.setVisibility(View.GONE);
+                    c2.setVisibility(View.GONE);
+                    c4.setVisibility(View.GONE);
+                    c5.setVisibility(View.GONE);
+                }
                 else {
                     tank3Inp.setVisibility(View.GONE);
                     tank3Inp.setText("");
+                    c1.setVisibility(View.VISIBLE);
+                    c2.setVisibility(View.VISIBLE);
+                    c4.setVisibility(View.VISIBLE);
+                    c5.setVisibility(View.VISIBLE);
+                    if(tank_n == 5) c5.setVisibility(View.VISIBLE);
                 }
             }
         });
         c4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) tank4Inp.setVisibility(View.VISIBLE);
+                if (b) {
+                    tank4Inp.setVisibility(View.VISIBLE);
+                    c1.setVisibility(View.GONE);
+                    c2.setVisibility(View.GONE);
+                    c3.setVisibility(View.GONE);
+                    c5.setVisibility(View.GONE);
+                }
                 else {
                     tank4Inp.setVisibility(View.GONE);
                     tank4Inp.setText("");
+                    c1.setVisibility(View.VISIBLE);
+                    c2.setVisibility(View.VISIBLE);
+                    c3.setVisibility(View.VISIBLE);
+                    c5.setVisibility(View.VISIBLE);
+                    if(tank_n == 5) c5.setVisibility(View.VISIBLE);
                 }
             }
         });
         c5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) tank5Inp.setVisibility(View.VISIBLE);
+                if (b) {
+                    tank5Inp.setVisibility(View.VISIBLE);
+                    c1.setVisibility(View.GONE);
+                    c2.setVisibility(View.GONE);
+                    c3.setVisibility(View.GONE);
+                    c4.setVisibility(View.GONE);
+                }
                 else {
                     tank5Inp.setVisibility(View.GONE);
                     tank5Inp.setText("");
+                    c1.setVisibility(View.VISIBLE);
+                    c2.setVisibility(View.VISIBLE);
+                    c3.setVisibility(View.VISIBLE);
+                    c4.setVisibility(View.VISIBLE);
+                    if(tank_n == 5) c5.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -175,7 +223,7 @@ public class FormScreen extends AppCompatActivity {
         leaveMilk_radio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
+                if (b) {
                     ConstraintLayout lay = findViewById(R.id.truck_lay);
                     lay.setVisibility(View.GONE);
                     c1.setChecked(false);
@@ -183,13 +231,12 @@ public class FormScreen extends AppCompatActivity {
                     c3.setChecked(false);
                     c4.setChecked(false);
                     c5.setChecked(false);
-                }else{
+                } else {
                     ConstraintLayout lay = findViewById(R.id.truck_lay);
                     lay.setVisibility(View.VISIBLE);
                 }
             }
         });
-
 
 
         //arrangin tw on screen to write duty id
@@ -219,9 +266,9 @@ public class FormScreen extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 RadioButton checked = findViewById(i);
-                if(checked.getText().toString().equalsIgnoreCase(getString(R.string.more6_str))){
+                if (checked.getText().toString().equalsIgnoreCase(getString(R.string.more6_str))) {
                     milktemp_spin.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     milktemp_spin.setVisibility(View.INVISIBLE);
                 }
             }
@@ -249,9 +296,9 @@ public class FormScreen extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 RadioButton checked = findViewById(i);
-                if(checked.getText().toString().equalsIgnoreCase(getString(R.string.below95_str))){
+                if (checked.getText().toString().equalsIgnoreCase(getString(R.string.below95_str))) {
                     refracTemp_spin.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     refracTemp_spin.setVisibility(View.INVISIBLE);
                 }
             }
@@ -275,10 +322,9 @@ public class FormScreen extends AppCompatActivity {
         milktype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if((i == 0 || i == 1 || i == 2 )) {
+                if ((i == 0 || i == 1 || i == 2)) {
                     testLayout.setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
                     testLayout.setVisibility(View.GONE);
                 }
             }
@@ -306,9 +352,9 @@ public class FormScreen extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 RadioButton checked = findViewById(i);
-                if(checked.getText().toString().equalsIgnoreCase(getString(R.string.alcohol_e_str))){
+                if (checked.getText().toString().equalsIgnoreCase(getString(R.string.alcohol_e_str))) {
                     alcohol_type.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     alcohol_type.setVisibility(View.INVISIBLE);
                 }
 
@@ -322,9 +368,9 @@ public class FormScreen extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 RadioButton checked = findViewById(i);
-                if(checked.getText().toString().equalsIgnoreCase(getString(R.string.leave_milk_str))){
+                if (checked.getText().toString().equalsIgnoreCase(getString(R.string.leave_milk_str))) {
                     detail_radiogroup.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     detail_radiogroup.setVisibility(View.GONE);
                 }
             }
@@ -345,7 +391,7 @@ public class FormScreen extends AppCompatActivity {
         MilkInf milk = new MilkInf();
 
         RadioButton alc = findViewById(R.id.alcohol_e_radio);
-        if(alc.isChecked()){
+        if (alc.isChecked()) {
             milk.setAlcohol(true);
             milk.setAlcoholtype(alcohol_type.getSelectedItem().toString());
         }
@@ -355,83 +401,61 @@ public class FormScreen extends AppCompatActivity {
         milk.setAntibiotic_inf(antibiotic_e_radio.isChecked());
         milk.setDuty(duty_id);
         milk.setFarm(farmid);
-
-        //getting tank inputs
-        if(c1.isChecked()){
-            milk.setTank1_liter(Integer.parseInt(tank1Inp.getText().toString()));
-        }
-        if(c2.isChecked()){
-            milk.setTank2_liter(Integer.parseInt(tank2Inp.getText().toString()));
-        }
-        if(c3.isChecked()){
-            milk.setTank3_liter(Integer.parseInt(tank3Inp.getText().toString()));
-        }
-        if(c4.isChecked()){
-            milk.setTank4_liter(Integer.parseInt(tank4Inp.getText().toString()));
-        }
-        if(c5.isChecked()){
-            milk.setTank5_liter(Integer.parseInt(tank5Inp.getText().toString()));
-        }
-
-        milk.setMilkId(duty_id);
         milk.setMilktype(milktype.getSelectedItem().toString());
         RadioButton milktemp = findViewById(R.id.deg46_radio);
-        if(milktemp.isChecked()){
+        if (milktemp.isChecked()) {
             milk.setTemp("4-6");
-        }else{
+        } else {
             milk.setTemp(milktemp_spin.getSelectedItem().toString());
         }
         RadioButton refractemp = findViewById(R.id.below95_radio);
-        if(refractemp.isChecked()){
+        if (refractemp.isChecked()) {
             milk.setR_temp(refracTemp_spin.getSelectedItem().toString());
-        }else{
+        } else {
             milk.setR_temp(">9.5");
         }
 
-        QueryBuilder<TankInf> fortanks = ses.getTankInfDao().queryBuilder();
-        List<TankInf> tanks = fortanks.where(TankInfDao.Properties.Truck.eq(truck_id)).list();
-        for (TankInf tank : tanks){
-            if (tank.getTankN() == 1){
-                if(c1.isChecked()){
-                    milk.setTank1(tank.getTankId());
-                }
-            }else if(tank.getTankN() == 2){
-                if(c2.isChecked()){
-                    milk.setTank2(tank.getTankId());
-                }
-            }else if(tank.getTankN() == 3){
-                if(c3.isChecked()){
-                    milk.setTank3(tank.getTankId());
-                }
-            }else if(tank.getTankN() == 4){
-                if(c4.isChecked()){
-                    milk.setTank4(tank.getTankId());
-                }
-            }else if(tank.getTankN() == 5){
-                if(c5.isChecked()){
-                    milk.setTank5(tank.getTankId());
-                }
-            }
-        }
+        int tankN = c1.isChecked()?1:c2.isChecked()?2:c3.isChecked()?3:c4.isChecked()?4:c5.isChecked()?5:0;
+        TankInf tank = helperFunctions.getTank(ses, truck_id, tankN);
+        milk.setTank_id(tank.getTankId());
+        milk.setTankN(tankN);
+
+
+
+        int total = Integer.parseInt(tank1Inp.getText().toString()) + Integer.parseInt(tank2Inp.getText().toString()) + Integer.parseInt(tank3Inp.getText().toString()) +
+                Integer.parseInt(tank4Inp.getText().toString()) + Integer.parseInt(tank5Inp.getText().toString());
+        //getting tank inputs
+        milk.setTank_liter(total);
 
         milk.setLeave_milk(leaveMilk_radio.isChecked());
 
         ses.getMilkInfDao().insert(milk);
-        Toast.makeText(FormScreen.this,"Kaydedildi.!", Toast.LENGTH_LONG).show();
+
+        Toast.makeText(FormScreen.this, "Kaydedildi.!", Toast.LENGTH_LONG).show();
 
     }
 
     private void openDialog() {
         RadioButton other_comm = findViewById(R.id.other_radio);
+        RadioButton bad_milk = findViewById(R.id.bad_milk_radio);
+        RadioButton someMilkRem = findViewById(R.id.some_milk_radio);
         TextView comment = findViewById(R.id.comment_tv);
-        if(antibiotic_e_radio.isChecked() && !leaveMilk_radio.isChecked()){
+        if (antibiotic_e_radio.isChecked() && !leaveMilk_radio.isChecked()) {
             Toast.makeText(FormScreen.this, getString(R.string.antibiotic_err), Toast.LENGTH_LONG).show();
-        }else if((c1.isChecked() && tank1Inp.getText().toString().equals("")) || (c2.isChecked() && tank2Inp.getText().toString().equals("")) || (c3.isChecked() && tank3Inp.getText().toString().equals(""))
-        || (c4.isChecked() && tank4Inp.getText().toString().equals("")) || (c5.isChecked() && tank5Inp.getText().toString().equals(""))){
+        } else if ((c1.isChecked() && tank1Inp.getText().toString().equals("")) || (c2.isChecked() && tank2Inp.getText().toString().equals("")) || (c3.isChecked() && tank3Inp.getText().toString().equals(""))
+                || (c4.isChecked() && tank4Inp.getText().toString().equals("")) || (c5.isChecked() && tank5Inp.getText().toString().equals(""))) {
             Toast.makeText(FormScreen.this, getString(R.string.empty_area_err_str), Toast.LENGTH_LONG).show();
-        }else if(((!c1.isChecked() && !c2.isChecked() && !c3.isChecked() && !c4.isChecked() && !c5.isChecked()) && !leaveMilk_radio.isChecked()) || (other_comm.isChecked() && comment.getText().toString().equals(""))){
+        } else if (((!c1.isChecked() && !c2.isChecked() && !c3.isChecked() && !c4.isChecked() && !c5.isChecked()) && !leaveMilk_radio.isChecked()) || (leaveMilk_radio.isChecked() && (!other_comm.isChecked() && !bad_milk.isChecked()))
+                || (other_comm.isChecked() && comment.getText().toString().equals(""))) {
             Toast.makeText(FormScreen.this, getString(R.string.empty_area_err_str), Toast.LENGTH_LONG).show();
-        }else{
+        } else if (!checkTankLimits()) {
+            Toast.makeText(FormScreen.this, getString(R.string.tank_limit_exceeded_str), Toast.LENGTH_LONG).show();
+        } else if(!checkMilkTypes()){
+            Toast.makeText(FormScreen.this, getString(R.string.milk_not_comp_str), Toast.LENGTH_LONG).show();
+        }else if(someMilkRem.isChecked()){
+            makeSubmission();
+            Toast.makeText(FormScreen.this, getString(R.string.some_milk_sent_str), Toast.LENGTH_LONG).show();
+        }else {
             final Dialog beforesub = new Dialog(FormScreen.this);
             beforesub.setContentView(R.layout.before_submission);
             beforesub.setTitle("Göndermeden önce..");
@@ -446,12 +470,16 @@ public class FormScreen extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     makeSubmission();
-                    farm_taken_milk.setIsEnvClean(isClean4.isChecked());
-                    farm_taken_milk.setIsPumpClean(isClean2.isChecked());
-                    farm_taken_milk.setIsWeighterClean(isClean3.isChecked());
-                    farm_taken_milk.setIsTankClean(isClean1.isChecked());
+                    FarmInf farm =  new FarmInf();
+                    farm.setFarmID(farm_taken_milk.getFarmID());
+                    farm.setFarmName(farm_taken_milk.getFarmName());
+                    farm.setIsEnvClean(isClean4.isChecked());
+                    farm.setIsPumpClean(isClean2.isChecked());
+                    farm.setIsWeighterClean(isClean3.isChecked());
+                    farm.setIsTankClean(isClean1.isChecked());
+                    ses.update(farm);
 
-                    beforesub.hide();
+                    beforesub.cancel();
 
                     //updating duty as done
                     DutyInf duty = new DutyInf();
@@ -466,6 +494,50 @@ public class FormScreen extends AppCompatActivity {
 
         }
     }
+
+
+    //checker method for milktypes
+    private boolean checkMilkTypes() {
+        int tankN = c1.isChecked()?1:c2.isChecked()?2:c3.isChecked()?3:c4.isChecked()?4:c5.isChecked()?5:0;
+        TankInf tank= helperFunctions.getTank(ses, truck_id, tankN);
+        RadioButton alcohol_e = findViewById(R.id.alcohol_e_radio);
+        RadioButton below95 = findViewById(R.id.below95_radio);
+        RadioButton bw46 = findViewById(R.id.deg46_radio);
+        MilkInf milk = helperFunctions.getMilk(ses, tank.getTankId());
+        if (milk != null) {
+            if(milk.getAlcoholtype().equalsIgnoreCase(alcohol_type.getSelectedItem().toString()) && milk.getMilktype().equalsIgnoreCase(milktype.getSelectedItem().toString()) &&
+                    (milk.getAlcohol() == alcohol_e.isChecked()) &&
+                    (milk.getR_temp().equalsIgnoreCase(refracTemp_spin.getSelectedItem().toString()) || milk.getR_temp().equalsIgnoreCase(">9.5") && below95.isChecked()) &&
+                    (milk.getTemp().equalsIgnoreCase(milktemp_spin.getSelectedItem().toString()) || milk.getTemp().equalsIgnoreCase("4-6") && bw46.isChecked())){
+                return true;
+            }
+
+            }
+        return false;
+    }
+
+
+    //a checker method for tanks
+    private boolean checkTankLimits() {
+        int tankN = c1.isChecked()?1:c2.isChecked()?2:c3.isChecked()?3:c4.isChecked()?4:c5.isChecked()?5:0;
+        TankInf each = helperFunctions.getTank(ses, truck_id, tankN);
+        TankInf tank = new TankInf();
+        tank.setTankId(each.getTankId());
+        tank.setTruck(truck_id);
+        tank.setLimit(each.getLimit());
+        tank.setTankN(each.getTankN());
+        String str = tank1Inp.getText().toString();
+        if (!str.equals("")) {
+            if (each.getLimit() >= each.getFullness() + Integer.parseInt(str)) {
+                tank.setFullness(each.getFullness() + Integer.parseInt(str));
+            }else return false;
+        }
+        ses.update(tank);
+        return true;
+    }
+
+
+
 
 
     int temp = 1;

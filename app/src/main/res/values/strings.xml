@@ -45,7 +45,7 @@
     <string name="comment_str">Notunuzu buraya giriniz.(500 karakter)</string>
     <string name="leave_milk_str">Sütü Almadım.</string>
     <string name="all_milk_str">Bütün sütü aldım.</string>
-    <string name="some_milk_str">Sütün bir kısmını aldım.</string>
+    <string name="some_milk_str">Başka süt ekleyeceğim.</string>
     <string name="other_reason_str" >Diğer Sebepler(Not Yazdım)</string>
     <string name="bad_milk_str">Bozuk Ürün</string>
     <string name="yes_str">Evet, Onaylıyorum.</string>
@@ -64,4 +64,7 @@
     <string name="tank5_str">Tank 5</string>
     <string name="antibiotic_err">Antibiyotikli bir ürünü alamazsınız.</string>
     <string name="empty_area_err_str">Boş alan bıraktınız. Lütfen tamamlayın.</string>
+    <string name="tank_limit_exceeded_str">Tank dolu.</string>
+    <string name="milk_not_comp_str">Sütler uyumlu değil.</string>
+    <string name="some_milk_sent_str">Sütün bir kısmını gönderdiniz. Şimdi Ek gönderme yapmalısınız.</string>
 </resources>

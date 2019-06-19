@@ -24,25 +24,18 @@ public class MilkInfDao extends AbstractDao<MilkInf, Long> {
     public static class Properties {
         public final static Property MilkId = new Property(0, Long.class, "milkId", true, "_id");
         public final static Property Farm = new Property(1, long.class, "farm", false, "FARM");
-        public final static Property Tank1 = new Property(2, long.class, "tank1", false, "TANK1");
-        public final static Property Tank2 = new Property(3, long.class, "tank2", false, "TANK2");
-        public final static Property Tank3 = new Property(4, long.class, "tank3", false, "TANK3");
-        public final static Property Tank4 = new Property(5, long.class, "tank4", false, "TANK4");
-        public final static Property Tank5 = new Property(6, long.class, "tank5", false, "TANK5");
-        public final static Property Duty = new Property(7, long.class, "duty", false, "DUTY");
-        public final static Property Milktype = new Property(8, String.class, "milktype", false, "MILKTYPE");
-        public final static Property Tank1_liter = new Property(9, int.class, "tank1_liter", false, "TANK1_LITER");
-        public final static Property Tank2_liter = new Property(10, int.class, "tank2_liter", false, "TANK2_LITER");
-        public final static Property Tank3_liter = new Property(11, int.class, "tank3_liter", false, "TANK3_LITER");
-        public final static Property Tank4_liter = new Property(12, int.class, "tank4_liter", false, "TANK4_LITER");
-        public final static Property Tank5_liter = new Property(13, int.class, "tank5_liter", false, "TANK5_LITER");
-        public final static Property Leave_milk = new Property(14, boolean.class, "leave_milk", false, "LEAVE_MILK");
-        public final static Property Antibiotic_inf = new Property(15, boolean.class, "antibiotic_inf", false, "ANTIBIOTIC_INF");
-        public final static Property Temp = new Property(16, String.class, "temp", false, "TEMP");
-        public final static Property R_temp = new Property(17, String.class, "r_temp", false, "R_TEMP");
-        public final static Property Alcohol = new Property(18, boolean.class, "alcohol", false, "ALCOHOL");
-        public final static Property Alcoholtype = new Property(19, String.class, "alcoholtype", false, "ALCOHOLTYPE");
-        public final static Property Comment = new Property(20, String.class, "comment", false, "COMMENT");
+        public final static Property Tank_id = new Property(2, long.class, "tank_id", false, "TANK_ID");
+        public final static Property TankN = new Property(3, int.class, "tankN", false, "TANK_N");
+        public final static Property Duty = new Property(4, long.class, "duty", false, "DUTY");
+        public final static Property Milktype = new Property(5, String.class, "milktype", false, "MILKTYPE");
+        public final static Property Tank_liter = new Property(6, int.class, "tank_liter", false, "TANK_LITER");
+        public final static Property Leave_milk = new Property(7, boolean.class, "leave_milk", false, "LEAVE_MILK");
+        public final static Property Antibiotic_inf = new Property(8, boolean.class, "antibiotic_inf", false, "ANTIBIOTIC_INF");
+        public final static Property Temp = new Property(9, String.class, "temp", false, "TEMP");
+        public final static Property R_temp = new Property(10, String.class, "r_temp", false, "R_TEMP");
+        public final static Property Alcohol = new Property(11, boolean.class, "alcohol", false, "ALCOHOL");
+        public final static Property Alcoholtype = new Property(12, String.class, "alcoholtype", false, "ALCOHOLTYPE");
+        public final static Property Comment = new Property(13, String.class, "comment", false, "COMMENT");
     }
 
 
@@ -60,25 +53,18 @@ public class MilkInfDao extends AbstractDao<MilkInf, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"sut_tbl\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: milkId
                 "\"FARM\" INTEGER NOT NULL ," + // 1: farm
-                "\"TANK1\" INTEGER NOT NULL ," + // 2: tank1
-                "\"TANK2\" INTEGER NOT NULL ," + // 3: tank2
-                "\"TANK3\" INTEGER NOT NULL ," + // 4: tank3
-                "\"TANK4\" INTEGER NOT NULL ," + // 5: tank4
-                "\"TANK5\" INTEGER NOT NULL ," + // 6: tank5
-                "\"DUTY\" INTEGER NOT NULL ," + // 7: duty
-                "\"MILKTYPE\" TEXT," + // 8: milktype
-                "\"TANK1_LITER\" INTEGER NOT NULL ," + // 9: tank1_liter
-                "\"TANK2_LITER\" INTEGER NOT NULL ," + // 10: tank2_liter
-                "\"TANK3_LITER\" INTEGER NOT NULL ," + // 11: tank3_liter
-                "\"TANK4_LITER\" INTEGER NOT NULL ," + // 12: tank4_liter
-                "\"TANK5_LITER\" INTEGER NOT NULL ," + // 13: tank5_liter
-                "\"LEAVE_MILK\" INTEGER NOT NULL ," + // 14: leave_milk
-                "\"ANTIBIOTIC_INF\" INTEGER NOT NULL ," + // 15: antibiotic_inf
-                "\"TEMP\" TEXT," + // 16: temp
-                "\"R_TEMP\" TEXT," + // 17: r_temp
-                "\"ALCOHOL\" INTEGER NOT NULL ," + // 18: alcohol
-                "\"ALCOHOLTYPE\" TEXT," + // 19: alcoholtype
-                "\"COMMENT\" TEXT);"); // 20: comment
+                "\"TANK_ID\" INTEGER NOT NULL ," + // 2: tank_id
+                "\"TANK_N\" INTEGER NOT NULL ," + // 3: tankN
+                "\"DUTY\" INTEGER NOT NULL ," + // 4: duty
+                "\"MILKTYPE\" TEXT," + // 5: milktype
+                "\"TANK_LITER\" INTEGER NOT NULL ," + // 6: tank_liter
+                "\"LEAVE_MILK\" INTEGER NOT NULL ," + // 7: leave_milk
+                "\"ANTIBIOTIC_INF\" INTEGER NOT NULL ," + // 8: antibiotic_inf
+                "\"TEMP\" TEXT," + // 9: temp
+                "\"R_TEMP\" TEXT," + // 10: r_temp
+                "\"ALCOHOL\" INTEGER NOT NULL ," + // 11: alcohol
+                "\"ALCOHOLTYPE\" TEXT," + // 12: alcoholtype
+                "\"COMMENT\" TEXT);"); // 13: comment
     }
 
     /** Drops the underlying database table. */
@@ -96,44 +82,37 @@ public class MilkInfDao extends AbstractDao<MilkInf, Long> {
             stmt.bindLong(1, milkId);
         }
         stmt.bindLong(2, entity.getFarm());
-        stmt.bindLong(3, entity.getTank1());
-        stmt.bindLong(4, entity.getTank2());
-        stmt.bindLong(5, entity.getTank3());
-        stmt.bindLong(6, entity.getTank4());
-        stmt.bindLong(7, entity.getTank5());
-        stmt.bindLong(8, entity.getDuty());
+        stmt.bindLong(3, entity.getTank_id());
+        stmt.bindLong(4, entity.getTankN());
+        stmt.bindLong(5, entity.getDuty());
  
         String milktype = entity.getMilktype();
         if (milktype != null) {
-            stmt.bindString(9, milktype);
+            stmt.bindString(6, milktype);
         }
-        stmt.bindLong(10, entity.getTank1_liter());
-        stmt.bindLong(11, entity.getTank2_liter());
-        stmt.bindLong(12, entity.getTank3_liter());
-        stmt.bindLong(13, entity.getTank4_liter());
-        stmt.bindLong(14, entity.getTank5_liter());
-        stmt.bindLong(15, entity.getLeave_milk() ? 1L: 0L);
-        stmt.bindLong(16, entity.getAntibiotic_inf() ? 1L: 0L);
+        stmt.bindLong(7, entity.getTank_liter());
+        stmt.bindLong(8, entity.getLeave_milk() ? 1L: 0L);
+        stmt.bindLong(9, entity.getAntibiotic_inf() ? 1L: 0L);
  
         String temp = entity.getTemp();
         if (temp != null) {
-            stmt.bindString(17, temp);
+            stmt.bindString(10, temp);
         }
  
         String r_temp = entity.getR_temp();
         if (r_temp != null) {
-            stmt.bindString(18, r_temp);
+            stmt.bindString(11, r_temp);
         }
-        stmt.bindLong(19, entity.getAlcohol() ? 1L: 0L);
+        stmt.bindLong(12, entity.getAlcohol() ? 1L: 0L);
  
         String alcoholtype = entity.getAlcoholtype();
         if (alcoholtype != null) {
-            stmt.bindString(20, alcoholtype);
+            stmt.bindString(13, alcoholtype);
         }
  
         String comment = entity.getComment();
         if (comment != null) {
-            stmt.bindString(21, comment);
+            stmt.bindString(14, comment);
         }
     }
 
@@ -146,44 +125,37 @@ public class MilkInfDao extends AbstractDao<MilkInf, Long> {
             stmt.bindLong(1, milkId);
         }
         stmt.bindLong(2, entity.getFarm());
-        stmt.bindLong(3, entity.getTank1());
-        stmt.bindLong(4, entity.getTank2());
-        stmt.bindLong(5, entity.getTank3());
-        stmt.bindLong(6, entity.getTank4());
-        stmt.bindLong(7, entity.getTank5());
-        stmt.bindLong(8, entity.getDuty());
+        stmt.bindLong(3, entity.getTank_id());
+        stmt.bindLong(4, entity.getTankN());
+        stmt.bindLong(5, entity.getDuty());
  
         String milktype = entity.getMilktype();
         if (milktype != null) {
-            stmt.bindString(9, milktype);
+            stmt.bindString(6, milktype);
         }
-        stmt.bindLong(10, entity.getTank1_liter());
-        stmt.bindLong(11, entity.getTank2_liter());
-        stmt.bindLong(12, entity.getTank3_liter());
-        stmt.bindLong(13, entity.getTank4_liter());
-        stmt.bindLong(14, entity.getTank5_liter());
-        stmt.bindLong(15, entity.getLeave_milk() ? 1L: 0L);
-        stmt.bindLong(16, entity.getAntibiotic_inf() ? 1L: 0L);
+        stmt.bindLong(7, entity.getTank_liter());
+        stmt.bindLong(8, entity.getLeave_milk() ? 1L: 0L);
+        stmt.bindLong(9, entity.getAntibiotic_inf() ? 1L: 0L);
  
         String temp = entity.getTemp();
         if (temp != null) {
-            stmt.bindString(17, temp);
+            stmt.bindString(10, temp);
         }
  
         String r_temp = entity.getR_temp();
         if (r_temp != null) {
-            stmt.bindString(18, r_temp);
+            stmt.bindString(11, r_temp);
         }
-        stmt.bindLong(19, entity.getAlcohol() ? 1L: 0L);
+        stmt.bindLong(12, entity.getAlcohol() ? 1L: 0L);
  
         String alcoholtype = entity.getAlcoholtype();
         if (alcoholtype != null) {
-            stmt.bindString(20, alcoholtype);
+            stmt.bindString(13, alcoholtype);
         }
  
         String comment = entity.getComment();
         if (comment != null) {
-            stmt.bindString(21, comment);
+            stmt.bindString(14, comment);
         }
     }
 
@@ -197,25 +169,18 @@ public class MilkInfDao extends AbstractDao<MilkInf, Long> {
         MilkInf entity = new MilkInf( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // milkId
             cursor.getLong(offset + 1), // farm
-            cursor.getLong(offset + 2), // tank1
-            cursor.getLong(offset + 3), // tank2
-            cursor.getLong(offset + 4), // tank3
-            cursor.getLong(offset + 5), // tank4
-            cursor.getLong(offset + 6), // tank5
-            cursor.getLong(offset + 7), // duty
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // milktype
-            cursor.getInt(offset + 9), // tank1_liter
-            cursor.getInt(offset + 10), // tank2_liter
-            cursor.getInt(offset + 11), // tank3_liter
-            cursor.getInt(offset + 12), // tank4_liter
-            cursor.getInt(offset + 13), // tank5_liter
-            cursor.getShort(offset + 14) != 0, // leave_milk
-            cursor.getShort(offset + 15) != 0, // antibiotic_inf
-            cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16), // temp
-            cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17), // r_temp
-            cursor.getShort(offset + 18) != 0, // alcohol
-            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // alcoholtype
-            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20) // comment
+            cursor.getLong(offset + 2), // tank_id
+            cursor.getInt(offset + 3), // tankN
+            cursor.getLong(offset + 4), // duty
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // milktype
+            cursor.getInt(offset + 6), // tank_liter
+            cursor.getShort(offset + 7) != 0, // leave_milk
+            cursor.getShort(offset + 8) != 0, // antibiotic_inf
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // temp
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // r_temp
+            cursor.getShort(offset + 11) != 0, // alcohol
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // alcoholtype
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13) // comment
         );
         return entity;
     }
@@ -224,25 +189,18 @@ public class MilkInfDao extends AbstractDao<MilkInf, Long> {
     public void readEntity(Cursor cursor, MilkInf entity, int offset) {
         entity.setMilkId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setFarm(cursor.getLong(offset + 1));
-        entity.setTank1(cursor.getLong(offset + 2));
-        entity.setTank2(cursor.getLong(offset + 3));
-        entity.setTank3(cursor.getLong(offset + 4));
-        entity.setTank4(cursor.getLong(offset + 5));
-        entity.setTank5(cursor.getLong(offset + 6));
-        entity.setDuty(cursor.getLong(offset + 7));
-        entity.setMilktype(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setTank1_liter(cursor.getInt(offset + 9));
-        entity.setTank2_liter(cursor.getInt(offset + 10));
-        entity.setTank3_liter(cursor.getInt(offset + 11));
-        entity.setTank4_liter(cursor.getInt(offset + 12));
-        entity.setTank5_liter(cursor.getInt(offset + 13));
-        entity.setLeave_milk(cursor.getShort(offset + 14) != 0);
-        entity.setAntibiotic_inf(cursor.getShort(offset + 15) != 0);
-        entity.setTemp(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
-        entity.setR_temp(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
-        entity.setAlcohol(cursor.getShort(offset + 18) != 0);
-        entity.setAlcoholtype(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
-        entity.setComment(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
+        entity.setTank_id(cursor.getLong(offset + 2));
+        entity.setTankN(cursor.getInt(offset + 3));
+        entity.setDuty(cursor.getLong(offset + 4));
+        entity.setMilktype(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setTank_liter(cursor.getInt(offset + 6));
+        entity.setLeave_milk(cursor.getShort(offset + 7) != 0);
+        entity.setAntibiotic_inf(cursor.getShort(offset + 8) != 0);
+        entity.setTemp(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setR_temp(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setAlcohol(cursor.getShort(offset + 11) != 0);
+        entity.setAlcoholtype(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setComment(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
      }
     
     @Override
