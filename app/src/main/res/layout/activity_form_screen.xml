@@ -34,6 +34,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <EditText
+            android:id="@+id/tankLiter_input"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:background="@android:color/background_light"
+            android:ems="5"
+            android:hint="@string/tank1_str"
+            android:inputType="number"
+            android:maxLength="5"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="15sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.116"
+            app:layout_constraintStart_toEndOf="@+id/amount_tv"
+            app:layout_constraintTop_toBottomOf="@+id/milktype_liter_lay"
+            app:layout_constraintVertical_bias="0.507" />
+
         <LinearLayout
             android:id="@+id/milktype_liter_lay"
             android:layout_width="wrap_content"
@@ -59,104 +85,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="269dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/truck_lay"
-            app:layout_constraintTop_toBottomOf="@+id/milktype_liter_lay">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/tank1Liter_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@android:color/background_light"
-                    android:ems="5"
-                    android:hint="@string/tank1_str"
-                    android:inputType="number"
-                    android:maxLength="5"
-                    android:textSize="15sp"
-                    android:visibility="invisible" />
-
-                <EditText
-                    android:id="@+id/tank2Liter_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="4dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/background_light"
-                    android:ems="5"
-                    android:hint="@string/tank2_str"
-                    android:inputType="number"
-                    android:maxLength="5"
-                    android:textSize="15sp"
-                    android:visibility="invisible" />
-
-                <EditText
-                    android:id="@+id/tank3Liter_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="4dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/background_light"
-                    android:ems="5"
-                    android:hint="@string/tank3_str"
-                    android:inputType="number"
-                    android:maxLength="5"
-                    android:textSize="15sp"
-                    android:visibility="invisible" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="8dp"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/tank4Liter_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@android:color/background_light"
-                    android:ems="5"
-                    android:hint="@string/tank4_str"
-                    android:inputType="number"
-                    android:maxLength="5"
-                    android:textSize="15sp"
-                    android:visibility="invisible" />
-
-                <EditText
-                    android:id="@+id/tank5Liter_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="4dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/background_light"
-                    android:ems="5"
-                    android:hint="@string/tank5_str"
-                    android:inputType="number"
-                    android:maxLength="5"
-                    android:textSize="15sp"
-                    android:visibility="invisible" />
-            </LinearLayout>
         </LinearLayout>
 
         <TextView
@@ -200,66 +128,80 @@
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/sutas_truck" />
 
-            <CheckBox
-                android:id="@+id/tank1_chk"
-                android:layout_width="32dp"
+            <RadioGroup
+                android:id="@+id/truck_chk_radio"
+                android:layout_width="254dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="212dp"
-                android:layout_marginLeft="212dp"
-                android:layout_marginTop="28dp"
-                android:background="@android:drawable/checkbox_off_background"
-                android:visibility="gone"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/truck_img"
+                app:layout_constraintEnd_toEndOf="@+id/truck_img"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/truck_img"
-                app:layout_constraintTop_toTopOf="@+id/truck_img" />
+                app:layout_constraintTop_toTopOf="@+id/truck_img"
+                app:layout_constraintVertical_bias="0.373">
 
-            <CheckBox
-                android:id="@+id/tank2_chk"
-                android:layout_width="32dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="164dp"
-                android:layout_marginLeft="164dp"
-                android:layout_marginTop="28dp"
-                android:background="@android:drawable/checkbox_off_background"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="@+id/truck_img"
-                app:layout_constraintTop_toTopOf="@+id/truck_img" />
+                <RadioButton
+                    android:id="@+id/tank5_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:background="@android:color/background_light"
+                    android:visibility="invisible" />
 
-            <CheckBox
-                android:id="@+id/tank3_chk"
-                android:layout_width="32dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="112dp"
-                android:layout_marginLeft="112dp"
-                android:layout_marginTop="28dp"
-                android:background="@android:drawable/checkbox_off_background"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="@+id/truck_img"
-                app:layout_constraintTop_toTopOf="@+id/truck_img" />
+                <RadioButton
+                    android:id="@+id/tank4_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:background="@android:color/background_light"
+                    android:visibility="invisible" />
 
-            <CheckBox
-                android:id="@+id/tank4_chk"
-                android:layout_width="32dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
-                android:layout_marginLeft="60dp"
-                android:layout_marginTop="28dp"
-                android:background="@android:drawable/checkbox_off_background"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="@+id/truck_img"
-                app:layout_constraintTop_toTopOf="@+id/truck_img" />
+                <RadioButton
+                    android:id="@+id/tank3_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:background="@android:color/background_light"
+                    android:visibility="invisible" />
 
-            <CheckBox
-                android:id="@+id/tank5_chk"
-                android:layout_width="32dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="28dp"
-                android:background="@android:drawable/checkbox_off_background"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/truck_img" />
+                <RadioButton
+                    android:id="@+id/tank2_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:background="@android:color/background_light"
+                    android:visibility="invisible" />
+
+                <RadioButton
+                    android:id="@+id/tank1_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:background="@android:color/background_light"
+                    android:checked="false"
+                    android:visibility="visible" />
+
+            </RadioGroup>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/amount_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/background_light"
+            android:text="@string/amount_str"
+            android:textColor="@android:color/background_dark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/truck_lay"
+            app:layout_constraintTop_toBottomOf="@+id/milktype_liter_lay" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
