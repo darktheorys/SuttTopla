@@ -129,6 +129,9 @@ public class MilkInf {
         this.comment = comment;
     }
 
-    
 
+    @Override
+    public String toString() {
+        return "Çiftlik id: " + getFarm() + ", Süt Türü/Alınan: "+ getMilktype() + " / " + getTank_liter();
+    }
 }

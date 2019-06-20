@@ -1,5 +1,6 @@
 package com.brkomrs.sttopla;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +9,8 @@ import android.widget.Button;
 import android.widget.ArrayAdapter;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 import com.brkomrs.sttopla.database.DutyInf;
@@ -18,13 +21,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.brkomrs.sttopla.database.MilkInf;
 import com.brkomrs.sttopla.necessary.helperFunctions;
 
 public class MissionSelectScreen extends AppCompatActivity{
     private List<DutyInf>  duties;
     private Spinner spin;
     private long user_id;
-    private Button goSelected;
+    private Button goSelected, showPrev;
     private SwipeRefreshLayout swipes;
 
     @Override
@@ -32,7 +36,9 @@ public class MissionSelectScreen extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_missionselect);
 
+
         //getters for widgets
+        showPrev = findViewById(R.id.prevsubs_btn);
         swipes = findViewById(R.id.swipe);
         goSelected = findViewById(R.id.go_duty_btn);
         spin = findViewById(R.id.mission_spin);
@@ -84,7 +90,29 @@ public class MissionSelectScreen extends AppCompatActivity{
         });
 
 
+        showPrev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goShowPrevs();
+            }
+        });
+    }
 
+    private void goShowPrevs() {
+        List<DutyInf> allDuties = helperFunctions.getAllDuties(((dbHelper)getApplication()).getDaoSession(), user_id);
+        ArrayList<MilkInf> prevMilks = new ArrayList<>();
+        for (DutyInf each : allDuties){
+            prevMilks.addAll(helperFunctions.getAllMilks(((dbHelper)getApplication()).getDaoSession(), each.getDutyId()));
+        }
+        final Dialog prevs = new Dialog(MissionSelectScreen.this);
+        prevs.setContentView(R.layout.show_prevs);
+        prevs.setTitle("Eski gönderilenler..");
+        prevs.show();
+        ListView lv = prevs.findViewById(R.id.prev_subs_lv);
+        ArrayAdapter<MilkInf> veriAdaptoru=new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, prevMilks);
+        lv.setAdapter(veriAdaptoru);
+        prevs.show();
+        prevs.setCancelable(true);
     }
 
     //duty getter fuction

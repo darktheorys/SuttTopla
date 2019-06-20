@@ -286,6 +286,19 @@ public class helperFunctions {
     }
 
     /**
+     * To get duties from database for a given id
+     * @param ses
+     * @param user_id
+     * @return
+     */
+    public static List<DutyInf> getAllDuties(DaoSession ses, long user_id){
+        QueryBuilder<DutyInf> q = ses.getDutyInfDao().queryBuilder();
+        List<DutyInf> list = q.where(DutyInfDao.Properties.User.eq(user_id)).list();
+        return list;
+    }
+
+
+    /**
      * To get milk from database for a given id
      * @param ses
      * @param tank_id
@@ -300,6 +313,18 @@ public class helperFunctions {
         }else{
             return null;
         }
+    }
+
+    /**
+     * To get milk from database for a given id
+     * @param ses
+     * @param duty_id
+     * @return
+     */
+    public static List<MilkInf> getAllMilks(DaoSession ses, long duty_id){
+        QueryBuilder<MilkInf> q = ses.getMilkInfDao().queryBuilder();
+        List<MilkInf> list = q.where(MilkInfDao.Properties.Duty.eq(duty_id)).list();
+        return list;
     }
 
 
