@@ -286,7 +286,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:checkedButton="@id/deg46_radio"
                         android:orientation="horizontal">
 
                         <RadioButton
@@ -311,7 +310,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:checkedButton="@id/alcohol_ne_radio"
                         android:orientation="horizontal">
 
                         <RadioButton
@@ -335,7 +333,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:checkedButton="@id/antibiotic_ne_radio"
                         android:orientation="horizontal">
 
                         <RadioButton
@@ -358,15 +355,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:checkedButton="@id/above95_radio"
                         android:orientation="horizontal">
-
-                        <RadioButton
-                            android:id="@+id/below95_radio"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/below95_str" />
 
                         <RadioButton
                             android:id="@+id/above95_radio"
@@ -374,6 +363,13 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:text="@string/above95_str" />
+
+                        <RadioButton
+                            android:id="@+id/below95_radio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/below95_str" />
 
                     </RadioGroup>
 

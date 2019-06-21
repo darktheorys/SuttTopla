@@ -31,8 +31,8 @@ public class MilkInfDao extends AbstractDao<MilkInf, Long> {
         public final static Property Tank_liter = new Property(6, int.class, "tank_liter", false, "TANK_LITER");
         public final static Property Leave_milk = new Property(7, boolean.class, "leave_milk", false, "LEAVE_MILK");
         public final static Property Antibiotic_inf = new Property(8, boolean.class, "antibiotic_inf", false, "ANTIBIOTIC_INF");
-        public final static Property Temp = new Property(9, String.class, "temp", false, "TEMP");
-        public final static Property R_temp = new Property(10, String.class, "r_temp", false, "R_TEMP");
+        public final static Property Temp = new Property(9, double.class, "temp", false, "TEMP");
+        public final static Property R_temp = new Property(10, double.class, "r_temp", false, "R_TEMP");
         public final static Property Alcohol = new Property(11, boolean.class, "alcohol", false, "ALCOHOL");
         public final static Property Alcoholtype = new Property(12, String.class, "alcoholtype", false, "ALCOHOLTYPE");
         public final static Property Comment = new Property(13, String.class, "comment", false, "COMMENT");
@@ -60,8 +60,8 @@ public class MilkInfDao extends AbstractDao<MilkInf, Long> {
                 "\"TANK_LITER\" INTEGER NOT NULL ," + // 6: tank_liter
                 "\"LEAVE_MILK\" INTEGER NOT NULL ," + // 7: leave_milk
                 "\"ANTIBIOTIC_INF\" INTEGER NOT NULL ," + // 8: antibiotic_inf
-                "\"TEMP\" TEXT," + // 9: temp
-                "\"R_TEMP\" TEXT," + // 10: r_temp
+                "\"TEMP\" REAL NOT NULL ," + // 9: temp
+                "\"R_TEMP\" REAL NOT NULL ," + // 10: r_temp
                 "\"ALCOHOL\" INTEGER NOT NULL ," + // 11: alcohol
                 "\"ALCOHOLTYPE\" TEXT," + // 12: alcoholtype
                 "\"COMMENT\" TEXT);"); // 13: comment
@@ -93,16 +93,8 @@ public class MilkInfDao extends AbstractDao<MilkInf, Long> {
         stmt.bindLong(7, entity.getTank_liter());
         stmt.bindLong(8, entity.getLeave_milk() ? 1L: 0L);
         stmt.bindLong(9, entity.getAntibiotic_inf() ? 1L: 0L);
- 
-        String temp = entity.getTemp();
-        if (temp != null) {
-            stmt.bindString(10, temp);
-        }
- 
-        String r_temp = entity.getR_temp();
-        if (r_temp != null) {
-            stmt.bindString(11, r_temp);
-        }
+        stmt.bindDouble(10, entity.getTemp());
+        stmt.bindDouble(11, entity.getR_temp());
         stmt.bindLong(12, entity.getAlcohol() ? 1L: 0L);
  
         String alcoholtype = entity.getAlcoholtype();
@@ -136,16 +128,8 @@ public class MilkInfDao extends AbstractDao<MilkInf, Long> {
         stmt.bindLong(7, entity.getTank_liter());
         stmt.bindLong(8, entity.getLeave_milk() ? 1L: 0L);
         stmt.bindLong(9, entity.getAntibiotic_inf() ? 1L: 0L);
- 
-        String temp = entity.getTemp();
-        if (temp != null) {
-            stmt.bindString(10, temp);
-        }
- 
-        String r_temp = entity.getR_temp();
-        if (r_temp != null) {
-            stmt.bindString(11, r_temp);
-        }
+        stmt.bindDouble(10, entity.getTemp());
+        stmt.bindDouble(11, entity.getR_temp());
         stmt.bindLong(12, entity.getAlcohol() ? 1L: 0L);
  
         String alcoholtype = entity.getAlcoholtype();
@@ -176,8 +160,8 @@ public class MilkInfDao extends AbstractDao<MilkInf, Long> {
             cursor.getInt(offset + 6), // tank_liter
             cursor.getShort(offset + 7) != 0, // leave_milk
             cursor.getShort(offset + 8) != 0, // antibiotic_inf
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // temp
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // r_temp
+            cursor.getDouble(offset + 9), // temp
+            cursor.getDouble(offset + 10), // r_temp
             cursor.getShort(offset + 11) != 0, // alcohol
             cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // alcoholtype
             cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13) // comment
@@ -196,8 +180,8 @@ public class MilkInfDao extends AbstractDao<MilkInf, Long> {
         entity.setTank_liter(cursor.getInt(offset + 6));
         entity.setLeave_milk(cursor.getShort(offset + 7) != 0);
         entity.setAntibiotic_inf(cursor.getShort(offset + 8) != 0);
-        entity.setTemp(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setR_temp(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setTemp(cursor.getDouble(offset + 9));
+        entity.setR_temp(cursor.getDouble(offset + 10));
         entity.setAlcohol(cursor.getShort(offset + 11) != 0);
         entity.setAlcoholtype(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
         entity.setComment(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));

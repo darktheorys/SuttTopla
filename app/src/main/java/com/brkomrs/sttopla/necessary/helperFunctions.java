@@ -293,7 +293,7 @@ public class helperFunctions {
      */
     public static List<DutyInf> getAllDuties(DaoSession ses, long user_id){
         QueryBuilder<DutyInf> q = ses.getDutyInfDao().queryBuilder();
-        List<DutyInf> list = q.where(DutyInfDao.Properties.User.eq(user_id)).list();
+        List<DutyInf> list = q.where(DutyInfDao.Properties.User.eq(user_id)).orderAsc(DutyInfDao.Properties.DutyId).list();
         return list;
     }
 

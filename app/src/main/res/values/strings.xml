@@ -67,4 +67,5 @@
     <string name="tank_limit_exceeded_str">Tank dolu.</string>
     <string name="milk_not_comp_str">Sütler uyumlu değil.</string>
     <string name="some_milk_sent_str">Sütün bir kısmını gönderdiniz. Şimdi Ek gönderme yapmalısınız.</string>
+    <string name="understood_str">ANLADIM!</string>
 </resources>

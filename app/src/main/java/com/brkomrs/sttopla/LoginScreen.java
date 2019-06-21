@@ -213,6 +213,7 @@ public class LoginScreen extends AppCompatActivity {
                 });
                 //making autologin
                  if(autolog_chk.isChecked()){
+                     submit_btn.setEnabled(true);
                      submit_btn.performClick();
                  }
             }
