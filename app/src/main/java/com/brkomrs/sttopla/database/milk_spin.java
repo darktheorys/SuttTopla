@@ -8,6 +8,6 @@ public class milk_spin extends MilkInf {
 
     @Override
     public String toString() {
-        return "Gönderdikleriniz";
+        return " - Gönderdikleriniz - ";
     }
 }

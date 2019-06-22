@@ -323,7 +323,7 @@ public class helperFunctions {
      */
     public static List<MilkInf> getAllMilks(DaoSession ses, long duty_id){
         QueryBuilder<MilkInf> q = ses.getMilkInfDao().queryBuilder();
-        List<MilkInf> list = q.where(MilkInfDao.Properties.Duty.eq(duty_id)).list();
+        List<MilkInf> list = q.where(MilkInfDao.Properties.Duty.eq(duty_id)).orderAsc(MilkInfDao.Properties.TankN).list();
         return list;
     }
 

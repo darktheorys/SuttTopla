@@ -48,7 +48,7 @@ public class MilkInf {
     
     @Override
     public String toString() {
-        return "Çiftlik id: " + getFarm() + ", Süt Türü/Alınan: "+ getMilktype() + " / " + getTank_liter();
+        return "Çiftlik: " + getFarm() + "- Süt: "+ getMilktype() + "- Miktar: " + getTank_liter() + "- Aldım: " + (getLeave_milk()?"Hayır":"Evet") + "- Tank: " + getTankN();
     }
 
     public Long getMilkId() {

@@ -1,528 +1,551 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@drawable/mn_back"
+    android:fadeScrollbars="true"
+    android:fitsSystemWindows="true"
+    android:scrollbarSize="10dip"
+    android:scrollbarStyle="insideInset"
+    android:scrollbars="vertical"
     tools:context=".FormScreen">
 
-
-    <ImageView
-        android:id="@+id/main_background"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:contentDescription="@string/background_main"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/mn_back" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+    <HorizontalScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <Spinner
-            android:id="@+id/basket_spin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@color/design_default_color_background"
-            app:layout_constraintBottom_toTopOf="@+id/amount_tv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/truck_lay"
-            app:layout_constraintTop_toBottomOf="@+id/milktype_liter_lay" />
-
-        <EditText
-            android:id="@+id/tankLiter_input"
-            android:layout_width="107dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="1"
-            android:background="@android:color/background_light"
-            android:ems="5"
-            android:hint="@string/tank1_str"
-            android:inputType="number"
-            android:maxLength="5"
-            android:textColor="@android:color/holo_blue_light"
-            android:textSize="18sp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/amount_tv" />
-
-        <LinearLayout
-            android:id="@+id/milktype_liter_lay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="8dp"
-            android:background="@android:color/background_light"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toEndOf="@+id/truck_lay"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/milk_type_tw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@android:color/background_light"
-                android:text="@string/milk_type_sty"
-                android:textSize="18sp" />
-
-            <Spinner
-                android:id="@+id/milk_type_spin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/duty_id_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@android:color/background_light"
-            android:text="@string/title_activity_missionselect"
-            android:textSize="19sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/milktype_liter_lay"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:scrollbars="horizontal">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/truck_lay"
-            android:layout_width="348dp"
-            android:layout_height="115dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/truck_img"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/truck_img"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/sutas_truck" />
 
-            <RadioGroup
-                android:id="@+id/truck_chk_radio"
-                android:layout_width="254dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginBottom="8dp"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="@+id/truck_img"
-                app:layout_constraintEnd_toEndOf="@+id/truck_img"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/truck_img"
-                app:layout_constraintTop_toTopOf="@+id/truck_img"
-                app:layout_constraintVertical_bias="0.373">
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <RadioButton
-                    android:id="@+id/tank5_radio"
+                <Spinner
+                    android:id="@+id/basket_spin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:background="@android:drawable/ic_menu_add"
-                    android:visibility="invisible" />
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@android:drawable/editbox_dropdown_light_frame"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/truck_lay"
+                    app:layout_constraintTop_toBottomOf="@+id/milktype_liter_lay" />
 
-                <RadioButton
-                    android:id="@+id/tank4_radio"
+                <EditText
+                    android:id="@+id/tankLiter_input"
+                    android:layout_width="107dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="1"
+                    android:background="@android:drawable/edit_text"
+                    android:ems="5"
+                    android:hint="@string/tank1_str"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:textColor="@color/design_default_color_on_secondary"
+                    android:textSize="18sp"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/amount_tv"
+                    app:layout_constraintTop_toBottomOf="@+id/basket_spin"
+                    tools:targetApi="o" />
+
+                <LinearLayout
+                    android:id="@+id/milktype_liter_lay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:background="@android:drawable/ic_menu_add"
-                    android:visibility="invisible" />
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@android:drawable/editbox_background_normal"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toEndOf="@+id/truck_lay"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <RadioButton
-                    android:id="@+id/tank3_radio"
+                    <TextView
+                        android:id="@+id/milk_type_tw"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/milk_type_sty"
+                        android:textSize="18sp" />
+
+                    <Spinner
+                        android:id="@+id/milk_type_spin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:drawable/editbox_dropdown_light_frame" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/duty_id_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:background="@android:drawable/ic_menu_add"
-                    android:visibility="invisible" />
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@android:drawable/editbox_background_normal"
+                    android:text="@string/title_activity_missionselect"
+                    android:textSize="19sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/milktype_liter_lay"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <RadioButton
-                    android:id="@+id/tank2_radio"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/truck_lay"
+                    android:layout_width="348dp"
+                    android:layout_height="115dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/truck_img"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/truck_img"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
+                        app:srcCompat="@drawable/sutas_truck" />
+
+                    <RadioGroup
+                        android:id="@+id/truck_chk_radio"
+                        android:layout_width="254dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="@+id/truck_img"
+                        app:layout_constraintEnd_toEndOf="@+id/truck_img"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/truck_img"
+                        app:layout_constraintTop_toTopOf="@+id/truck_img"
+                        app:layout_constraintVertical_bias="0.373">
+
+                        <RadioButton
+                            android:id="@+id/tank5_radio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginLeft="4dp"
+                            android:background="@android:drawable/ic_menu_add"
+                            android:visibility="invisible" />
+
+                        <RadioButton
+                            android:id="@+id/tank4_radio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginLeft="16dp"
+                            android:background="@android:drawable/ic_menu_add"
+                            android:visibility="invisible" />
+
+                        <RadioButton
+                            android:id="@+id/tank3_radio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginLeft="16dp"
+                            android:background="@android:drawable/ic_menu_add"
+                            android:visibility="invisible" />
+
+                        <RadioButton
+                            android:id="@+id/tank2_radio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:background="@android:drawable/ic_menu_add"
+                            android:visibility="invisible" />
+
+                        <RadioButton
+                            android:id="@+id/tank1_radio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:background="@android:drawable/ic_menu_add"
+                            android:checked="false"
+                            android:visibility="visible" />
+
+                    </RadioGroup>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/amount_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:background="@android:drawable/ic_menu_add"
-                    android:visibility="invisible" />
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@android:drawable/editbox_background_normal"
+                    android:text="@string/amount_str"
+                    android:textColor="@android:color/background_dark"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/truck_lay"
+                    app:layout_constraintTop_toBottomOf="@+id/basket_spin" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <RadioButton
-                    android:id="@+id/tank1_radio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:background="@android:drawable/ic_menu_add"
-                    android:checked="false"
-                    android:visibility="visible" />
-
-            </RadioGroup>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:id="@+id/amount_tv"
-            android:layout_width="98dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginBottom="8dp"
-            android:background="@android:color/background_light"
-            android:text="@string/amount_str"
-            android:textColor="@android:color/background_dark"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/truck_lay" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="wrap_content"
-        android:layout_height="276dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.484"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
-
-        <LinearLayout
-            android:id="@+id/body_lay"
-            android:layout_width="666dp"
-            android:layout_height="180dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/tests_lay"
+                android:id="@+id/linearLayout2"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@android:color/background_light"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/background_light"
-                    android:orientation="vertical">
+                    android:id="@+id/body_lay"
+                    android:layout_width="666dp"
+                    android:layout_height="180dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/temp_tv"
+                    <LinearLayout
+                        android:id="@+id/tests_lay"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_weight="1"
-                        android:text="@string/temp_str"
-                        android:textColor="@android:color/background_dark" />
-
-                    <TextView
-                        android:id="@+id/alcohol_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_weight="1"
-                        android:text="@string/alcohol_str"
-                        android:textColor="@android:color/background_dark" />
-
-                    <TextView
-                        android:id="@+id/antibiotic_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_weight="1"
-                        android:text="@string/antibiotic_str"
-                        android:textColor="@android:color/background_dark" />
-
-                    <TextView
-                        android:id="@+id/refrac_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_weight="1"
-                        android:text="@string/refrac_str"
-                        android:textColor="@android:color/background_dark" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <RadioGroup
-                        android:id="@+id/radiotemp_lay"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:background="@android:drawable/editbox_background"
                         android:orientation="horizontal">
 
-                        <RadioButton
-                            android:id="@+id/deg46_radio"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
                             android:background="@android:color/background_light"
-                            android:text="@string/deg46_str" />
+                            android:orientation="vertical">
 
-                        <RadioButton
-                            android:id="@+id/more6_radio"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/more6_str" />
+                            <TextView
+                                android:id="@+id/temp_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_weight="1"
+                                android:text="@string/temp_str"
+                                android:textColor="@android:color/background_dark" />
 
-                    </RadioGroup>
+                            <TextView
+                                android:id="@+id/alcohol_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_weight="1"
+                                android:text="@string/alcohol_str"
+                                android:textColor="@android:color/background_dark" />
 
-                    <RadioGroup
-                        android:id="@+id/radioalcohol_lay"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/antibiotic_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_weight="1"
+                                android:text="@string/antibiotic_str"
+                                android:textColor="@android:color/background_dark" />
 
-                        <RadioButton
-                            android:id="@+id/alcohol_ne_radio"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/alcohol_ne_str" />
+                            <TextView
+                                android:id="@+id/refrac_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_weight="1"
+                                android:text="@string/refrac_str"
+                                android:textColor="@android:color/background_dark" />
+                        </LinearLayout>
 
-                        <RadioButton
-                            android:id="@+id/alcohol_e_radio"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/alcohol_e_str" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
 
-                    </RadioGroup>
+                            <RadioGroup
+                                android:id="@+id/radiotemp_lay"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
 
-                    <RadioGroup
-                        android:id="@+id/antibiotic_radio_lay"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
+                                <RadioButton
+                                    android:id="@+id/deg46_radio"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@android:color/background_light"
+                                    android:text="@string/deg46_str" />
 
-                        <RadioButton
-                            android:id="@+id/antibiotic_ne_radio"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/antibiotic_n_str" />
+                                <RadioButton
+                                    android:id="@+id/more6_radio"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/more6_str" />
 
-                        <RadioButton
-                            android:id="@+id/antibiotic_e_radio"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/antibiotic_e_str" />
-                    </RadioGroup>
+                            </RadioGroup>
 
-                    <RadioGroup
-                        android:id="@+id/radiotempR_lay"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
+                            <RadioGroup
+                                android:id="@+id/radioalcohol_lay"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
 
-                        <RadioButton
-                            android:id="@+id/above95_radio"
+                                <RadioButton
+                                    android:id="@+id/alcohol_ne_radio"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/alcohol_ne_str" />
+
+                                <RadioButton
+                                    android:id="@+id/alcohol_e_radio"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/alcohol_e_str" />
+
+                            </RadioGroup>
+
+                            <RadioGroup
+                                android:id="@+id/antibiotic_radio_lay"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <RadioButton
+                                    android:id="@+id/antibiotic_ne_radio"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/antibiotic_n_str" />
+
+                                <RadioButton
+                                    android:id="@+id/antibiotic_e_radio"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/antibiotic_e_str" />
+                            </RadioGroup>
+
+                            <RadioGroup
+                                android:id="@+id/radiotempR_lay"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <RadioButton
+                                    android:id="@+id/above95_radio"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:text="@string/above95_str" />
+
+                                <RadioButton
+                                    android:id="@+id/below95_radio"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/below95_str" />
+
+                            </RadioGroup>
+
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:text="@string/above95_str" />
+                            android:orientation="vertical">
 
-                        <RadioButton
-                            android:id="@+id/below95_radio"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/below95_str" />
+                            <Spinner
+                                android:id="@+id/temp_spin"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@android:drawable/editbox_dropdown_light_frame"
+                                android:visibility="invisible" />
 
-                    </RadioGroup>
+                            <Spinner
+                                android:id="@+id/alcohol_type_spin"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@android:drawable/editbox_dropdown_light_frame"
+                                android:visibility="invisible" />
+
+                            <Spinner
+                                android:id="@+id/_unused"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@android:drawable/editbox_dropdown_light_frame"
+                                android:visibility="invisible" />
+
+                            <Spinner
+                                android:id="@+id/refrac_temp_spin"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@android:drawable/editbox_dropdown_light_frame"
+                                android:visibility="invisible" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/comment_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginLeft="4dp"
+                        android:background="@android:drawable/edit_text"
+                        android:hint="@string/comment_str"
+                        android:importantForAutofill="no"
+                        android:inputType="textMultiLine"
+                        android:maxWidth="200dp"
+                        android:maxLength="500"
+                        tools:targetApi="o" />
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                <RadioGroup
+                    android:id="@+id/taken_amount_lay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@android:drawable/editbox_background"
+                    android:checkedButton="@id/all_milk_radio"
+                    android:orientation="horizontal">
 
-                    <Spinner
-                        android:id="@+id/temp_spin"
-                        android:layout_width="match_parent"
+                    <RadioButton
+                        android:id="@+id/leave_milk_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/leave_milk_str" />
+
+                    <RadioButton
+                        android:id="@+id/all_milk_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/all_milk_str" />
+
+                    <RadioButton
+                        android:id="@+id/some_milk_radio"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:visibility="invisible" />
+                        android:text="@string/some_milk_str" />
+                </RadioGroup>
 
-                    <Spinner
-                        android:id="@+id/alcohol_type_spin"
-                        android:layout_width="match_parent"
+                <RadioGroup
+                    android:id="@+id/amount_detail_lay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@android:drawable/editbox_background"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <RadioButton
+                        android:id="@+id/other_radio"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
                         android:layout_weight="1"
-                        android:visibility="invisible" />
+                        android:text="@string/other_reason_str" />
 
-                    <Spinner
-                        android:id="@+id/_unused"
-                        android:layout_width="match_parent"
+                    <RadioButton
+                        android:id="@+id/bad_milk_radio"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
                         android:layout_weight="1"
-                        android:visibility="invisible" />
+                        android:text="@string/bad_milk_str" />
 
-                    <Spinner
-                        android:id="@+id/refrac_temp_spin"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:visibility="invisible" />
-
-                </LinearLayout>
+                </RadioGroup>
 
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/comment_tv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="4dp"
-                android:layout_marginLeft="4dp"
-                android:background="@android:color/darker_gray"
-                android:hint="@string/comment_str"
-                android:inputType="textMultiLine"
-                android:maxWidth="200dp"
-                android:maxLength="500" />
-
-        </LinearLayout>
-
-        <RadioGroup
-            android:id="@+id/taken_amount_lay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@android:color/background_light"
-            android:checkedButton="@id/all_milk_radio"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/leave_milk_radio"
+            <Button
+                android:id="@+id/submit_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_weight="1"
-                android:text="@string/leave_milk_str" />
+                android:background="@android:drawable/btn_default_small"
+                android:text="@string/apprvbutton_str"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-            <RadioButton
-                android:id="@+id/all_milk_radio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1"
-                android:text="@string/all_milk_str" />
 
-            <RadioButton
-                android:id="@+id/some_milk_radio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/some_milk_str" />
-        </RadioGroup>
-
-        <RadioGroup
-            android:id="@+id/amount_detail_lay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@android:color/background_light"
-            android:orientation="horizontal"
-            android:visibility="invisible">
-
-            <RadioButton
-                android:id="@+id/other_radio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1"
-                android:text="@string/other_reason_str" />
-
-            <RadioButton
-                android:id="@+id/bad_milk_radio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1"
-                android:text="@string/bad_milk_str" />
-
-        </RadioGroup>
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/submit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@color/design_default_color_primary_dark"
-        android:text="@string/apprvbutton_str"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </HorizontalScrollView>
+</ScrollView>

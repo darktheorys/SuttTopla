@@ -37,6 +37,8 @@ public class FormScreen extends AppCompatActivity {
     private String test_alcohol = "", milk_type_str = "",comment = "";
     private boolean[] clicked;
     private ArrayList<MilkInf> basket_list;
+    private boolean just_poll = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +99,6 @@ public class FormScreen extends AppCompatActivity {
         }
 
         //tank selection radio buttons are arranged here
-        tankInp.setVisibility(View.VISIBLE);
         truck_radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -289,8 +290,10 @@ public class FormScreen extends AppCompatActivity {
         milktype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if ((i == 0 || i == 1 || i == 2)) {
-                    testLayout.setVisibility(View.VISIBLE);
+                if (i == 0 || i == 1 || i == 2){
+                    if (!leavingMilk ){
+                        testLayout.setVisibility(View.VISIBLE);
+                    }
                     milk_type_str = milktype.getItemAtPosition(i).toString();
                     noTestRequired = false;
                 } else {
@@ -431,8 +434,7 @@ public class FormScreen extends AppCompatActivity {
             }else{
                 if (!test_alcohol.equalsIgnoreCase("")) {
                     milk.setAlcohol(true);
-
-                }
+                }else milk.setAlcohol(false);
                 milk.setAlcoholtype(test_alcohol);
                 milk.setAntibiotic_inf(test_antibiotic);
                 milk.setTemp(test_temperature);
@@ -448,13 +450,14 @@ public class FormScreen extends AppCompatActivity {
             }else{
                 milk.setTank_id(tank.getTankId());
                 milk.setTank_liter(liter_input);
+                milk.setLeave_milk(false);
                 milk.setTankN(tank_filled);
             }
 
             basket_list.add(milk);
             ses.getMilkInfDao().insert(milk);
             updateTank();
-            Toast.makeText(FormScreen.this, "Kaydedildi.!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(FormScreen.this, "Kaydedildi, tank güncellendi!", Toast.LENGTH_SHORT).show();
         }catch (Exception e){
             showErrorAndExit();
             Log.e("@@@@@@@@", "makesubmit");
@@ -469,11 +472,11 @@ public class FormScreen extends AppCompatActivity {
 
     private void openDialog() {
 
-        if((liter_input == 0 && ( !leavingMilk && addMoreMilk))){
+        if((liter_input == 0 && !leavingMilk)){       //one that take all the milk can pass with 0 liter
             Toast.makeText(FormScreen.this, "0 Litre Olamaz, Tekrar Deneyin.", Toast.LENGTH_LONG).show();
         }else if (test_antibiotic && !leavingMilk) {
             Toast.makeText(FormScreen.this, getString(R.string.antibiotic_err), Toast.LENGTH_LONG).show();
-        } else if ((tankInp.getText().toString().equals("") && !leavingMilk) || (comment.equalsIgnoreCase("") && leavingMilk && !detail_badmilk) ||  (!leavingMilk && !clicked[0] && !clicked[1] && !clicked[2] && !clicked[3])) {
+        } else if ((comment.equalsIgnoreCase("") && leavingMilk && !detail_badmilk) ||  (!leavingMilk && (!clicked[0] || !clicked[1] || !clicked[2] || !clicked[3]))) {
             Toast.makeText(FormScreen.this, getString(R.string.empty_area_err_str), Toast.LENGTH_LONG).show();
         } else if (!leavingMilk && !checkTankLimits()) {
             Toast.makeText(FormScreen.this, getString(R.string.tank_limit_exceeded_str), Toast.LENGTH_LONG).show();
@@ -493,54 +496,58 @@ public class FormScreen extends AppCompatActivity {
                 }
             });
             addMoreMilk.show();
-
             //checking "tüm sütü aldım" radio button, to make things easy
             RadioGroup taken_amount_radiogroup = findViewById(R.id.taken_amount_lay);
             taken_amount_radiogroup.check(R.id.all_milk_radio);
         }else {
-            final Dialog beforesub = new Dialog(FormScreen.this);
-            beforesub.setContentView(R.layout.before_submission);
-            beforesub.setTitle("Göndermeden önce..");
-            beforesub.setCancelable(true);
-            beforesub.setCanceledOnTouchOutside(false);
-            final FarmInf farm_taken_milk = helperFunctions.getFarm(ses, farmid);
-            final CheckBox isClean1 = beforesub.findViewById(R.id.isClean1_chk);
-            final CheckBox isClean2 = beforesub.findViewById(R.id.isClean2_chk);
-            final CheckBox isClean3 = beforesub.findViewById(R.id.isClean3_chk);
-            final CheckBox isClean4 = beforesub.findViewById(R.id.isClean4_chk);
-            Button last_sub = beforesub.findViewById(R.id.last_submission_button);
-            last_sub.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try{
-                        FarmInf farm =  new FarmInf();
-                        farm.setFarmID(farm_taken_milk.getFarmID());
-                        farm.setFarmName(farm_taken_milk.getFarmName());
-                        farm.setIsEnvClean(isClean4.isChecked());
-                        farm.setIsPumpClean(isClean2.isChecked());
-                        farm.setIsWeighterClean(isClean3.isChecked());
-                        farm.setIsTankClean(isClean1.isChecked());
-                        ses.update(farm);
-                        if(liter_input > 0){
-                            Toast.makeText(FormScreen.this, "Eklendi ve görev bitirildi.", Toast.LENGTH_LONG).show();
-                            makeSubmission();
-                        }else{
-                            Toast.makeText(FormScreen.this, "Görev bitirildi.", Toast.LENGTH_LONG).show();
-                        }
-
-                    }catch (Exception e){
-                        showErrorAndExit();
-                        Log.e("@@@@@@@@", "isClean");
-                    }
-                    beforesub.cancel();
-
-                    updateDutyAsDone();
-                    finish();
-                }
-            });
-            beforesub.show();
+            pollAndFinish();
 
         }
+    }
+
+    private void pollAndFinish() {
+        final Dialog beforesub = new Dialog(FormScreen.this);
+        beforesub.setContentView(R.layout.before_submission);
+        beforesub.setTitle("Çiftlik oylaması");
+        beforesub.setCancelable(true);
+        beforesub.setCanceledOnTouchOutside(false);
+        final FarmInf farm_taken_milk = helperFunctions.getFarm(ses, farmid);
+        final CheckBox isClean1 = beforesub.findViewById(R.id.isClean1_chk);
+        final CheckBox isClean2 = beforesub.findViewById(R.id.isClean2_chk);
+        final CheckBox isClean3 = beforesub.findViewById(R.id.isClean3_chk);
+        final CheckBox isClean4 = beforesub.findViewById(R.id.isClean4_chk);
+        Button last_sub = beforesub.findViewById(R.id.last_submission_button);
+        last_sub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
+                    FarmInf farm =  new FarmInf();
+                    farm.setFarmID(farm_taken_milk.getFarmID());
+                    farm.setFarmName(farm_taken_milk.getFarmName());
+                    farm.setIsEnvClean(isClean4.isChecked());
+                    farm.setIsPumpClean(isClean2.isChecked());
+                    farm.setIsWeighterClean(isClean3.isChecked());
+                    farm.setIsTankClean(isClean1.isChecked());
+                    ses.update(farm);
+                    if(!just_poll){
+                        Toast.makeText(FormScreen.this, "Eklendi ve görev bitirildi.", Toast.LENGTH_LONG).show();
+                        makeSubmission();
+                    }else{
+                        Toast.makeText(FormScreen.this, "Görev bitirildi.", Toast.LENGTH_LONG).show();
+                    }
+
+                }catch (Exception e){
+                    showErrorAndExit();
+                    Log.e("@@@@@@@@", "isClean");
+                }
+                beforesub.cancel();
+
+                updateDutyAsDone();
+                finish();
+            }
+        });
+        beforesub.show();
+
     }
 
     private void updateDutyAsDone() {
@@ -561,7 +568,8 @@ public class FormScreen extends AppCompatActivity {
 
             MilkInf milk = helperFunctions.getMilk(ses, tank.getTankId());
 
-            if(milk != null) {
+
+            if(milk != null && !(liter_input == 0 && !addMoreMilk && !leavingMilk)) {
                 if((milk.getAlcoholtype().equalsIgnoreCase(test_alcohol) || (!milk.getAlcohol() && test_alcohol.equalsIgnoreCase(""))) && milk.getMilktype().equalsIgnoreCase(milk_type_str) &&
                         (milk.getR_temp() == test_Rtemperature) && (milk.getTemp() == test_temperature)){
                     return true;
@@ -614,25 +622,42 @@ public class FormScreen extends AppCompatActivity {
 
 
 
-
-
     int temp = 1;
     @Override
     public void onBackPressed() {
-        if(temp == 0){
-            finish();
+        if(basket_list.size() > 1){
+            if(temp == 0){
+                just_poll = true;
+                pollAndFinish();
+            }else{
+                Toast.makeText(FormScreen.this, "Başka göndermemek için bir daha basın.", Toast.LENGTH_LONG).show();
+                temp--;
+                //if in 4 seconds, user cannot press second time, it resets counter to prevent misdoings
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        just_poll = false;
+                        temp++;
+                    }
+                }, 2000);
+            }
         }else{
-            Toast.makeText(FormScreen.this, getString(R.string.not_submit_str), Toast.LENGTH_LONG).show();
-            temp--;
-
-            //if in 4 seconds, user cannot press second time, it resets counter to prevent misdoings
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    temp++;
-                }
-            }, 4000);
+            if(temp == 0){
+                finish();
+            }else{
+                Toast.makeText(FormScreen.this, getString(R.string.not_submit_str), Toast.LENGTH_LONG).show();
+                temp--;
+                //if in 4 seconds, user cannot press second time, it resets counter to prevent misdoings
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        temp++;
+                    }
+                }, 2000);
+            }
         }
+
+
 
 
     }

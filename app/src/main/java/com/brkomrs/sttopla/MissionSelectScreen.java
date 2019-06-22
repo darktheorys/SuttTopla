@@ -142,6 +142,7 @@ public class MissionSelectScreen extends AppCompatActivity{
 
         //if no duty remaining
         if(duties.size() == 0){
+            spin.setEnabled(false);
             goSelected.setEnabled(false);
         }
 
