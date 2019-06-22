@@ -34,13 +34,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <Spinner
+            android:id="@+id/basket_spin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/design_default_color_background"
+            app:layout_constraintBottom_toTopOf="@+id/amount_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/truck_lay"
+            app:layout_constraintTop_toBottomOf="@+id/milktype_liter_lay" />
+
         <EditText
             android:id="@+id/tankLiter_input"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="107dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
@@ -51,19 +63,17 @@
             android:inputType="number"
             android:maxLength="5"
             android:textColor="@android:color/holo_blue_light"
-            android:textSize="15sp"
+            android:textSize="18sp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.116"
-            app:layout_constraintStart_toEndOf="@+id/amount_tv"
-            app:layout_constraintTop_toBottomOf="@+id/milktype_liter_lay"
-            app:layout_constraintVertical_bias="0.507" />
+            app:layout_constraintStart_toEndOf="@+id/amount_tv" />
 
         <LinearLayout
             android:id="@+id/milktype_liter_lay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
             android:layout_marginTop="8dp"
             android:background="@android:color/background_light"
             android:orientation="horizontal"
@@ -74,10 +84,10 @@
                 android:id="@+id/milk_type_tw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
                 android:layout_weight="1"
                 android:background="@android:color/background_light"
-                android:text="@string/milk_type_sty" />
+                android:text="@string/milk_type_sty"
+                android:textSize="18sp" />
 
             <Spinner
                 android:id="@+id/milk_type_spin"
@@ -98,7 +108,7 @@
             android:layout_marginRight="8dp"
             android:background="@android:color/background_light"
             android:text="@string/title_activity_missionselect"
-            android:textSize="20sp"
+            android:textSize="19sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/milktype_liter_lay"
             app:layout_constraintTop_toTopOf="parent" />
@@ -148,7 +158,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
-                    android:background="@android:color/background_light"
+                    android:background="@android:drawable/ic_menu_add"
                     android:visibility="invisible" />
 
                 <RadioButton
@@ -156,7 +166,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
-                    android:background="@android:color/background_light"
+                    android:background="@android:drawable/ic_menu_add"
                     android:visibility="invisible" />
 
                 <RadioButton
@@ -164,7 +174,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
-                    android:background="@android:color/background_light"
+                    android:background="@android:drawable/ic_menu_add"
                     android:visibility="invisible" />
 
                 <RadioButton
@@ -172,7 +182,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:background="@android:color/background_light"
+                    android:background="@android:drawable/ic_menu_add"
                     android:visibility="invisible" />
 
                 <RadioButton
@@ -180,7 +190,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:background="@android:color/background_light"
+                    android:background="@android:drawable/ic_menu_add"
                     android:checked="false"
                     android:visibility="visible" />
 
@@ -190,18 +200,17 @@
 
         <TextView
             android:id="@+id/amount_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="98dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginLeft="12dp"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:background="@android:color/background_light"
             android:text="@string/amount_str"
             android:textColor="@android:color/background_dark"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/truck_lay"
-            app:layout_constraintTop_toBottomOf="@+id/milktype_liter_lay" />
+            app:layout_constraintStart_toEndOf="@+id/truck_lay" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -247,6 +256,7 @@
                         android:id="@+id/temp_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
                         android:layout_weight="1"
                         android:text="@string/temp_str"
                         android:textColor="@android:color/background_dark" />
@@ -255,6 +265,7 @@
                         android:id="@+id/alcohol_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
                         android:layout_weight="1"
                         android:text="@string/alcohol_str"
                         android:textColor="@android:color/background_dark" />
@@ -263,6 +274,7 @@
                         android:id="@+id/antibiotic_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
                         android:layout_weight="1"
                         android:text="@string/antibiotic_str"
                         android:textColor="@android:color/background_dark" />
@@ -271,6 +283,7 @@
                         android:id="@+id/refrac_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
                         android:layout_weight="1"
                         android:text="@string/refrac_str"
                         android:textColor="@android:color/background_dark" />
@@ -395,7 +408,7 @@
                         android:visibility="invisible" />
 
                     <Spinner
-                        android:id="@+id/spinner4"
+                        android:id="@+id/_unused"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -495,6 +508,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_weight="1"
                 android:text="@string/bad_milk_str" />
+
         </RadioGroup>
 
     </LinearLayout>
@@ -503,9 +517,9 @@
         android:id="@+id/submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/design_default_color_primary_dark"
         android:text="@string/apprvbutton_str"
         app:layout_constraintBottom_toBottomOf="parent"

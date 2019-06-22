@@ -17,7 +17,9 @@ import org.greenrobot.greendao.query.QueryBuilder;
 import java.io.IOException;
 import java.util.List;
 import java.io.File;
+import java.util.concurrent.ExecutionException;
 
+import com.brkomrs.sttopla.necessary.HttpRequestList;
 import com.brkomrs.sttopla.necessary.helperFunctions;
 
 public class LoginScreen extends AppCompatActivity {
@@ -30,6 +32,16 @@ public class LoginScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+/*
+        HttpRequestList temp = new HttpRequestList();
+        try {
+            List<UserInf> users = temp.new HttpRequestUser().execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 

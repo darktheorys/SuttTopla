@@ -21,10 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.brkomrs.sttopla.database.*;
 import com.brkomrs.sttopla.necessary.*;
+
+import java.text.Normalizer;
 import java.util.ArrayList;
 
 public class FormScreen extends AppCompatActivity {
-    private Spinner alcohol_type,milktype,milktemp_spin, refracTemp_spin;
+    private Spinner alcohol_type,milktype,milktemp_spin, refracTemp_spin, basket_spin;
     private LinearLayout testLayout;
     private DaoSession ses;
     private long farmid, userid, truck_id,duty_id;
@@ -34,6 +36,7 @@ public class FormScreen extends AppCompatActivity {
     private double test_Rtemperature, test_temperature;
     private String test_alcohol = "", milk_type_str = "",comment = "";
     private boolean[] clicked;
+    private ArrayList<MilkInf> basket_list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +60,7 @@ public class FormScreen extends AppCompatActivity {
         ses = ((dbHelper) getApplication()).getDaoSession();
 
         //widged declarations
+        basket_spin = findViewById(R.id.basket_spin);
         testLayout = findViewById(R.id.tests_lay);
         milktemp_spin = findViewById(R.id.temp_spin);
         refracTemp_spin = findViewById(R.id.refrac_temp_spin);
@@ -151,23 +155,29 @@ public class FormScreen extends AppCompatActivity {
                 ConstraintLayout lay = findViewById(R.id.truck_lay);
                 if(i == R.id.leave_milk_radio){
                     lay.setVisibility(View.GONE);
+                    testLayout.setVisibility(View.GONE);
                     findViewById(R.id.amount_tv).setVisibility(View.GONE);
                     tankInp.setText("");
                     tankInp.setVisibility(View.GONE);
                     detail_radiogroup.setVisibility(View.VISIBLE);
                     leavingMilk = true;
+                    addMoreMilk = false;
                 }else if(i == R.id.some_milk_radio){
+                    testLayout.setVisibility(View.VISIBLE);
                     addMoreMilk = true;
+                    leavingMilk = false;
                     lay.setVisibility(View.VISIBLE);
                     findViewById(R.id.amount_tv).setVisibility(View.VISIBLE);
                     tankInp.setVisibility(View.VISIBLE);
                     detail_radiogroup.setVisibility(View.GONE);
                 }else{
+                    testLayout.setVisibility(View.VISIBLE);
                     lay.setVisibility(View.VISIBLE);
                     findViewById(R.id.amount_tv).setVisibility(View.VISIBLE);
                     tankInp.setVisibility(View.VISIBLE);
                     detail_radiogroup.setVisibility(View.GONE);
                     addMoreMilk = false;
+                    leavingMilk = false;
                 }
             }
         });
@@ -385,6 +395,12 @@ public class FormScreen extends AppCompatActivity {
             }
         });
 
+        //saved milks spinner
+        basket_list= new ArrayList<>();
+        basket_list.add(new milk_spin());
+        ArrayAdapter<MilkInf> dataAdapterBasket = new ArrayAdapter<>(FormScreen.this, android.R.layout.simple_spinner_item,basket_list);
+        dataAdapterBasket.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        basket_spin.setAdapter(dataAdapterBasket);
 
 
         Button submit = findViewById(R.id.submit_button);
@@ -406,7 +422,7 @@ public class FormScreen extends AppCompatActivity {
             milk.setComment(comment);
             milk.setMilktype(milk_type_str);
 
-            if(noTestRequired){
+            if(noTestRequired || leavingMilk){
                 milk.setAlcoholtype("");
                 milk.setAlcohol(false);
                 milk.setAntibiotic_inf(false);
@@ -423,8 +439,6 @@ public class FormScreen extends AppCompatActivity {
                 milk.setR_temp(test_Rtemperature);
             }
 
-
-
             TankInf tank = helperFunctions.getTank(ses, truck_id, tank_filled);
             if(leavingMilk){
                 milk.setTank_id(0);
@@ -437,6 +451,7 @@ public class FormScreen extends AppCompatActivity {
                 milk.setTankN(tank_filled);
             }
 
+            basket_list.add(milk);
             ses.getMilkInfDao().insert(milk);
             updateTank();
             Toast.makeText(FormScreen.this, "Kaydedildi.!", Toast.LENGTH_SHORT).show();
@@ -453,11 +468,12 @@ public class FormScreen extends AppCompatActivity {
 
 
     private void openDialog() {
-        if(liter_input == 0 && !leavingMilk){
+
+        if((liter_input == 0 && ( !leavingMilk && addMoreMilk))){
             Toast.makeText(FormScreen.this, "0 Litre Olamaz, Tekrar Deneyin.", Toast.LENGTH_LONG).show();
-        } else if (test_antibiotic && !leavingMilk) {
+        }else if (test_antibiotic && !leavingMilk) {
             Toast.makeText(FormScreen.this, getString(R.string.antibiotic_err), Toast.LENGTH_LONG).show();
-        } else if ((tankInp.getText().toString().equals("") && !leavingMilk) || (comment.equalsIgnoreCase("") && leavingMilk && !detail_badmilk) || !clicked[0] || !clicked[1] || !clicked[2] || !clicked[3]) {
+        } else if ((tankInp.getText().toString().equals("") && !leavingMilk) || (comment.equalsIgnoreCase("") && leavingMilk && !detail_badmilk) ||  (!leavingMilk && !clicked[0] && !clicked[1] && !clicked[2] && !clicked[3])) {
             Toast.makeText(FormScreen.this, getString(R.string.empty_area_err_str), Toast.LENGTH_LONG).show();
         } else if (!leavingMilk && !checkTankLimits()) {
             Toast.makeText(FormScreen.this, getString(R.string.tank_limit_exceeded_str), Toast.LENGTH_LONG).show();
@@ -505,7 +521,13 @@ public class FormScreen extends AppCompatActivity {
                         farm.setIsWeighterClean(isClean3.isChecked());
                         farm.setIsTankClean(isClean1.isChecked());
                         ses.update(farm);
-                        makeSubmission();
+                        if(liter_input > 0){
+                            Toast.makeText(FormScreen.this, "Eklendi ve görev bitirildi.", Toast.LENGTH_LONG).show();
+                            makeSubmission();
+                        }else{
+                            Toast.makeText(FormScreen.this, "Görev bitirildi.", Toast.LENGTH_LONG).show();
+                        }
+
                     }catch (Exception e){
                         showErrorAndExit();
                         Log.e("@@@@@@@@", "isClean");
