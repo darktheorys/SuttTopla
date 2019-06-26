@@ -424,7 +424,7 @@ public class helperFunctions {
                         jsonParam.put("Liter", each.getLiter());
                         jsonParam.put("MilkType", each.getMilkType());
                         jsonParam.put("LeaveMilk", each.getLeaveMilk());
-                        jsonParam.put("AntibioticInf", each.getAlcoholInf());
+                        jsonParam.put("AntibioticInf", each.getAntibioticInf());
 
                         jsonParam.put("Temp", each.getTemp());
                         jsonParam.put("RTemp",each.getRTemp());

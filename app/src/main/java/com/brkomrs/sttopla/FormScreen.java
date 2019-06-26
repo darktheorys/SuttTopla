@@ -459,7 +459,7 @@ public class FormScreen extends AppCompatActivity {
 
             TankInf tank = truck_obj.getTanks().get(tank_filled-1);
             if(leavingMilk){
-                milk.setTankId(1);
+                milk.setTankId(truck_obj.getTanks().get(0).getId());
                 milk.setLeaveMilk(true);
                 milk.setLiter(0);
                 milk.setTankFilled(0);
@@ -492,7 +492,7 @@ public class FormScreen extends AppCompatActivity {
             Toast.makeText(FormScreen.this, "0 Litre Olamaz, Tekrar Deneyin.", Toast.LENGTH_LONG).show();
         } else if ((leavingMilk && !(detail_badmilk || detail_commentbox)) || (comment.equalsIgnoreCase("") && leavingMilk && detail_commentbox) ||  (!leavingMilk && !noTestRequired && (!clicked[0] || !clicked[1] || !clicked[2] || !clicked[3]))) {
             Toast.makeText(FormScreen.this, getString(R.string.empty_area_err_str), Toast.LENGTH_LONG).show();
-        }else if (test_antibiotic && !leavingMilk) {
+        }else if (test_antibiotic && !leavingMilk && !noTestRequired) {
             Toast.makeText(FormScreen.this, getString(R.string.antibiotic_err), Toast.LENGTH_LONG).show();
         } else if (!checkTankLimits()) {
             Toast.makeText(FormScreen.this, getString(R.string.tank_limit_exceeded_str), Toast.LENGTH_LONG).show();
@@ -571,16 +571,17 @@ public class FormScreen extends AppCompatActivity {
 
     //checker method for milktypes
     private boolean checkMilkTypes() {
+        if (leavingMilk) return true;
         try{
             truck_obj.resetTanks();
             TankInf tank= truck_obj.getTanks().get(tank_filled-1);
             tank.resetMilks();
             if(tank.getMilks().size() > 0 && !(liter_input == 0 && !addMoreMilk && !leavingMilk)){
-                MilkInf milk = tank.getMilks().get(0);
-                if((milk.getAlcoholType().equalsIgnoreCase(test_alcohol) || (!milk.getAlcoholInf() && test_alcohol.equalsIgnoreCase(""))) && milk.getMilkType().equalsIgnoreCase(milk_type_str) &&
-                        (milk.getRTemp() == test_Rtemperature) && (milk.getTemp() == test_temperature)){
-                    return true;
-                }else return false;
+                for(MilkInf milk : tank.getMilks()){
+                    if(!milk.getLeaveMilk()){
+                        return (milk.getAlcoholType().equalsIgnoreCase(test_alcohol) || (!milk.getAlcoholInf() && test_alcohol.equalsIgnoreCase(""))) && milk.getMilkType().equalsIgnoreCase(milk_type_str) &&
+                                (milk.getRTemp() == test_Rtemperature) && (milk.getTemp() == test_temperature);
+                } }
             }else{
                 return true;
             }
