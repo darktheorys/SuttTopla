@@ -40,6 +40,8 @@ public class FormScreen extends AppCompatActivity {
     private boolean just_poll = false;
     private TruckInf truck_obj;
     private  DutyInf duty_obj;
+    private boolean detail_commentbox = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -196,8 +198,10 @@ public class FormScreen extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 if (i == R.id.bad_milk_radio){
                     detail_badmilk = true;
-                }else{
+                    detail_commentbox = false;
+                }else if(i == R.id.other_radio){
                     detail_badmilk = false;
+                    detail_commentbox = true;
                 }
             }
         });
@@ -439,12 +443,14 @@ public class FormScreen extends AppCompatActivity {
                 milk.setAlcoholType("");
                 milk.setAlcoholInf(false);
                 milk.setAntibioticInf(false);
-                milk.setTemp(0);
-                milk.setRTemp(0);
+                milk.setTemp(0.0);
+                milk.setRTemp(0.0);
             }else{
                 if (!test_alcohol.equalsIgnoreCase("")) {
                     milk.setAlcoholInf(true);
-                }else milk.setAlcoholInf(false);
+                }else {
+                    milk.setAlcoholInf(false);
+                }
                 milk.setAlcoholType(test_alcohol);
                 milk.setAntibioticInf(test_antibiotic);
                 milk.setTemp(test_temperature);
@@ -453,7 +459,7 @@ public class FormScreen extends AppCompatActivity {
 
             TankInf tank = truck_obj.getTanks().get(tank_filled-1);
             if(leavingMilk){
-                milk.setTankId(0);
+                milk.setTankId(1);
                 milk.setLeaveMilk(true);
                 milk.setLiter(0);
                 milk.setTankFilled(0);
@@ -486,11 +492,11 @@ public class FormScreen extends AppCompatActivity {
             Toast.makeText(FormScreen.this, "0 Litre Olamaz, Tekrar Deneyin.", Toast.LENGTH_LONG).show();
         }else if (test_antibiotic && !leavingMilk) {
             Toast.makeText(FormScreen.this, getString(R.string.antibiotic_err), Toast.LENGTH_LONG).show();
-        } else if ((comment.equalsIgnoreCase("") && leavingMilk && !detail_badmilk) ||  (!leavingMilk && (!clicked[0] || !clicked[1] || !clicked[2] || !clicked[3]))) {
+        } else if ((leavingMilk && !(detail_badmilk || detail_commentbox)) || (comment.equalsIgnoreCase("") && leavingMilk && detail_commentbox) ||  (!leavingMilk && (!clicked[0] || !clicked[1] || !clicked[2] || !clicked[3]))) {
             Toast.makeText(FormScreen.this, getString(R.string.empty_area_err_str), Toast.LENGTH_LONG).show();
-        } else if (!leavingMilk && !checkTankLimits()) {
+        } else if (!checkTankLimits()) {
             Toast.makeText(FormScreen.this, getString(R.string.tank_limit_exceeded_str), Toast.LENGTH_LONG).show();
-        } else if(!leavingMilk && !checkMilkTypes()){
+        } else if(!checkMilkTypes()){
             Toast.makeText(FormScreen.this, getString(R.string.milk_not_comp_str), Toast.LENGTH_LONG).show();
         }else if(addMoreMilk){
             makeSubmission(2,2,2,2);
@@ -558,6 +564,7 @@ public class FormScreen extends AppCompatActivity {
         duty.setDone(true);
         duty.setTruckId(truck_id);
         duty.setFarmId(farmid);
+        duty.setSync(false);
         ses.update(duty);
     }
 
@@ -614,6 +621,7 @@ public class FormScreen extends AppCompatActivity {
             if (liter_input >=0 && each.getLimit() >= each.getFullness() + liter_input) {
                 tank.setFullness(each.getFullness() + liter_input);
             }
+            tank.setSync(false);
             ses.update(tank);
         }catch (Exception e){
             showErrorAndExit();

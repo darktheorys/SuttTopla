@@ -32,6 +32,7 @@ public class TankInfDao extends AbstractDao<TankInf, Long> {
         public final static Property NTank = new Property(2, int.class, "NTank", false, "NTANK");
         public final static Property Limit = new Property(3, int.class, "Limit", false, "LIMIT");
         public final static Property Fullness = new Property(4, int.class, "Fullness", false, "FULLNESS");
+        public final static Property Sync = new Property(5, boolean.class, "Sync", false, "SYNC");
     }
 
     private DaoSession daoSession;
@@ -55,7 +56,8 @@ public class TankInfDao extends AbstractDao<TankInf, Long> {
                 "\"TRUCK_ID\" INTEGER NOT NULL ," + // 1: TruckId
                 "\"NTANK\" INTEGER NOT NULL ," + // 2: NTank
                 "\"LIMIT\" INTEGER NOT NULL ," + // 3: Limit
-                "\"FULLNESS\" INTEGER NOT NULL );"); // 4: Fullness
+                "\"FULLNESS\" INTEGER NOT NULL ," + // 4: Fullness
+                "\"SYNC\" INTEGER NOT NULL );"); // 5: Sync
     }
 
     /** Drops the underlying database table. */
@@ -76,6 +78,7 @@ public class TankInfDao extends AbstractDao<TankInf, Long> {
         stmt.bindLong(3, entity.getNTank());
         stmt.bindLong(4, entity.getLimit());
         stmt.bindLong(5, entity.getFullness());
+        stmt.bindLong(6, entity.getSync() ? 1L: 0L);
     }
 
     @Override
@@ -90,6 +93,7 @@ public class TankInfDao extends AbstractDao<TankInf, Long> {
         stmt.bindLong(3, entity.getNTank());
         stmt.bindLong(4, entity.getLimit());
         stmt.bindLong(5, entity.getFullness());
+        stmt.bindLong(6, entity.getSync() ? 1L: 0L);
     }
 
     @Override
@@ -110,7 +114,8 @@ public class TankInfDao extends AbstractDao<TankInf, Long> {
             cursor.getLong(offset + 1), // TruckId
             cursor.getInt(offset + 2), // NTank
             cursor.getInt(offset + 3), // Limit
-            cursor.getInt(offset + 4) // Fullness
+            cursor.getInt(offset + 4), // Fullness
+            cursor.getShort(offset + 5) != 0 // Sync
         );
         return entity;
     }
@@ -122,6 +127,7 @@ public class TankInfDao extends AbstractDao<TankInf, Long> {
         entity.setNTank(cursor.getInt(offset + 2));
         entity.setLimit(cursor.getInt(offset + 3));
         entity.setFullness(cursor.getInt(offset + 4));
+        entity.setSync(cursor.getShort(offset + 5) != 0);
      }
     
     @Override

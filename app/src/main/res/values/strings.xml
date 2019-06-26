@@ -46,7 +46,7 @@
     <string name="leave_milk_str">Sütü Almadım.</string>
     <string name="all_milk_str">Bütün sütü aldım.</string>
     <string name="some_milk_str">Başka süt ekleyeceğim.</string>
-    <string name="other_reason_str" >Diğer Sebepler(Not Yazdım)</string>
+    <string name="other_reason_str">Diğer Sebepler(Not Yazdım)</string>
     <string name="bad_milk_str">Bozuk Ürün</string>
     <string name="yes_str">Evet, Onaylıyorum.</string>
     <string name="isClear1_str">Soğutma tankı temiz mi?</string>

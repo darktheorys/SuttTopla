@@ -39,6 +39,12 @@ public class MissionSelectScreen extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_missionselect);
 
+        //if service is not running start
+        if(!helperFunctions.serviceWorking(getApplicationContext())){
+            Intent intent = new Intent(getApplicationContext(),PushService.class);
+            startService(intent);
+        }
+
         //db session
         daoSession = ((dbHelper)getApplication()).getDaoSession();
 
@@ -81,14 +87,14 @@ public class MissionSelectScreen extends AppCompatActivity{
         });
 
 
-        final String url = "http://192.168.182.225/sserver/api/milks";
-        helperFunctions.sendPost(url,daoSession);
+
+        helperFunctions.sendPost(daoSession);
 
         //swipe arrangement
         swipes.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                helperFunctions.sendPost(url,daoSession);
+                helperFunctions.sendPost(daoSession);
                 getUndoneDutiesToSpinner(helperFunctions.haveConnection(MissionSelectScreen.this));
                 new Handler().postDelayed(new Runnable() {
                     @Override

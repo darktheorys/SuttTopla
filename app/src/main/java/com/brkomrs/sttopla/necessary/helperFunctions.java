@@ -1,5 +1,6 @@
 package com.brkomrs.sttopla.necessary;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -8,9 +9,11 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.brkomrs.sttopla.PushService;
 import com.brkomrs.sttopla.R;
 import com.brkomrs.sttopla.database.*;
 
+import org.apache.http.HttpStatus;
 import org.greenrobot.greendao.query.QueryBuilder;
 import org.greenrobot.greendao.query.WhereCondition;
 import org.json.JSONArray;
@@ -103,7 +106,6 @@ public class helperFunctions {
      * @param daoSession current db session
      */
     public static void addDuty(DaoSession daoSession, DutyInf duty){
-        duty.setSync(false);
         QueryBuilder<DutyInf> q = daoSession.getDutyInfDao().queryBuilder();
         List<DutyInf> list = q.where(DutyInfDao.Properties.Id.eq(duty.getId())).list();
         if(!(list.size() > 0)){
@@ -352,13 +354,13 @@ public class helperFunctions {
     public static void parseDuties(JSONArray ja, long truck_id, DaoSession ses) throws Exception {
         if(ja != null){
             for(int i = 0; i < ja.length(); i++){
-
                 DutyInf duty = new DutyInf();
                 JSONObject jo = (JSONObject) ja.get(i);
                 duty.setId(Long.parseLong(jo.get("Id").toString()));
                 duty.setFarmId(Long.parseLong(((JSONObject)jo.get("Farm")).get("Id").toString()));
                 parseAddFarm(((JSONObject)jo.get("Farm")), ses);
                 duty.setTruckId(truck_id);
+                duty.setSync(true);
                 duty.setDone(jo.get("Done").toString().equals("true"));
                 addDuty(ses, duty);
 
@@ -395,7 +397,13 @@ public class helperFunctions {
             addTruck(daoSession,truck);
         }
     }
-    public static void sendPost(final String urlAdress, final DaoSession ses){
+
+    /**
+     * To send unsynced milks to server from local database
+     * @param ses   daosession
+     */
+    public static void sendPost(final DaoSession ses){
+        final String urlAdress = "http://192.168.182.225/sserver/api/milks/add";
         List<MilkInf> milks = getAllUnsyncMilks(ses);
         for(final MilkInf each : milks) {
 
@@ -429,7 +437,7 @@ public class helperFunctions {
                         jsonParam.put("IsTankClean", each.getIsTankClean());
                         jsonParam.put("IsPumpClean", each.getIsPumpClean());
                         jsonParam.put("IsWeighterClean", each.getIsWeighterClean());
-                        Log.i("JSON", jsonParam.toString());
+                        //Log.i("JSON_MILK", jsonParam.toString());
 
                         DataOutputStream os = new DataOutputStream(conn.getOutputStream());
                         //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
@@ -437,13 +445,12 @@ public class helperFunctions {
 
                         os.flush();
                         os.close();
-                        if(conn.getResponseCode() == 201){
+                        if(conn.getResponseCode() == 200){
                             each.setSync(true);
                             ses.getMilkInfDao().update(each);
                             updateDutyAndTank(ses, each.getTankId());
                         }
-                        Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-                        Log.i("MSG", conn.getResponseMessage());
+                        Log.i("STATUS_MILK", String.valueOf(conn.getResponseCode()));
                         conn.disconnect();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -455,13 +462,19 @@ public class helperFunctions {
         }
     }
 
+    /**
+     * Sycnronization of duty and tank with serve
+     * @param ses daosession
+     * @param tankid some tank's id
+     */
     private static void updateDutyAndTank(final DaoSession ses, long tankid){
         QueryBuilder<TankInf> tankq = ses.getTankInfDao().queryBuilder();
         List<TankInf> list = tankq.where(TankInfDao.Properties.Id.eq(tankid)).list();
         TruckInf truck = list.get(0).getTruck();
+        //to sync unsynced duties with server
         truck.resetDuties();
         for ( final DutyInf each : truck.getDuties()){
-            if(each.getDone() && !each.getSync()){
+            if(!each.getSync()){
                 final String urlAdress = "http://192.168.182.225/sserver/api/duties/" + each.getId();
                 Thread thread = new Thread(new Runnable() {
                     @Override
@@ -477,27 +490,24 @@ public class helperFunctions {
 
                             JSONObject jsonParam = new JSONObject();
                             jsonParam.put("Id", each.getId());
-                            jsonParam.put("Done", true);
+                            jsonParam.put("Done", each.getDone());
                             DateFormat dateFormat = DateFormat.getDateInstance();
                             Date date = new Date();
                             jsonParam.put("Date", dateFormat.format(date));
                             jsonParam.put("TruckId", each.getTruckId());
 
-                            Log.i("JSON", jsonParam.toString());
-                            Log.i("URL", urlAdress);
+                            Log.i("JSON_DUTY", jsonParam.toString());
 
                             DataOutputStream os = new DataOutputStream(conn.getOutputStream());
                             //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
                             os.writeBytes(jsonParam.toString());
-
                             os.flush();
                             os.close();
-                            if(conn.getResponseCode() == 201){
+                            if(conn.getResponseCode() == 200){
                                 each.setSync(true);
                                 ses.getDutyInfDao().update(each);
                             }
-                            Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-                            Log.i("MSG", conn.getResponseMessage());
+                            Log.i("STATUS_DUTY", String.valueOf(conn.getResponseCode()));
                             conn.disconnect();
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -508,6 +518,54 @@ public class helperFunctions {
                 thread.start();
             }
         }
+
+        //to sync unsynced tanks with server
+        truck.resetTanks();
+        for ( final TankInf each : truck.getTanks()){
+            if(!each.getSync()){
+                final String urlAdress = "http://192.168.182.225/sserver/api/tanks/" + each.getId();
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            URL url = new URL(urlAdress);
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setRequestMethod("POST");
+                            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                            conn.setRequestProperty("Accept", "application/json");
+                            conn.setDoOutput(true);
+                            conn.setDoInput(true);
+
+                            JSONObject jsonParam = new JSONObject();
+                            jsonParam.put("Id", each.getId());
+                            jsonParam.put("NTank", each.getNTank());
+                            jsonParam.put("Limit", each.getLimit());
+                            jsonParam.put("Fullness", each.getFullness());
+                            jsonParam.put("TruckId", each.getTruckId());
+
+                            //Log.i("JSON_TANK", jsonParam.toString());
+
+                            DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+                            //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
+                            os.writeBytes(jsonParam.toString());
+                            os.flush();
+                            os.close();
+                            if(conn.getResponseCode() == 200){
+                                each.setSync(true);
+                                ses.getTankInfDao().update(each);
+                            }
+                            Log.i("STATUS_TANK", String.valueOf(conn.getResponseCode()));
+                            conn.disconnect();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                thread.start();
+            }
+        }
+
 
         }
 
@@ -521,6 +579,7 @@ public class helperFunctions {
         JSONArray ja = new JSONArray(jo.get("Tanks").toString());
         for(int i = 0; i < ja.length(); i++){
             TankInf tank = new TankInf();
+            tank.setSync(true);
             JSONObject jo_temp = (JSONObject) ja.get(i);
             tank.setId(Long.parseLong(jo_temp.get("Id").toString()));
             tank.setTruckId(truck_id);
@@ -534,7 +593,18 @@ public class helperFunctions {
 
 
 
+    public static boolean serviceWorking(Context con){//Servis Çalışıyor mu kontrol eden fonksiyon
 
+        ActivityManager manager = (ActivityManager) con.getSystemService(Context.ACTIVITY_SERVICE);
+        if (manager != null) {
+            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                if ( PushService.class.getName().equals(service.service.getClassName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 
 }

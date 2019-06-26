@@ -23,6 +23,7 @@ public class TankInf {
     private int NTank;
     private int Limit;
     private int Fullness;
+    private boolean Sync;
 
     @ToOne(joinProperty = "TruckId")
     private TruckInf Truck;
@@ -37,13 +38,14 @@ public class TankInf {
     @Generated(hash = 2111422486)
     private transient TankInfDao myDao;
 
-    @Generated(hash = 2051559156)
-    public TankInf(Long Id, long TruckId, int NTank, int Limit, int Fullness) {
+    @Generated(hash = 761301450)
+    public TankInf(Long Id, long TruckId, int NTank, int Limit, int Fullness, boolean Sync) {
         this.Id = Id;
         this.TruckId = TruckId;
         this.NTank = NTank;
         this.Limit = Limit;
         this.Fullness = Fullness;
+        this.Sync = Sync;
     }
 
     @Generated(hash = 2128023932)
@@ -195,6 +197,14 @@ public class TankInf {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getTankInfDao() : null;
+    }
+
+    public boolean getSync() {
+        return this.Sync;
+    }
+
+    public void setSync(boolean Sync) {
+        this.Sync = Sync;
     }
 
 
