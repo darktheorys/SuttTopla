@@ -3,65 +3,40 @@ package com.brkomrs.sttopla.database;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 
-@Entity (nameInDb = "ciftlik_tbl")
-public class FarmInf {
+import java.io.Serializable;
+
+@Entity (nameInDb = "dbo.Farms")
+public class FarmInf{
 
     @org.greenrobot.greendao.annotation.Id (autoincrement = true)
-    private Long farmID;
+    private Long Id;
 
-    private boolean isTankClean = false;
-    private boolean isPumpClean = false;
-    private boolean isEnvClean = false;
-    private boolean isWeighterClean = false;
-    private String farmName = "";
-    @Generated(hash = 1895313793)
-    public FarmInf(Long farmID, boolean isTankClean, boolean isPumpClean,
-            boolean isEnvClean, boolean isWeighterClean, String farmName) {
-        this.farmID = farmID;
-        this.isTankClean = isTankClean;
-        this.isPumpClean = isPumpClean;
-        this.isEnvClean = isEnvClean;
-        this.isWeighterClean = isWeighterClean;
-        this.farmName = farmName;
+    private String FarmName;
+
+    @Generated(hash = 1506879889)
+    public FarmInf(Long Id, String FarmName) {
+        this.Id = Id;
+        this.FarmName = FarmName;
     }
+
     @Generated(hash = 396617878)
     public FarmInf() {
     }
-    public Long getFarmID() {
-        return this.farmID;
+
+    public Long getId() {
+        return this.Id;
     }
-    public void setFarmID(Long farmID) {
-        this.farmID = farmID;
+
+    public void setId(Long Id) {
+        this.Id = Id;
     }
-    public boolean getIsTankClean() {
-        return this.isTankClean;
-    }
-    public void setIsTankClean(boolean isTankClean) {
-        this.isTankClean = isTankClean;
-    }
-    public boolean getIsPumpClean() {
-        return this.isPumpClean;
-    }
-    public void setIsPumpClean(boolean isPumpClean) {
-        this.isPumpClean = isPumpClean;
-    }
-    public boolean getIsEnvClean() {
-        return this.isEnvClean;
-    }
-    public void setIsEnvClean(boolean isEnvClean) {
-        this.isEnvClean = isEnvClean;
-    }
-    public boolean getIsWeighterClean() {
-        return this.isWeighterClean;
-    }
-    public void setIsWeighterClean(boolean isWeighterClean) {
-        this.isWeighterClean = isWeighterClean;
-    }
+
     public String getFarmName() {
-        return this.farmName;
+        return this.FarmName;
     }
-    public void setFarmName(String farmName) {
-        this.farmName = farmName;
+
+    public void setFarmName(String FarmName) {
+        this.FarmName = FarmName;
     }
 
 

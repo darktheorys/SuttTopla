@@ -6,10 +6,11 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
         
     }
     dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.1.6.RELEASE"
+
         classpath 'com.android.tools.build:gradle:3.4.1'
         classpath 'com.google.gms:google-services:4.2.0'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2' // add plugin

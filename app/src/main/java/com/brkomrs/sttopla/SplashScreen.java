@@ -9,6 +9,7 @@ import android.content.Intent;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.util.DisplayMetrics;
 import android.view.animation.Animation;
 
@@ -28,7 +29,8 @@ ConstraintLayout img;
         setContentView(R.layout.activity_splash_screen);
 
         img = findViewById(R.id.zoomOutLayout);
-
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         ScaleAnimation sa = new ScaleAnimation(1.0f, 0.6f, 1.0f, 0.6f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         sa.setFillAfter(true);

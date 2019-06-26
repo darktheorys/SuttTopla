@@ -10,16 +10,16 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.content.Intent;
 import android.widget.EditText;
+
 import com.brkomrs.sttopla.database.DaoSession;
 import com.brkomrs.sttopla.database.UserInf;
-import com.brkomrs.sttopla.database.UserInfDao;
-import org.greenrobot.greendao.query.QueryBuilder;
-import java.io.IOException;
-import java.util.List;
-import java.io.File;
-import java.util.concurrent.ExecutionException;
 
-import com.brkomrs.sttopla.necessary.HttpRequestList;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.File;
+
 import com.brkomrs.sttopla.necessary.helperFunctions;
 
 public class LoginScreen extends AppCompatActivity {
@@ -32,16 +32,6 @@ public class LoginScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-/*
-        HttpRequestList temp = new HttpRequestList();
-        try {
-            List<UserInf> users = temp.new HttpRequestUser().execute().get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
@@ -54,8 +44,6 @@ public class LoginScreen extends AppCompatActivity {
         submit_btn = findViewById(R.id.submit_id);
         remember_chk = findViewById(R.id.remember_chk);
         autolog_chk = findViewById(R.id.autologin_chk);
-        //button is disabled at first
-        submit_btn.setEnabled(false);
         //construction of id.txt file, to save
         //path of current installation
         File path = LoginScreen.this.getFilesDir();
@@ -72,64 +60,6 @@ public class LoginScreen extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            // setting database from scratch after installation
-
-            //adding users
-            helperFunctions.addUser(daoSession,"burak","ömür", "email1", "phone1");
-            helperFunctions.addUser(daoSession,"mazlum","yıldırım", "email2", "phone2");
-            helperFunctions.addUser(daoSession,"ramazan","yurt", "email3", "phone3");
-            helperFunctions.addUser(daoSession,"doğukan","yıldırım", "email4", "phone4");
-            helperFunctions.addUser(daoSession,"temp","user","sdf","fsld");
-
-            //adding trucks
-            helperFunctions.addTruck(daoSession,4,"16abc32",1);
-            helperFunctions.addTruck(daoSession,5,"34asf78",2);
-            helperFunctions.addTruck(daoSession,4,"26vgd77",3);
-            helperFunctions.addTruck(daoSession,5,"67asd54",4);
-
-            //adding farms
-            helperFunctions.addFarm(daoSession,"Alibaba");
-            helperFunctions.addFarm(daoSession,"Sütaş Ana Çiftlik");
-            helperFunctions.addFarm(daoSession,"Samsun Merkez");
-            helperFunctions.addFarm(daoSession,"Karacabey");
-
-            //addding tanks
-            helperFunctions.addTank(daoSession,200,1, 1);
-            helperFunctions.addTank(daoSession,200,2, 1);
-            helperFunctions.addTank(daoSession,200,3, 1);
-            helperFunctions.addTank(daoSession,200,4, 1);
-
-            helperFunctions.addTank(daoSession,200,1, 2);
-            helperFunctions.addTank(daoSession,200,2, 2);
-            helperFunctions.addTank(daoSession,200,3, 2);
-            helperFunctions.addTank(daoSession,200,4, 2);
-            helperFunctions.addTank(daoSession,200,5, 2);
-
-            helperFunctions.addTank(daoSession,200,1, 3);
-            helperFunctions.addTank(daoSession,200,2, 3);
-            helperFunctions.addTank(daoSession,200,3, 3);
-            helperFunctions.addTank(daoSession,200,4, 3);
-
-            helperFunctions.addTank(daoSession,200,1, 4);
-            helperFunctions.addTank(daoSession,200,2, 4);
-            helperFunctions.addTank(daoSession,200,3, 4);
-            helperFunctions.addTank(daoSession,200,4, 4);
-            helperFunctions.addTank(daoSession,200,5, 4);
-
-
-            //duty adding
-            helperFunctions.addDuty(daoSession,1,1,false);
-            helperFunctions.addDuty(daoSession,1,2,false);
-            helperFunctions.addDuty(daoSession,2,1,false);
-            helperFunctions.addDuty(daoSession,2,2,false);
-            helperFunctions.addDuty(daoSession,2,3,false);
-            helperFunctions.addDuty(daoSession,3,1,false);
-            helperFunctions.addDuty(daoSession,3,2,false);
-            helperFunctions.addDuty(daoSession,3,3,false);
-            helperFunctions.addDuty(daoSession,1,3,false);
-            helperFunctions.addDuty(daoSession,4,4,false);
-            helperFunctions.addDuty(daoSession,4,2,false);
-
 
         }
         //retrieving data from configfile
@@ -183,9 +113,8 @@ public class LoginScreen extends AppCompatActivity {
              if (!conn) {
                 Toast.makeText(LoginScreen.this, getString(R.string.connection_err_str), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(LoginScreen.this, getString(R.string.connected_str), Toast.LENGTH_SHORT).show();
-                //enabling button
-                submit_btn.setEnabled(true);
+                 Toast.makeText(LoginScreen.this, getString(R.string.connected_str), Toast.LENGTH_SHORT).show();
+             }
                 submit_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -196,6 +125,14 @@ public class LoginScreen extends AppCompatActivity {
                         //if valid id is entered, it goes to mission page
                         //if not valit it shows an error and waits for another id
                         if(getValidity(id_str)){
+
+                            try {
+                                helperFunctions.getDatasFromServer(daoSession, id_str);
+                            } catch (Exception e) {
+                                Toast.makeText(LoginScreen.this, getString(R.string.connection_err_str), Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+
                             Toast.makeText(LoginScreen.this, getString(R.string.log_making_str) ,Toast.LENGTH_SHORT).show();
                             //if remember checkbox is checked, then we save id in the textEdit to the file.
                             // if not checked then, it saved empty string to file, replaces previous savings
@@ -230,13 +167,36 @@ public class LoginScreen extends AppCompatActivity {
                  }
             }
 
-    }
-
 
     //database getter place
     public boolean getValidity(String id){
+
+        UserInf user = helperFunctions.getUser(daoSession, Long.parseLong(id));
+        if(user != null){
+            return true;
+        }
+
+        String url = "http://192.168.182.225/sserver/api/users/" + id;
+
+        try {
+            JSONObject jo = helperFunctions.getJSONObjectFromURL(url);
+            //Log.e("@@@@", jo.toString());
+            user = helperFunctions.parseUser(jo);
+            if(user != null){
+                helperFunctions.addUser(daoSession, user);
+                return true;
+            }else return false;
+        } catch (IOException e) {
+            Toast.makeText(LoginScreen.this, getString(R.string.connection_err_str), Toast.LENGTH_SHORT).show();
+            return false;
+        } catch (JSONException e) {
+            Toast.makeText(LoginScreen.this, getString(R.string.connection_err_str), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+/*
         QueryBuilder<UserInf> query = daoSession.getUserInfDao().queryBuilder();
-        List<UserInf> c_user = query.where(UserInfDao.Properties.UserId.eq(id)).list();
+        List<UserInf> c_user = query.where(UserInfDao.Properties.Id.eq(id)).list();
 
         //if a user exists it returns true
         if(c_user.size() > 0){
@@ -245,6 +205,7 @@ public class LoginScreen extends AppCompatActivity {
         else{
             return false;
         }
+        */
     }
 
 

@@ -16,20 +16,20 @@ import android.widget.Toast;
 
 import com.brkomrs.sttopla.database.DaoSession;
 import com.brkomrs.sttopla.database.DutyInf;
-import com.brkomrs.sttopla.database.DutyInfDao;
 
-import org.greenrobot.greendao.query.QueryBuilder;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.brkomrs.sttopla.database.MilkInf;
+import com.brkomrs.sttopla.database.TankInf;
+import com.brkomrs.sttopla.database.TruckInf;
 import com.brkomrs.sttopla.necessary.helperFunctions;
 
 public class MissionSelectScreen extends AppCompatActivity{
     private List<DutyInf>  duties;
     private Spinner spin;
-    private long user_id;
+    private int user_id;
     private Button goSelected, showPrev;
     private SwipeRefreshLayout swipes;
     private DaoSession daoSession;
@@ -63,7 +63,7 @@ public class MissionSelectScreen extends AppCompatActivity{
         //getting user id from previous activity to get true duties from database
         String userid_temp_str = getIntent().getStringExtra(getString(R.string.user_id_extra_str));
         if (userid_temp_str != null  && !userid_temp_str.equals("")) {
-            user_id = Long.parseLong(userid_temp_str);
+            user_id = Integer.parseInt(userid_temp_str);
         }
 
 
@@ -75,16 +75,20 @@ public class MissionSelectScreen extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MissionSelectScreen.this, FormScreen.class);
-                i.putExtra(getString(R.string.duty_id_extra_str), duties.get(spin.getSelectedItemPosition()).getDutyId().toString());
+                i.putExtra(getString(R.string.duty_id_extra_str), duties.get(spin.getSelectedItemPosition()).getId().toString());
                 startActivity(i);
             }
         });
 
 
+        final String url = "http://192.168.182.225/sserver/api/milks";
+        helperFunctions.sendPost(url,daoSession);
+
         //swipe arrangement
         swipes.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                helperFunctions.sendPost(url,daoSession);
                 getUndoneDutiesToSpinner(helperFunctions.haveConnection(MissionSelectScreen.this));
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -105,20 +109,29 @@ public class MissionSelectScreen extends AppCompatActivity{
     }
 
     private void goShowPrevs() {
-        List<DutyInf> allDuties = helperFunctions.getAllDuties(daoSession, user_id);
-        ArrayList<MilkInf> prevMilks = new ArrayList<>();
-        for (DutyInf each : allDuties){
-            prevMilks.addAll(helperFunctions.getAllMilks(daoSession, each.getDutyId()));
+        try{
+
+            ArrayList<MilkInf> prevMilks = new ArrayList<>();
+            TruckInf truck = helperFunctions.getUser (daoSession, user_id).getTruck();
+            truck.resetTanks();
+            List<TankInf> allTanks = truck.getTanks();
+            for (TankInf each : allTanks){
+                prevMilks.addAll(each.getMilks());
+            }
+            final Dialog prevs = new Dialog(MissionSelectScreen.this);
+            prevs.setContentView(R.layout.show_prevs);
+            prevs.setTitle("Eski gönderilenler..");
+            ListView lv = prevs.findViewById(R.id.prev_subs_lv);
+            ArrayAdapter<MilkInf> veriAdaptoru=new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, prevMilks);
+            lv.setAdapter(veriAdaptoru);
+            prevs.setCancelable(true);
+            prevs.setCanceledOnTouchOutside(true);
+            prevs.show();
+        }catch (Exception e){
+            e.printStackTrace();
+            finish();
         }
-        final Dialog prevs = new Dialog(MissionSelectScreen.this);
-        prevs.setContentView(R.layout.show_prevs);
-        prevs.setTitle("Eski gönderilenler..");
-        prevs.show();
-        ListView lv = prevs.findViewById(R.id.prev_subs_lv);
-        ArrayAdapter<MilkInf> veriAdaptoru=new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, prevMilks);
-        lv.setAdapter(veriAdaptoru);
-        prevs.show();
-        prevs.setCancelable(true);
+
     }
 
     //duty getter fuction
@@ -128,9 +141,8 @@ public class MissionSelectScreen extends AppCompatActivity{
         }
         duties = new ArrayList<>();
         ArrayAdapter<DutyInf> dataAdapterMissions;
-        QueryBuilder<DutyInf> qb = ((dbHelper)getApplication()).getDaoSession().getDutyInfDao().queryBuilder();
         //all duties for given id
-        List<DutyInf> temp = qb.where(DutyInfDao.Properties.User.eq(user_id)).list();
+        List<DutyInf> temp = helperFunctions.getAllDuties(daoSession,user_id);
         for (DutyInf each : temp){
             //adding undone duties
             if (!each.getDone()) duties.add(each);

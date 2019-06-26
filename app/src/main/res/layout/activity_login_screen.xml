@@ -11,17 +11,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/mn_back">
 
-
-        <ImageView
-            android:id="@+id/main_background"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/mn_back"
-            tools:layout_editor_absoluteX="-16dp"
-            tools:layout_editor_absoluteY="0dp" />
 
         <ImageView
             android:id="@+id/logo_splash_img"
@@ -29,14 +21,14 @@
             android:layout_height="107dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="56dp"
+            android:layout_marginTop="72dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:contentDescription="Logo"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.499"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/main_background"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/logo" />
 
         <LinearLayout
@@ -44,12 +36,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="28dp"
             android:layout_marginEnd="8dp"
-            android:background="@android:drawable/edit_text"
+            android:layout_marginRight="8dp"
+            android:background="@android:drawable/editbox_background_normal"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="@+id/main_background"
-            app:layout_constraintHorizontal_bias="0.519"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/logo_splash_img">
 
@@ -86,14 +80,11 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="@+id/main_background"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.524"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idAndInput"
-            app:layout_constraintVertical_bias="0.025">
+            app:layout_constraintTop_toBottomOf="@+id/idAndInput">
 
             <Button
                 android:id="@+id/submit_id"
@@ -117,7 +108,7 @@
                     android:id="@+id/remember_chk"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:drawable/edit_text"
+                    android:background="@android:drawable/editbox_background_normal"
                     android:text="@string/saveid_str" />
 
                 <CheckBox
@@ -125,7 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:background="@android:drawable/edit_text"
+                    android:background="@android:drawable/editbox_background_normal"
                     android:text="@string/autolog_str" />
             </LinearLayout>
         </LinearLayout>

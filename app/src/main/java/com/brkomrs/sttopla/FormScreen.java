@@ -29,7 +29,7 @@ public class FormScreen extends AppCompatActivity {
     private Spinner alcohol_type,milktype,milktemp_spin, refracTemp_spin, basket_spin;
     private LinearLayout testLayout;
     private DaoSession ses;
-    private long farmid, userid, truck_id,duty_id;
+    private long farmid, truck_id,duty_id;
     private int tank_filled = 0, tank_number = 0, liter_input = 0;
     private TextView tankInp,commentInp;
     private boolean leavingMilk = false, addMoreMilk = false, noTestRequired = false, test_antibiotic = false,detail_badmilk = false;
@@ -38,7 +38,8 @@ public class FormScreen extends AppCompatActivity {
     private boolean[] clicked;
     private ArrayList<MilkInf> basket_list;
     private boolean just_poll = false;
-
+    private TruckInf truck_obj;
+    private  DutyInf duty_obj;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +56,7 @@ public class FormScreen extends AppCompatActivity {
         //getting duty id from previous page
         String duty_id_temp_str = getIntent().getStringExtra(getString(R.string.duty_id_extra_str));
         if (duty_id_temp_str != null && !duty_id_temp_str.equals("")) {
-            duty_id = Long.parseLong(duty_id_temp_str);
+            duty_id = Integer.parseInt(duty_id_temp_str);
         }
 
         //session getter
@@ -83,16 +84,16 @@ public class FormScreen extends AppCompatActivity {
         //db info getters
 
         try{
-            DutyInf duty_obj = helperFunctions.getDuty(ses, duty_id);
+            duty_obj = helperFunctions.getDuty(ses, duty_id);
             if(duty_obj.getDone()){
                 Toast.makeText(FormScreen.this, getString(R.string.already_done_str),Toast.LENGTH_SHORT).show();
                 finish();
             }
-            userid = duty_obj.getUser();
-            farmid = duty_obj.getFarm_id();
-            TruckInf truck_obj = helperFunctions.getTruck(ses, userid);
-            tank_number = truck_obj.getN_tank();
-            truck_id = truck_obj.getTruckId();
+            farmid = duty_obj.getFarmId();
+            truck_obj = duty_obj.getTruck();
+            tank_number = truck_obj.getTankNumber();
+            truck_id = truck_obj.getId();
+
         }catch (Exception e){
             showErrorAndExit();
             Log.e("@@@@@@@@", "oncreate");
@@ -154,6 +155,7 @@ public class FormScreen extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 ConstraintLayout lay = findViewById(R.id.truck_lay);
+                int r = milktype.getSelectedItemPosition();
                 if(i == R.id.leave_milk_radio){
                     lay.setVisibility(View.GONE);
                     testLayout.setVisibility(View.GONE);
@@ -164,7 +166,11 @@ public class FormScreen extends AppCompatActivity {
                     leavingMilk = true;
                     addMoreMilk = false;
                 }else if(i == R.id.some_milk_radio){
-                    testLayout.setVisibility(View.VISIBLE);
+
+                    if(r == 0 || r == 1 || r == 2){
+                        testLayout.setVisibility(View.VISIBLE);
+                    }
+
                     addMoreMilk = true;
                     leavingMilk = false;
                     lay.setVisibility(View.VISIBLE);
@@ -172,7 +178,9 @@ public class FormScreen extends AppCompatActivity {
                     tankInp.setVisibility(View.VISIBLE);
                     detail_radiogroup.setVisibility(View.GONE);
                 }else{
-                    testLayout.setVisibility(View.VISIBLE);
+                    if(r == 0 || r == 1 || r == 2){
+                        testLayout.setVisibility(View.VISIBLE);
+                    }
                     lay.setVisibility(View.VISIBLE);
                     findViewById(R.id.amount_tv).setVisibility(View.VISIBLE);
                     tankInp.setVisibility(View.VISIBLE);
@@ -274,10 +282,10 @@ public class FormScreen extends AppCompatActivity {
 
         //milk types spinner, if user chooses milk test inputs will be visible
         ArrayList<String> milktypes = new ArrayList<>();
-        milktypes.add("İnek");
-        milktypes.add("Keçi");
+        milktypes.add("Inek");
+        milktypes.add("Keci");
         milktypes.add("Koyun");
-        milktypes.add("Pastörize Süt");
+        milktypes.add("Pastorize Sut");
         milktypes.add("Peyniraltı Suyu");
         milktypes.add("Su");
         milktypes.add("Krema");
@@ -415,43 +423,45 @@ public class FormScreen extends AppCompatActivity {
         });
     }
 
-    private void makeSubmission() {
+    private void makeSubmission(int a, int b, int c, int d) {
         try{
             MilkInf milk = new MilkInf();
 
-
-            milk.setDuty(duty_id);
-            milk.setFarm(farmid);
             milk.setComment(comment);
-            milk.setMilktype(milk_type_str);
+            milk.setMilkType(milk_type_str);
+            milk.setSync(false);
+            milk.setIsEnvClean(a);
+            milk.setIsPumpClean(b);
+            milk.setIsTankClean(c);
+            milk.setIsWeighterClean(d);
 
             if(noTestRequired || leavingMilk){
-                milk.setAlcoholtype("");
-                milk.setAlcohol(false);
-                milk.setAntibiotic_inf(false);
+                milk.setAlcoholType("");
+                milk.setAlcoholInf(false);
+                milk.setAntibioticInf(false);
                 milk.setTemp(0);
-                milk.setR_temp(0);
+                milk.setRTemp(0);
             }else{
                 if (!test_alcohol.equalsIgnoreCase("")) {
-                    milk.setAlcohol(true);
-                }else milk.setAlcohol(false);
-                milk.setAlcoholtype(test_alcohol);
-                milk.setAntibiotic_inf(test_antibiotic);
+                    milk.setAlcoholInf(true);
+                }else milk.setAlcoholInf(false);
+                milk.setAlcoholType(test_alcohol);
+                milk.setAntibioticInf(test_antibiotic);
                 milk.setTemp(test_temperature);
-                milk.setR_temp(test_Rtemperature);
+                milk.setRTemp(test_Rtemperature);
             }
 
-            TankInf tank = helperFunctions.getTank(ses, truck_id, tank_filled);
+            TankInf tank = truck_obj.getTanks().get(tank_filled-1);
             if(leavingMilk){
-                milk.setTank_id(0);
-                milk.setLeave_milk(true);
-                milk.setTank_liter(0);
-                milk.setTankN(0);
+                milk.setTankId(0);
+                milk.setLeaveMilk(true);
+                milk.setLiter(0);
+                milk.setTankFilled(0);
             }else{
-                milk.setTank_id(tank.getTankId());
-                milk.setTank_liter(liter_input);
-                milk.setLeave_milk(false);
-                milk.setTankN(tank_filled);
+                milk.setTankId(tank.getId());
+                milk.setLiter(liter_input);
+                milk.setLeaveMilk(false);
+                milk.setTankFilled(tank_filled);
             }
 
             basket_list.add(milk);
@@ -483,7 +493,7 @@ public class FormScreen extends AppCompatActivity {
         } else if(!leavingMilk && !checkMilkTypes()){
             Toast.makeText(FormScreen.this, getString(R.string.milk_not_comp_str), Toast.LENGTH_LONG).show();
         }else if(addMoreMilk){
-            makeSubmission();
+            makeSubmission(2,2,2,2);
             final Dialog addMoreMilk = new Dialog(FormScreen.this);
             addMoreMilk.setContentView(R.layout.add_milk);
             addMoreMilk.setCancelable(true);
@@ -511,7 +521,6 @@ public class FormScreen extends AppCompatActivity {
         beforesub.setTitle("Çiftlik oylaması");
         beforesub.setCancelable(true);
         beforesub.setCanceledOnTouchOutside(false);
-        final FarmInf farm_taken_milk = helperFunctions.getFarm(ses, farmid);
         final CheckBox isClean1 = beforesub.findViewById(R.id.isClean1_chk);
         final CheckBox isClean2 = beforesub.findViewById(R.id.isClean2_chk);
         final CheckBox isClean3 = beforesub.findViewById(R.id.isClean3_chk);
@@ -521,17 +530,9 @@ public class FormScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try{
-                    FarmInf farm =  new FarmInf();
-                    farm.setFarmID(farm_taken_milk.getFarmID());
-                    farm.setFarmName(farm_taken_milk.getFarmName());
-                    farm.setIsEnvClean(isClean4.isChecked());
-                    farm.setIsPumpClean(isClean2.isChecked());
-                    farm.setIsWeighterClean(isClean3.isChecked());
-                    farm.setIsTankClean(isClean1.isChecked());
-                    ses.update(farm);
                     if(!just_poll){
                         Toast.makeText(FormScreen.this, "Eklendi ve görev bitirildi.", Toast.LENGTH_LONG).show();
-                        makeSubmission();
+                        makeSubmission(isClean1.isChecked()?1:0, isClean2.isChecked()?1:0, isClean3.isChecked()?1:0, isClean4.isChecked()?1:0);
                     }else{
                         Toast.makeText(FormScreen.this, "Görev bitirildi.", Toast.LENGTH_LONG).show();
                     }
@@ -553,10 +554,10 @@ public class FormScreen extends AppCompatActivity {
     private void updateDutyAsDone() {
         //updating duty as done
         DutyInf duty = new DutyInf();
-        duty.setDutyId(duty_id);
+        duty.setId(duty_id);
         duty.setDone(true);
-        duty.setFarm_id(farmid);
-        duty.setUser(userid);
+        duty.setTruckId(truck_id);
+        duty.setFarmId(farmid);
         ses.update(duty);
     }
 
@@ -564,14 +565,13 @@ public class FormScreen extends AppCompatActivity {
     //checker method for milktypes
     private boolean checkMilkTypes() {
         try{
-            TankInf tank= helperFunctions.getTank(ses, truck_id, tank_filled);
-
-            MilkInf milk = helperFunctions.getMilk(ses, tank.getTankId());
-
-
-            if(milk != null && !(liter_input == 0 && !addMoreMilk && !leavingMilk)) {
-                if((milk.getAlcoholtype().equalsIgnoreCase(test_alcohol) || (!milk.getAlcohol() && test_alcohol.equalsIgnoreCase(""))) && milk.getMilktype().equalsIgnoreCase(milk_type_str) &&
-                        (milk.getR_temp() == test_Rtemperature) && (milk.getTemp() == test_temperature)){
+            truck_obj.resetTanks();
+            TankInf tank= truck_obj.getTanks().get(tank_filled-1);
+            tank.resetMilks();
+            if(tank.getMilks().size() > 0 && !(liter_input == 0 && !addMoreMilk && !leavingMilk)){
+                MilkInf milk = tank.getMilks().get(0);
+                if((milk.getAlcoholType().equalsIgnoreCase(test_alcohol) || (!milk.getAlcoholInf() && test_alcohol.equalsIgnoreCase(""))) && milk.getMilkType().equalsIgnoreCase(milk_type_str) &&
+                        (milk.getRTemp() == test_Rtemperature) && (milk.getTemp() == test_temperature)){
                     return true;
                 }else return false;
             }else{
@@ -589,7 +589,8 @@ public class FormScreen extends AppCompatActivity {
     private boolean checkTankLimits() {
         if(leavingMilk) return true;
         try {
-            TankInf each = helperFunctions.getTank(ses, truck_id, tank_filled);
+            truck_obj.resetTanks();
+            TankInf each = truck_obj.getTanks().get(tank_filled-1);
             if (liter_input >= 0 && each.getLimit() >= each.getFullness() + liter_input) {
                 return true;
             } else return false;
@@ -603,12 +604,13 @@ public class FormScreen extends AppCompatActivity {
 
     private void updateTank(){
         try{
-            TankInf each = helperFunctions.getTank(ses, truck_id, tank_filled);
+            truck_obj.resetTanks();
+            TankInf each = truck_obj.getTanks().get(tank_filled-1);
             TankInf tank = new TankInf();
-            tank.setTankId(each.getTankId());
-            tank.setTruck(truck_id);
+            tank.setId(each.getId());
+            tank.setTruckId(truck_id);
             tank.setLimit(each.getLimit());
-            tank.setTankN(each.getTankN());
+            tank.setNTank(each.getNTank());
             if (liter_input >=0 && each.getLimit() >= each.getFullness() + liter_input) {
                 tank.setFullness(each.getFullness() + liter_input);
             }
@@ -627,6 +629,7 @@ public class FormScreen extends AppCompatActivity {
     public void onBackPressed() {
         if(basket_list.size() > 1){
             if(temp == 0){
+                temp--;
                 just_poll = true;
                 pollAndFinish();
             }else{
@@ -636,7 +639,9 @@ public class FormScreen extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        just_poll = false;
+                        if(temp == 0){
+                            just_poll = false;
+                        }
                         temp++;
                     }
                 }, 2000);

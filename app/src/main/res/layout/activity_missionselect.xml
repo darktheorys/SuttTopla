@@ -12,17 +12,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:background="@drawable/mn_back"
         app:layout_constraintHorizontal_bias="1">
-
-        <ImageView
-            android:id="@+id/main_back"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/background_main"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/mn_back"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp" />
 
         <LinearLayout
             android:id="@+id/buttons_duty_lay"
@@ -53,7 +44,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:background="@android:drawable/btn_default_small"
-                android:text="@string/previous_submissions_str" />
+                android:text="@string/previous_submissions_str"
+                android:layout_marginStart="8dp" />
         </LinearLayout>
 
         <TextView
@@ -97,7 +89,7 @@
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:background="@android:drawable/spinner_background" />
+                android:background="@android:drawable/editbox_dropdown_light_frame" />
 
             <Button
                 android:id="@+id/go_duty_btn"

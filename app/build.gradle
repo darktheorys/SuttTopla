@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'org.greenrobot.greendao' // apply plugin
-//apply plugin: 'org.springframework.boot'
-//apply plugin: 'io.spring.dependency-management'
 
 android {
     compileSdkVersion 29
     buildToolsVersion '29.0.0'
+    useLibrary 'org.apache.http.legacy'
+
     defaultConfig {
         applicationId "com.brkomrs.sttopla"
         minSdkVersion 15
@@ -25,6 +25,10 @@ android {
     packagingOptions {
         exclude 'META-INF/license.txt'
         exclude 'META-INF/notice.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/ASL2.0'
+
     }
 }
 greendao{
@@ -33,9 +37,8 @@ greendao{
 }
 
 
+
 dependencies {
-    //implementation("org.springframework.boot:spring-boot-starter")
-    //implementation("org.springframework:spring-web")
     implementation 'org.greenrobot:greendao:3.2.2' // add library
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0-beta01'

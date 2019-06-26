@@ -3,6 +3,8 @@ package com.brkomrs.sttopla.necessary;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -11,14 +13,29 @@ import com.brkomrs.sttopla.database.*;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 import org.greenrobot.greendao.query.WhereCondition;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
-
 public class helperFunctions {
 
     helperFunctions(){
@@ -59,80 +76,65 @@ public class helperFunctions {
     /**
      * Adding new user to database
      * @param daoSession current db session
-     * @param userName
-     * @param userSurname
-     * @param email
-     * @param phone
      */
-    public static void addUser(DaoSession daoSession, String userName, String userSurname, String email, String phone){
-        UserInf user = new UserInf();
-        user.setUserId(null);
-        user.setUserPhone(phone);
-        user.setUserEmail(email);
-        user.setUserName(userName);
-        user.setUserSurname(userSurname);
-        daoSession.getUserInfDao().insert(user);
-
+    public static void addUser(DaoSession daoSession, UserInf user){
+        QueryBuilder<UserInf> q = daoSession.getUserInfDao().queryBuilder();
+        List<UserInf> list = q.where(UserInfDao.Properties.Id.eq(user.getId())).list();
+        if(!(list.size() > 0)){
+            daoSession.getUserInfDao().insert(user);
+        }
     }
 
     /**
      * Adding new farm to database
      * @param daoSession current db session
-     * @param farmname
      */
-    public static void addFarm(DaoSession daoSession, String farmname){
-        FarmInf farm = new FarmInf();
-        farm.setFarmID(null);
-        farm.setFarmName(farmname);
-        daoSession.getFarmInfDao().insert(farm);
+    public static void addFarm(DaoSession daoSession, FarmInf farm){
+
+        QueryBuilder<FarmInf> q = daoSession.getFarmInfDao().queryBuilder();
+        List<FarmInf> list = q.where(FarmInfDao.Properties.Id.eq(farm.getId())).list();
+        if(!(list.size() > 0)){
+            daoSession.getFarmInfDao().insert(farm);
+        }
     }
 
     /**
      * Adding new duty to database
      * @param daoSession current db session
-     * @param farmid
-     * @param userid
      */
-    public static void addDuty(DaoSession daoSession, long farmid, long userid, boolean bool){
-        DutyInf duty = new DutyInf();
-        duty.setDutyId(null);
-        duty.setFarm_id(farmid);
-        duty.setUser(userid);
-        duty.setDone(bool);
-        daoSession.getDutyInfDao().insert(duty);
-    }
+    public static void addDuty(DaoSession daoSession, DutyInf duty){
+        duty.setSync(false);
+        QueryBuilder<DutyInf> q = daoSession.getDutyInfDao().queryBuilder();
+        List<DutyInf> list = q.where(DutyInfDao.Properties.Id.eq(duty.getId())).list();
+        if(!(list.size() > 0)){
+            Log.e("Added ",  duty.getId() + " added");
+            daoSession.getDutyInfDao().insert(duty);
+        }
+        }
+
 
     /**
      * Adding new tank to database
      * @param daoSession current db session
-     * @param limit
-     * @param tankn
-     * @param truck_id
      */
-    public static void addTank(DaoSession daoSession, int limit, int tankn, long truck_id){
-        TankInf tank = new TankInf();
-        tank.setFullness(0);
-        tank.setLimit(limit);
-        tank.setTankId(null);
-        tank.setTankN(tankn);
-        tank.setTruck(truck_id);
-        daoSession.getTankInfDao().insert(tank);
+    public static void addTank(DaoSession daoSession, TankInf tank){
+        QueryBuilder<TankInf> q = daoSession.getTankInfDao().queryBuilder();
+        List<TankInf> list = q.where(TankInfDao.Properties.Id.eq(tank.getId())).list();
+        if(!(list.size() > 0)){
+            daoSession.getTankInfDao().insert(tank);
+        }
     }
 
     /**
      * Adding new track to database
      * @param daoSession current db session
-     * @param tankn
-     * @param plate
-     * @param user_id
      */
-    public static void addTruck(DaoSession daoSession, int tankn, String plate, long user_id){
-        TruckInf truck = new TruckInf();
-        truck.setN_tank(tankn);
-        truck.setPlate(plate);
-        truck.setTruckId(null);
-        truck.setUser(user_id);
-        daoSession.getTruckInfDao().insert(truck);
+    public static void addTruck(DaoSession daoSession, TruckInf truck){
+        QueryBuilder<TruckInf> q = daoSession.getTruckInfDao().queryBuilder();
+        List<TruckInf> list = q.where(TruckInfDao.Properties.Id.eq(truck.getId())).list();
+        if(!(list.size() > 0)){
+            daoSession.getTruckInfDao().insert(truck);
+        }
     }
 
 
@@ -212,7 +214,7 @@ public class helperFunctions {
      */
     public static UserInf getUser(DaoSession ses, long user_id){
         QueryBuilder<UserInf> q = ses.getUserInfDao().queryBuilder();
-        List<UserInf> list = q.where(UserInfDao.Properties.UserId.eq(user_id)).list();
+        List<UserInf> list = q.where(UserInfDao.Properties.Id.eq(user_id)).list();
         if (list.size() > 0 ){
             return list.get(0);
         }else{
@@ -223,12 +225,12 @@ public class helperFunctions {
     /**
      * To get truck from database for a given id
      * @param ses
-     * @param user_id
+     * @param truckid
      * @return
      */
-    public static TruckInf getTruck(DaoSession ses, long user_id){
+    public static TruckInf getTruck(DaoSession ses, long truckid){
         QueryBuilder<TruckInf> q = ses.getTruckInfDao().queryBuilder();
-        List<TruckInf> list = q.where(TruckInfDao.Properties.User.eq(user_id)).list();
+        List<TruckInf> list = q.where(TruckInfDao.Properties.Id.eq(truckid)).list();
         if (list.size() > 0 ){
             return list.get(0);
         }else{
@@ -244,7 +246,7 @@ public class helperFunctions {
      */
     public static FarmInf getFarm(DaoSession ses, long farm_id){
         QueryBuilder<FarmInf> q = ses.getFarmInfDao().queryBuilder();
-        List<FarmInf> list = q.where(FarmInfDao.Properties.FarmID.eq(farm_id)).list();
+        List<FarmInf> list = q.where(FarmInfDao.Properties.Id.eq(farm_id)).list();
         if (list.size() > 0 ){
             return list.get(0);
         }else{
@@ -252,22 +254,6 @@ public class helperFunctions {
         }
     }
 
-    /**
-     * To get tank info database for a given id
-     * @param ses
-     * @param truck_id
-     * @return
-     */
-    public static TankInf getTank(DaoSession ses, long truck_id, int tankN){
-        QueryBuilder<TankInf> q = ses.getTankInfDao().queryBuilder();
-        List<TankInf> list = q.where(TankInfDao.Properties.Truck.eq(truck_id)).list();
-        for (TankInf each : list){
-            if(each.getTankN() == tankN){
-                return each;
-            }
-        }
-        return null;
-    }
 
     /**
      * To get duty from database for a given id
@@ -277,7 +263,7 @@ public class helperFunctions {
      */
     public static DutyInf getDuty(DaoSession ses, long duty_id){
         QueryBuilder<DutyInf> q = ses.getDutyInfDao().queryBuilder();
-        List<DutyInf> list = q.where(DutyInfDao.Properties.DutyId.eq(duty_id)).list();
+        List<DutyInf> list = q.where(DutyInfDao.Properties.Id.eq(duty_id)).list();
         if (list.size() > 0 ){
             return list.get(0);
         }else{
@@ -288,43 +274,262 @@ public class helperFunctions {
     /**
      * To get duties from database for a given id
      * @param ses
-     * @param user_id
+     * @param userid
      * @return
      */
-    public static List<DutyInf> getAllDuties(DaoSession ses, long user_id){
-        QueryBuilder<DutyInf> q = ses.getDutyInfDao().queryBuilder();
-        List<DutyInf> list = q.where(DutyInfDao.Properties.User.eq(user_id)).orderAsc(DutyInfDao.Properties.DutyId).list();
-        return list;
+    public static List<DutyInf> getAllDuties(DaoSession ses, long userid){
+        QueryBuilder<UserInf> q = ses.getUserInfDao().queryBuilder();
+        List<UserInf> list = q.where(UserInfDao.Properties.Id.eq(userid)).list();
+
+        if(list.size() > 0){
+           TruckInf tr = list.get(0).getTruck();
+            tr.resetDuties();
+            return tr.getDuties();
+        }
+        return new ArrayList<>();
     }
 
 
-    /**
-     * To get milk from database for a given id
-     * @param ses
-     * @param tank_id
-     * @return
-     */
-    public static MilkInf getMilk(DaoSession ses, long tank_id){
-        QueryBuilder<MilkInf> q = ses.getMilkInfDao().queryBuilder();
-        List<MilkInf> list = q.where(MilkInfDao.Properties.Tank_id.eq(tank_id)).list();
+    public static JSONObject getJSONObjectFromURL(String urlString) throws IOException, JSONException {
+        HttpURLConnection urlConnection = null;
+        URL url = new URL(urlString);
+        urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setRequestMethod("GET");
+        urlConnection.setReadTimeout(5000 /* milliseconds */ );
+        urlConnection.setConnectTimeout(15000 /* milliseconds */ );
+        urlConnection.setDoOutput(true);
+        urlConnection.connect();
 
-        if (list.size() > 0 ){
-            return list.get(0);
-        }else{
+        BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+        StringBuilder sb = new StringBuilder();
+
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line + "\n");
+        }
+        br.close();
+
+        String jsonString = sb.toString();
+        if(jsonString.equalsIgnoreCase("")){
             return null;
+        }
+
+        return new JSONObject(jsonString);
+    }
+
+    public static UserInf parseUser(JSONObject jo) throws JSONException {
+        if(jo != null){
+            UserInf user = new UserInf();
+            user.setId(Long.parseLong(jo.get("Id").toString()));
+            user.setName(jo.get("Name").toString());
+            user.setSurname(jo.get("Surname").toString());
+            user.setPhone(jo.get("Phone").toString());
+            user.setEmail(jo.get("Email").toString());
+            JSONObject jo2 = new JSONObject(jo.get("Truck").toString());
+            user.setTruckId(Long.parseLong(jo2.get("Id").toString()));
+            return user;
+        }
+        return null;
+    }
+
+    private static TruckInf parseTruck(JSONObject jo, DaoSession ses) throws Exception {
+        if(jo != null){
+
+            TruckInf truck = new TruckInf();
+            truck.setId(Long.parseLong(jo.get("Id").toString()));
+            truck.setTankNumber(Integer.parseInt(jo.get("TankNumber").toString()));
+            truck.setPlate(jo.get("Plate").toString());
+            JSONArray ja = new JSONArray(jo.get("Duties").toString());
+
+            parseDuties(ja, truck.getId(), ses);
+
+            return truck;
+        }
+        return null;
+
+    }
+
+    public static void parseDuties(JSONArray ja, long truck_id, DaoSession ses) throws Exception {
+        if(ja != null){
+            for(int i = 0; i < ja.length(); i++){
+
+                DutyInf duty = new DutyInf();
+                JSONObject jo = (JSONObject) ja.get(i);
+                duty.setId(Long.parseLong(jo.get("Id").toString()));
+                duty.setFarmId(Long.parseLong(((JSONObject)jo.get("Farm")).get("Id").toString()));
+                parseAddFarm(((JSONObject)jo.get("Farm")), ses);
+                duty.setTruckId(truck_id);
+                duty.setDone(jo.get("Done").toString().equals("true"));
+                addDuty(ses, duty);
+
+            }
         }
     }
 
-    /**
-     * To get milk from database for a given id
-     * @param ses
-     * @param duty_id
-     * @return
-     */
-    public static List<MilkInf> getAllMilks(DaoSession ses, long duty_id){
+    private static void parseAddFarm(JSONObject jo, DaoSession ses) throws Exception{
+
+        FarmInf farm = new FarmInf();
+        farm.setId(Long.parseLong(jo.get("Id").toString()));
+        farm.setFarmName(jo.get("FarmName").toString());
+        addFarm(ses, farm);
+    }
+
+
+    public static void getDatasFromServer(DaoSession daoSession, String id_str ) throws Exception {
+        String url = "http://192.168.182.225/sserver/api/trucks/";
+        long id = Long.parseLong(id_str);
+        QueryBuilder<UserInf> q = daoSession.getUserInfDao().queryBuilder();
+        List<UserInf> users = q.where(UserInfDao.Properties.Id.eq(id)).list();
+        UserInf user = null;
+        JSONObject jo = null;
+        if(users.size() > 0){
+            user = users.get(0);
+        }
+        if(user != null){
+            jo = getJSONObjectFromURL(url + user.getTruckId() + "");
+        }
+        if(jo != null){
+
+            TruckInf truck = parseTruck(jo,daoSession);
+            parseTanks(jo, daoSession, truck.getId());
+            addTruck(daoSession,truck);
+        }
+    }
+    public static void sendPost(final String urlAdress, final DaoSession ses){
+        List<MilkInf> milks = getAllUnsyncMilks(ses);
+        for(final MilkInf each : milks) {
+
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        URL url = new URL(urlAdress);
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.setRequestMethod("POST");
+                        conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                        conn.setRequestProperty("Accept", "application/json");
+                        conn.setDoOutput(true);
+                        conn.setDoInput(true);
+
+                        JSONObject jsonParam = new JSONObject();
+                        jsonParam.put("TankFilled", each.getTankFilled());
+                        jsonParam.put("Liter", each.getLiter());
+                        jsonParam.put("MilkType", each.getMilkType());
+                        jsonParam.put("LeaveMilk", each.getLeaveMilk());
+                        jsonParam.put("AntibioticInf", each.getAlcoholInf());
+
+                        jsonParam.put("Temp", each.getTemp());
+                        jsonParam.put("RTemp",each.getRTemp());
+                        jsonParam.put("AlcoholInf", each.getAlcoholInf());
+                        jsonParam.put("AlcoholType", each.getAlcoholType());
+                        jsonParam.put("Comment", each.getComment());
+                        jsonParam.put("TankId", each.getTankId());
+
+                        jsonParam.put("IsEnvClean", each.getIsEnvClean());
+                        jsonParam.put("IsTankClean", each.getIsTankClean());
+                        jsonParam.put("IsPumpClean", each.getIsPumpClean());
+                        jsonParam.put("IsWeighterClean", each.getIsWeighterClean());
+                        Log.i("JSON", jsonParam.toString());
+
+                        DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+                        //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
+                        os.writeBytes(jsonParam.toString());
+
+                        os.flush();
+                        os.close();
+                        if(conn.getResponseCode() == 201){
+                            each.setSync(true);
+                            ses.getMilkInfDao().update(each);
+                            updateDutyAndTank(ses, each.getTankId());
+                        }
+                        Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+                        Log.i("MSG", conn.getResponseMessage());
+                        conn.disconnect();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            thread.start();
+        }
+    }
+
+    private static void updateDutyAndTank(final DaoSession ses, long tankid){
+        QueryBuilder<TankInf> tankq = ses.getTankInfDao().queryBuilder();
+        List<TankInf> list = tankq.where(TankInfDao.Properties.Id.eq(tankid)).list();
+        TruckInf truck = list.get(0).getTruck();
+        truck.resetDuties();
+        for ( final DutyInf each : truck.getDuties()){
+            if(each.getDone() && !each.getSync()){
+                final String urlAdress = "http://192.168.182.225/sserver/api/duties/" + each.getId();
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            URL url = new URL(urlAdress);
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setRequestMethod("POST");
+                            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                            conn.setRequestProperty("Accept", "application/json");
+                            conn.setDoOutput(true);
+                            conn.setDoInput(true);
+
+                            JSONObject jsonParam = new JSONObject();
+                            jsonParam.put("Id", each.getId());
+                            jsonParam.put("Done", true);
+                            DateFormat dateFormat = DateFormat.getDateInstance();
+                            Date date = new Date();
+                            jsonParam.put("Date", dateFormat.format(date));
+                            jsonParam.put("TruckId", each.getTruckId());
+
+                            Log.i("JSON", jsonParam.toString());
+                            Log.i("URL", urlAdress);
+
+                            DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+                            //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
+                            os.writeBytes(jsonParam.toString());
+
+                            os.flush();
+                            os.close();
+                            if(conn.getResponseCode() == 201){
+                                each.setSync(true);
+                                ses.getDutyInfDao().update(each);
+                            }
+                            Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+                            Log.i("MSG", conn.getResponseMessage());
+                            conn.disconnect();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                thread.start();
+            }
+        }
+
+        }
+
+
+    private static List<MilkInf> getAllUnsyncMilks(DaoSession ses) {
         QueryBuilder<MilkInf> q = ses.getMilkInfDao().queryBuilder();
-        List<MilkInf> list = q.where(MilkInfDao.Properties.Duty.eq(duty_id)).orderAsc(MilkInfDao.Properties.TankN).list();
-        return list;
+        return q.where(MilkInfDao.Properties.Sync.eq(false)).list();
+    }
+
+    private static void parseTanks(JSONObject jo, DaoSession ses, long truck_id) throws Exception {
+        JSONArray ja = new JSONArray(jo.get("Tanks").toString());
+        for(int i = 0; i < ja.length(); i++){
+            TankInf tank = new TankInf();
+            JSONObject jo_temp = (JSONObject) ja.get(i);
+            tank.setId(Long.parseLong(jo_temp.get("Id").toString()));
+            tank.setTruckId(truck_id);
+            tank.setLimit(Integer.parseInt(jo_temp.get("Limit").toString()));
+            tank.setFullness(Integer.parseInt(jo_temp.get("Fullness").toString()));
+            tank.setNTank(Integer.parseInt(jo_temp.get("NTank").toString()));
+
+            addTank(ses, tank);
+        }
     }
 
 

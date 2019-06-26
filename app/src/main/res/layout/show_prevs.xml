@@ -5,16 +5,9 @@
 
     <ListView
         android:id="@+id/prev_subs_lv"
-        style="@style/Widget.AppCompat.Light.ListView.DropDown"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:addStatesFromChildren="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="#A4B891"
-        android:cacheColorHint="#00090000"
-        android:choiceMode="multipleChoice"
-        android:clickable="false"
         android:divider="@android:drawable/divider_horizontal_textfield"
-        android:dividerHeight="1dp"
-        android:footerDividersEnabled="true"
-        android:headerDividersEnabled="true" />
+        android:dividerHeight="4dp" />
 </LinearLayout>

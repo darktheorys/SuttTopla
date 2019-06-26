@@ -3,163 +3,244 @@ package com.brkomrs.sttopla.database;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 
-@Entity (nameInDb = "sut_tbl")
+import java.io.Serializable;
+
+@Entity (nameInDb = "dbo.Milks")
 public class MilkInf {
+
     @org.greenrobot.greendao.annotation.Id (autoincrement = true)
-    private Long milkId;
+    private Long Id;
 
-    private long farm = 0;
-    private long tank_id= 0;
-    private int tankN = 0;
-    private long duty= 0;
-    private String milktype = "-";
-    private int tank_liter = 0;
-    private boolean leave_milk = false;
-    private boolean antibiotic_inf = false;
-    private double temp = 0;
-    private double r_temp = 0;
-    private boolean alcohol = false;
-    private String alcoholtype = "-";
-    private String comment = "-";
+    private long TankId;
+    private int TankFilled;
 
-    @Generated(hash = 1757266661)
-    public MilkInf(Long milkId, long farm, long tank_id, int tankN, long duty, String milktype, int tank_liter,
-            boolean leave_milk, boolean antibiotic_inf, double temp, double r_temp, boolean alcohol,
-            String alcoholtype, String comment) {
-        this.milkId = milkId;
-        this.farm = farm;
-        this.tank_id = tank_id;
-        this.tankN = tankN;
-        this.duty = duty;
-        this.milktype = milktype;
-        this.tank_liter = tank_liter;
-        this.leave_milk = leave_milk;
-        this.antibiotic_inf = antibiotic_inf;
-        this.temp = temp;
-        this.r_temp = r_temp;
-        this.alcohol = alcohol;
-        this.alcoholtype = alcoholtype;
-        this.comment = comment;
+    private String MilkType;
+    private int Liter;
+    private boolean LeaveMilk;
+    private boolean AntibioticInf;
+    private double Temp;
+    private double RTemp;
+    private boolean AlcoholInf;
+    private String AlcoholType;
+    private String Comment;
+    private boolean Sync;
+
+    private int IsTankClean;
+    private int IsPumpClean;
+    private int IsEnvClean;
+    private int IsWeighterClean;
+
+
+    @Generated(hash = 1621190220)
+    public MilkInf(Long Id, long TankId, int TankFilled, String MilkType, int Liter,
+            boolean LeaveMilk, boolean AntibioticInf, double Temp, double RTemp,
+            boolean AlcoholInf, String AlcoholType, String Comment, boolean Sync,
+            int IsTankClean, int IsPumpClean, int IsEnvClean, int IsWeighterClean) {
+        this.Id = Id;
+        this.TankId = TankId;
+        this.TankFilled = TankFilled;
+        this.MilkType = MilkType;
+        this.Liter = Liter;
+        this.LeaveMilk = LeaveMilk;
+        this.AntibioticInf = AntibioticInf;
+        this.Temp = Temp;
+        this.RTemp = RTemp;
+        this.AlcoholInf = AlcoholInf;
+        this.AlcoholType = AlcoholType;
+        this.Comment = Comment;
+        this.Sync = Sync;
+        this.IsTankClean = IsTankClean;
+        this.IsPumpClean = IsPumpClean;
+        this.IsEnvClean = IsEnvClean;
+        this.IsWeighterClean = IsWeighterClean;
     }
+
 
     @Generated(hash = 1049425218)
     public MilkInf() {
     }
-    
+
+
     @Override
     public String toString() {
-        return "Çiftlik: " + getFarm() + "- Süt: "+ getMilktype() + "- Miktar: " + getTank_liter() + "- Aldım: " + (getLeave_milk()?"Hayır":"Evet") + "- Tank: " + getTankN();
+        return
+                "Tank=" + TankFilled +
+                ", Süt Tipi='" + MilkType + '\'' +
+                ", Miktar=" + Liter +
+                ", Bıraktım =" + (LeaveMilk?"E":"H") +
+                ", İlaç=" + (AntibioticInf?"E":"H") +
+                ", Sıcaklık=" + Temp +
+                ", RSıcaklık=" + RTemp +
+                ", Alkol=" + (AlcoholInf?"E":"H");
     }
 
-    public Long getMilkId() {
-        return this.milkId;
+
+    public Long getId() {
+        return this.Id;
     }
 
-    public void setMilkId(Long milkId) {
-        this.milkId = milkId;
+
+    public void setId(Long Id) {
+        this.Id = Id;
     }
 
-    public long getFarm() {
-        return this.farm;
+
+    public long getTankId() {
+        return this.TankId;
     }
 
-    public void setFarm(long farm) {
-        this.farm = farm;
+
+    public void setTankId(long TankId) {
+        this.TankId = TankId;
     }
 
-    public long getTank_id() {
-        return this.tank_id;
+
+    public int getTankFilled() {
+        return this.TankFilled;
     }
 
-    public void setTank_id(long tank_id) {
-        this.tank_id = tank_id;
+
+    public void setTankFilled(int TankFilled) {
+        this.TankFilled = TankFilled;
     }
 
-    public int getTankN() {
-        return this.tankN;
+
+    public String getMilkType() {
+        return this.MilkType;
     }
 
-    public void setTankN(int tankN) {
-        this.tankN = tankN;
+
+    public void setMilkType(String MilkType) {
+        this.MilkType = MilkType;
     }
 
-    public long getDuty() {
-        return this.duty;
+
+    public int getLiter() {
+        return this.Liter;
     }
 
-    public void setDuty(long duty) {
-        this.duty = duty;
+
+    public void setLiter(int Liter) {
+        this.Liter = Liter;
     }
 
-    public String getMilktype() {
-        return this.milktype;
+
+    public boolean getLeaveMilk() {
+        return this.LeaveMilk;
     }
 
-    public void setMilktype(String milktype) {
-        this.milktype = milktype;
+
+    public void setLeaveMilk(boolean LeaveMilk) {
+        this.LeaveMilk = LeaveMilk;
     }
 
-    public int getTank_liter() {
-        return this.tank_liter;
+
+    public boolean getAntibioticInf() {
+        return this.AntibioticInf;
     }
 
-    public void setTank_liter(int tank_liter) {
-        this.tank_liter = tank_liter;
+
+    public void setAntibioticInf(boolean AntibioticInf) {
+        this.AntibioticInf = AntibioticInf;
     }
 
-    public boolean getLeave_milk() {
-        return this.leave_milk;
-    }
-
-    public void setLeave_milk(boolean leave_milk) {
-        this.leave_milk = leave_milk;
-    }
-
-    public boolean getAntibiotic_inf() {
-        return this.antibiotic_inf;
-    }
-
-    public void setAntibiotic_inf(boolean antibiotic_inf) {
-        this.antibiotic_inf = antibiotic_inf;
-    }
 
     public double getTemp() {
-        return this.temp;
+        return this.Temp;
     }
 
-    public void setTemp(double temp) {
-        this.temp = temp;
+
+    public void setTemp(double Temp) {
+        this.Temp = Temp;
     }
 
-    public double getR_temp() {
-        return this.r_temp;
+
+    public double getRTemp() {
+        return this.RTemp;
     }
 
-    public void setR_temp(double r_temp) {
-        this.r_temp = r_temp;
+
+    public void setRTemp(double RTemp) {
+        this.RTemp = RTemp;
     }
 
-    public boolean getAlcohol() {
-        return this.alcohol;
+
+    public boolean getAlcoholInf() {
+        return this.AlcoholInf;
     }
 
-    public void setAlcohol(boolean alcohol) {
-        this.alcohol = alcohol;
+
+    public void setAlcoholInf(boolean AlcoholInf) {
+        this.AlcoholInf = AlcoholInf;
     }
 
-    public String getAlcoholtype() {
-        return this.alcoholtype;
+
+    public String getAlcoholType() {
+        return this.AlcoholType;
     }
 
-    public void setAlcoholtype(String alcoholtype) {
-        this.alcoholtype = alcoholtype;
+
+    public void setAlcoholType(String AlcoholType) {
+        this.AlcoholType = AlcoholType;
     }
+
 
     public String getComment() {
-        return this.comment;
+        return this.Comment;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+
+    public void setComment(String Comment) {
+        this.Comment = Comment;
+    }
+
+
+    public boolean getSync() {
+        return this.Sync;
+    }
+
+
+    public void setSync(boolean Sync) {
+        this.Sync = Sync;
+    }
+
+
+    public int getIsTankClean() {
+        return this.IsTankClean;
+    }
+
+
+    public void setIsTankClean(int IsTankClean) {
+        this.IsTankClean = IsTankClean;
+    }
+
+
+    public int getIsPumpClean() {
+        return this.IsPumpClean;
+    }
+
+
+    public void setIsPumpClean(int IsPumpClean) {
+        this.IsPumpClean = IsPumpClean;
+    }
+
+
+    public int getIsEnvClean() {
+        return this.IsEnvClean;
+    }
+
+
+    public void setIsEnvClean(int IsEnvClean) {
+        this.IsEnvClean = IsEnvClean;
+    }
+
+
+    public int getIsWeighterClean() {
+        return this.IsWeighterClean;
+    }
+
+
+    public void setIsWeighterClean(int IsWeighterClean) {
+        this.IsWeighterClean = IsWeighterClean;
     }
 }
