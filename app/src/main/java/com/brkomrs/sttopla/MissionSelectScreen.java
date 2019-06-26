@@ -73,8 +73,6 @@ public class MissionSelectScreen extends AppCompatActivity{
         }
 
 
-        //getting duties for entrance
-        getUndoneDutiesToSpinner(helperFunctions.haveConnection(MissionSelectScreen.this));
 
         //going next activity with selected duty
         goSelected.setOnClickListener(new View.OnClickListener() {
@@ -88,13 +86,33 @@ public class MissionSelectScreen extends AppCompatActivity{
 
 
 
-        helperFunctions.sendPost(daoSession);
+        if(helperFunctions.haveConnection(MissionSelectScreen.this)){
+            helperFunctions.sendPost(daoSession);
+            try {
+                helperFunctions.getDatasFromServer(daoSession, user_id +"");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        //getting duties for entrance
+        getUndoneDutiesToSpinner(helperFunctions.haveConnection(MissionSelectScreen.this));
+
 
         //swipe arrangement
         swipes.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                helperFunctions.sendPost(daoSession);
+                if(helperFunctions.haveConnection(MissionSelectScreen.this)){
+                    helperFunctions.sendPost(daoSession);
+                    try {
+                        helperFunctions.getDatasFromServer(daoSession, user_id +"");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 getUndoneDutiesToSpinner(helperFunctions.haveConnection(MissionSelectScreen.this));
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -143,7 +161,7 @@ public class MissionSelectScreen extends AppCompatActivity{
     //duty getter fuction
     private void getUndoneDutiesToSpinner(boolean isConnected) {
         if(!isConnected){
-            Toast.makeText(MissionSelectScreen.this,getString(R.string.connection_err_str), Toast.LENGTH_LONG).show();
+            Toast.makeText(MissionSelectScreen.this,"Çevrimdışı veri kullanılıyor", Toast.LENGTH_LONG).show();
         }
         duties = new ArrayList<>();
         ArrayAdapter<DutyInf> dataAdapterMissions;

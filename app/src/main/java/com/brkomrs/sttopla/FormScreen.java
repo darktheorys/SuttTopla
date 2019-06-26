@@ -290,7 +290,7 @@ public class FormScreen extends AppCompatActivity {
         milktypes.add("Keci");
         milktypes.add("Koyun");
         milktypes.add("Pastorize Sut");
-        milktypes.add("Peyniraltı Suyu");
+        milktypes.add("Peyniralti Suyu");
         milktypes.add("Su");
         milktypes.add("Krema");
 
@@ -327,9 +327,9 @@ public class FormScreen extends AppCompatActivity {
         //if alcohol exists, app will make visible a spinner to choose color
         final ArrayList<String> colors = new ArrayList<>();
         colors.add("Mavi");
-        colors.add("Yeşil");
-        colors.add("Mavi - Yeşil");
-        colors.add("Sarı");
+        colors.add("Yesil");
+        colors.add("Mavi - Yesil");
+        colors.add("Sari");
 
         ArrayAdapter<String> dataAdapterAlcoholTypes = new ArrayAdapter<>(FormScreen.this, android.R.layout.simple_spinner_item, colors);
         dataAdapterAlcoholTypes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -490,10 +490,10 @@ public class FormScreen extends AppCompatActivity {
 
         if((liter_input == 0 && !leavingMilk)){       //one that take all the milk can pass with 0 liter
             Toast.makeText(FormScreen.this, "0 Litre Olamaz, Tekrar Deneyin.", Toast.LENGTH_LONG).show();
+        } else if ((leavingMilk && !(detail_badmilk || detail_commentbox)) || (comment.equalsIgnoreCase("") && leavingMilk && detail_commentbox) ||  (!leavingMilk && !noTestRequired && (!clicked[0] || !clicked[1] || !clicked[2] || !clicked[3]))) {
+            Toast.makeText(FormScreen.this, getString(R.string.empty_area_err_str), Toast.LENGTH_LONG).show();
         }else if (test_antibiotic && !leavingMilk) {
             Toast.makeText(FormScreen.this, getString(R.string.antibiotic_err), Toast.LENGTH_LONG).show();
-        } else if ((leavingMilk && !(detail_badmilk || detail_commentbox)) || (comment.equalsIgnoreCase("") && leavingMilk && detail_commentbox) ||  (!leavingMilk && (!clicked[0] || !clicked[1] || !clicked[2] || !clicked[3]))) {
-            Toast.makeText(FormScreen.this, getString(R.string.empty_area_err_str), Toast.LENGTH_LONG).show();
         } else if (!checkTankLimits()) {
             Toast.makeText(FormScreen.this, getString(R.string.tank_limit_exceeded_str), Toast.LENGTH_LONG).show();
         } else if(!checkMilkTypes()){

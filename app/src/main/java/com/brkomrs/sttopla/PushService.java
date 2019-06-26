@@ -18,13 +18,12 @@ import java.util.TimerTask;
 public class PushService extends Service {
 
     Context context ;
-    Notification notification;
     Timer timer;
 
     @Override
     public void onCreate() {
         context = getApplicationContext();
-        Toast.makeText(this, "Servis Çalıştı.Bu Mesaj Servis Class'dan", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Servis Çalıştı.", Toast.LENGTH_LONG).show();
 
         timer = new Timer();
         timer.schedule(new TimerTask() {  //every 10 minutes service do task.
@@ -43,8 +42,8 @@ public class PushService extends Service {
     }
 
     @Override
-    public void onDestroy() {//Servis stopService(); metoduyla durdurulduğunda çalışır
+    public void onDestroy() {
         timer.cancel();
-        Toast.makeText(this, "Servis Durduruldu.Bu Mesaj Servis Class'dan", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Servis Durduruldu.", Toast.LENGTH_LONG).show();
     }
 }

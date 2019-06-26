@@ -310,7 +310,7 @@ public class helperFunctions {
             sb.append(line + "\n");
         }
         br.close();
-
+        urlConnection.disconnect();
         String jsonString = sb.toString();
         if(jsonString.equalsIgnoreCase("")){
             return null;
