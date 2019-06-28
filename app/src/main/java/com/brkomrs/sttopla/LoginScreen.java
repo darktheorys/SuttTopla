@@ -1,26 +1,26 @@
 package com.brkomrs.sttopla;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.Toast;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.content.Intent;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.brkomrs.sttopla.database.DaoSession;
 import com.brkomrs.sttopla.database.UserInf;
+import com.brkomrs.sttopla.necessary.helperFunctions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.File;
-
-import com.brkomrs.sttopla.necessary.helperFunctions;
+import java.io.IOException;
 
 public class LoginScreen extends AppCompatActivity {
     public File configfile,db;
@@ -170,18 +170,22 @@ public class LoginScreen extends AppCompatActivity {
 
     //database getter place
     public boolean getValidity(String id){
-
+        if(id.equalsIgnoreCase("")) return false;
+        //if a local user exists it returns directly true
         UserInf user = helperFunctions.getUser(daoSession, Long.parseLong(id));
         if(user != null){
             return true;
         }
 
-        String url = "http://192.168.182.225/sserver/api/users/" + id;
+
+        //if no id is in local db, then app checks for server
+        String url = helperFunctions.prefix + "sserver/api/users/" + id;
 
         try {
+            //gets specicific user from server
             JSONObject jo = helperFunctions.getJSONObjectFromURL(url);
-            //Log.e("@@@@", jo.toString());
             user = helperFunctions.parseUser(jo);
+            //if user is null then it means we dont have a record
             if(user != null){
                 helperFunctions.addUser(daoSession, user);
                 return true;

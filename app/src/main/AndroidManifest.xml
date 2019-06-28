@@ -16,7 +16,7 @@
         <activity
             android:name=".SplashScreen"
             android:configChanges="screenSize|orientation"
-            android:screenOrientation="sensorLandscape"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +38,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".FormScreen"
-            android:label="@string/title_activity_missionselect"
+            android:label="@string/title_activity_formscreen"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
 

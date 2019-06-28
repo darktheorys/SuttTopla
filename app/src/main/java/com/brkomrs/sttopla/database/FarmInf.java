@@ -3,8 +3,6 @@ package com.brkomrs.sttopla.database;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 
-import java.io.Serializable;
-
 @Entity (nameInDb = "dbo.Farms")
 public class FarmInf{
 

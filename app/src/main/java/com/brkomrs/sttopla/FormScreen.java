@@ -1,8 +1,5 @@
 package com.brkomrs.sttopla;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,14 +16,25 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.brkomrs.sttopla.database.*;
-import com.brkomrs.sttopla.necessary.*;
 
-import java.text.Normalizer;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.brkomrs.sttopla.database.DaoSession;
+import com.brkomrs.sttopla.database.DutyInf;
+import com.brkomrs.sttopla.database.MilkInf;
+import com.brkomrs.sttopla.database.TankInf;
+import com.brkomrs.sttopla.database.TruckInf;
+import com.brkomrs.sttopla.database.milk_spin;
+import com.brkomrs.sttopla.necessary.helperFunctions;
+
 import java.util.ArrayList;
 
 public class FormScreen extends AppCompatActivity {
-    private Spinner alcohol_type,milktype,milktemp_spin, refracTemp_spin, basket_spin;
+    private Spinner alcohol_type;
+    private Spinner milktype;
+    private Spinner milktemp_spin;
+    private Spinner refracTemp_spin;
     private LinearLayout testLayout;
     private DaoSession ses;
     private long farmid, truck_id,duty_id;
@@ -65,7 +73,7 @@ public class FormScreen extends AppCompatActivity {
         ses = ((dbHelper) getApplication()).getDaoSession();
 
         //widged declarations
-        basket_spin = findViewById(R.id.basket_spin);
+        Spinner basket_spin = findViewById(R.id.basket_spin);
         testLayout = findViewById(R.id.tests_lay);
         milktemp_spin = findViewById(R.id.temp_spin);
         refracTemp_spin = findViewById(R.id.refrac_temp_spin);
@@ -286,11 +294,11 @@ public class FormScreen extends AppCompatActivity {
 
         //milk types spinner, if user chooses milk test inputs will be visible
         ArrayList<String> milktypes = new ArrayList<>();
-        milktypes.add("Inek");
-        milktypes.add("Keci");
-        milktypes.add("Koyun");
-        milktypes.add("Pastorize Sut");
-        milktypes.add("Peyniralti Suyu");
+        milktypes.add("İnek Sütü");
+        milktypes.add("Keçi Sütü");
+        milktypes.add("Koyun Sütü");
+        milktypes.add("Pastörize Sut");
+        milktypes.add("Peyniraltı Suyu");
         milktypes.add("Su");
         milktypes.add("Krema");
 
@@ -327,9 +335,9 @@ public class FormScreen extends AppCompatActivity {
         //if alcohol exists, app will make visible a spinner to choose color
         final ArrayList<String> colors = new ArrayList<>();
         colors.add("Mavi");
-        colors.add("Yesil");
-        colors.add("Mavi - Yesil");
-        colors.add("Sari");
+        colors.add("Yeşil");
+        colors.add("Mavi - Yeşil");
+        colors.add("Sarı");
 
         ArrayAdapter<String> dataAdapterAlcoholTypes = new ArrayAdapter<>(FormScreen.this, android.R.layout.simple_spinner_item, colors);
         dataAdapterAlcoholTypes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -369,11 +377,8 @@ public class FormScreen extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 clicked[3] = true;
-                if(i == R.id.antibiotic_e_radio){
-                    test_antibiotic = true;
-                }else{
-                    test_antibiotic = false;
-                }
+                test_antibiotic = i == R.id.antibiotic_e_radio;
+
             }
         });
 
@@ -452,7 +457,7 @@ public class FormScreen extends AppCompatActivity {
                     milk.setAlcoholInf(false);
                 }
                 milk.setAlcoholType(test_alcohol);
-                milk.setAntibioticInf(test_antibiotic);
+                milk.setAntibioticInf(detail_badmilk);
                 milk.setTemp(test_temperature);
                 milk.setRTemp(test_Rtemperature);
             }
@@ -550,6 +555,7 @@ public class FormScreen extends AppCompatActivity {
                 beforesub.cancel();
 
                 updateDutyAsDone();
+                if(helperFunctions.haveConnection(getApplicationContext())) helperFunctions.sendPost(ses);
                 finish();
             }
         });
@@ -590,7 +596,7 @@ public class FormScreen extends AppCompatActivity {
             showErrorAndExit();
             Log.e("@@@@@@@@", "milktype");
          }
-        return false;
+        return true;
     }
 
     //a checker method for tanks

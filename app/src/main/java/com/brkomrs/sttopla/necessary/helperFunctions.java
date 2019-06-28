@@ -4,18 +4,31 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.brkomrs.sttopla.PushService;
 import com.brkomrs.sttopla.R;
-import com.brkomrs.sttopla.database.*;
+import com.brkomrs.sttopla.database.DaoSession;
+import com.brkomrs.sttopla.database.DutyInf;
+import com.brkomrs.sttopla.database.DutyInfDao;
+import com.brkomrs.sttopla.database.FarmInf;
+import com.brkomrs.sttopla.database.FarmInfDao;
+import com.brkomrs.sttopla.database.MilkInf;
+import com.brkomrs.sttopla.database.MilkInfDao;
+import com.brkomrs.sttopla.database.TankInf;
+import com.brkomrs.sttopla.database.TankInfDao;
+import com.brkomrs.sttopla.database.TruckInf;
+import com.brkomrs.sttopla.database.TruckInfDao;
+import com.brkomrs.sttopla.database.UserInf;
+import com.brkomrs.sttopla.database.UserInfDao;
 
-import org.apache.http.HttpStatus;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.greenrobot.greendao.query.QueryBuilder;
-import org.greenrobot.greendao.query.WhereCondition;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,21 +38,18 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 public class helperFunctions {
+
+    public static String prefix = "http://192.168.182.67/";
 
     helperFunctions(){
 
@@ -73,6 +83,18 @@ public class helperFunctions {
         return wifi || mobile;
     }
 
+    /**
+     *
+     * @param daoSession
+     * @param milk
+     */
+    private static void addMilk(DaoSession daoSession, MilkInf milk) {
+        QueryBuilder<MilkInf> q = daoSession.getMilkInfDao().queryBuilder();
+        List<MilkInf> list = q.where(MilkInfDao.Properties.Id.eq(milk.getId())).list();
+        if(!(list.size() > 0)){
+            daoSession.getMilkInfDao().insert(milk);
+        }
+    }
 
 
 
@@ -106,8 +128,11 @@ public class helperFunctions {
      * @param daoSession current db session
      */
     public static void addDuty(DaoSession daoSession, DutyInf duty){
+
+        //Log.e("@@@@@@@@", duty.getFarm().getFarmName());
         QueryBuilder<DutyInf> q = daoSession.getDutyInfDao().queryBuilder();
         List<DutyInf> list = q.where(DutyInfDao.Properties.Id.eq(duty.getId())).list();
+        //Log.e("@@@@@@@@@", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         if(!(list.size() > 0)){
             Log.e("Added ",  duty.getId() + " added");
             daoSession.getDutyInfDao().insert(duty);
@@ -285,8 +310,12 @@ public class helperFunctions {
 
         if(list.size() > 0){
            TruckInf tr = list.get(0).getTruck();
-            tr.resetDuties();
-            return tr.getDuties();
+           try {
+               tr.resetDuties();
+               return tr.getDuties();
+           }catch (Exception e){
+               return new ArrayList<>();
+           }
         }
         return new ArrayList<>();
     }
@@ -297,8 +326,8 @@ public class helperFunctions {
         URL url = new URL(urlString);
         urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod("GET");
-        urlConnection.setReadTimeout(5000 /* milliseconds */ );
-        urlConnection.setConnectTimeout(15000 /* milliseconds */ );
+        urlConnection.setReadTimeout(3000 /* milliseconds */ );
+        urlConnection.setConnectTimeout(5000 /* milliseconds */ );
         urlConnection.setDoOutput(true);
         urlConnection.connect();
 
@@ -343,7 +372,7 @@ public class helperFunctions {
             truck.setPlate(jo.get("Plate").toString());
             JSONArray ja = new JSONArray(jo.get("Duties").toString());
 
-            parseDuties(ja, truck.getId(), ses);
+            parseDuties(ja, ses);
 
             return truck;
         }
@@ -351,17 +380,18 @@ public class helperFunctions {
 
     }
 
-    public static void parseDuties(JSONArray ja, long truck_id, DaoSession ses) throws Exception {
+    public static void parseDuties(JSONArray ja,  DaoSession ses) throws Exception {
         if(ja != null){
             for(int i = 0; i < ja.length(); i++){
                 DutyInf duty = new DutyInf();
                 JSONObject jo = (JSONObject) ja.get(i);
                 duty.setId(Long.parseLong(jo.get("Id").toString()));
-                duty.setFarmId(Long.parseLong(((JSONObject)jo.get("Farm")).get("Id").toString()));
+                duty.setFarmId(Long.parseLong((jo.get("FarmId")).toString()));
                 parseAddFarm(((JSONObject)jo.get("Farm")), ses);
-                duty.setTruckId(truck_id);
+                duty.setTruckId(Long.parseLong((jo.get("TruckId")).toString()));
                 duty.setSync(true);
                 duty.setDone(jo.get("Done").toString().equals("true"));
+                Log.e("duty", jo.toString());
                 addDuty(ses, duty);
 
             }
@@ -378,7 +408,7 @@ public class helperFunctions {
 
 
     public static void getDatasFromServer(DaoSession daoSession, String id_str ) throws Exception {
-        String url = "http://192.168.182.225/sserver/api/trucks/";
+        String url = prefix +"sserver/api/trucks/";
         long id = Long.parseLong(id_str);
         QueryBuilder<UserInf> q = daoSession.getUserInfDao().queryBuilder();
         List<UserInf> users = q.where(UserInfDao.Properties.Id.eq(id)).list();
@@ -403,7 +433,7 @@ public class helperFunctions {
      * @param ses   daosession
      */
     public static void sendPost(final DaoSession ses){
-        final String urlAdress = "http://192.168.182.225/sserver/api/milks/add";
+        final String urlAdress = prefix+"sserver/api/milks/add";
         List<MilkInf> milks = getAllUnsyncMilks(ses);
         for(final MilkInf each : milks) {
 
@@ -411,13 +441,6 @@ public class helperFunctions {
                 @Override
                 public void run() {
                     try {
-                        URL url = new URL(urlAdress);
-                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                        conn.setRequestMethod("POST");
-                        conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                        conn.setRequestProperty("Accept", "application/json");
-                        conn.setDoOutput(true);
-                        conn.setDoInput(true);
 
                         JSONObject jsonParam = new JSONObject();
                         jsonParam.put("TankFilled", each.getTankFilled());
@@ -437,26 +460,37 @@ public class helperFunctions {
                         jsonParam.put("IsTankClean", each.getIsTankClean());
                         jsonParam.put("IsPumpClean", each.getIsPumpClean());
                         jsonParam.put("IsWeighterClean", each.getIsWeighterClean());
-                        //Log.i("JSON_MILK", jsonParam.toString());
 
-                        DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-                        //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
-                        os.writeBytes(jsonParam.toString());
+                        HttpClient httpClient = new DefaultHttpClient();
+                        int responseString = 0;
+                        try {
+                            HttpPost request = new HttpPost(urlAdress);
+                            StringEntity params =new StringEntity(jsonParam.toString(), "UTF-8");
+                            request.addHeader("content-type", "application/json");
+                            request.setEntity(params);
+                            HttpResponse response = httpClient.execute(request);
 
-                        os.flush();
-                        os.close();
-                        if(conn.getResponseCode() == 200){
+                            responseString = response.getStatusLine().getStatusCode();
+
+                        }catch (Exception ex) {
+                            ex.printStackTrace();
+                            // handle exception here
+                        } finally {
+                            httpClient.getConnectionManager().shutdown();
+                        }
+
+                        if(responseString == 200){
                             each.setSync(true);
                             ses.getMilkInfDao().update(each);
                             updateDutyAndTank(ses, each.getTankId());
                         }
-                        Log.i("STATUS_MILK", String.valueOf(conn.getResponseCode()));
-                        conn.disconnect();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.i("STATUS_MILK", String.valueOf(responseString));
+
+
+                }catch (Exception e){
+
                     }
-                }
-            });
+            }});
 
             thread.start();
         }
@@ -475,7 +509,7 @@ public class helperFunctions {
         truck.resetDuties();
         for ( final DutyInf each : truck.getDuties()){
             if(!each.getSync()){
-                final String urlAdress = "http://192.168.182.225/sserver/api/duties/" + each.getId();
+                final String urlAdress = prefix + "sserver/api/duties/" + each.getId();
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -495,6 +529,7 @@ public class helperFunctions {
                             Date date = new Date();
                             jsonParam.put("Date", dateFormat.format(date));
                             jsonParam.put("TruckId", each.getTruckId());
+                            jsonParam.put("FarmId", each.getFarmId());
 
                             Log.i("JSON_DUTY", jsonParam.toString());
 
@@ -523,7 +558,7 @@ public class helperFunctions {
         truck.resetTanks();
         for ( final TankInf each : truck.getTanks()){
             if(!each.getSync()){
-                final String urlAdress = "http://192.168.182.225/sserver/api/tanks/" + each.getId();
+                final String urlAdress = prefix+ "sserver/api/tanks/" + each.getId();
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -586,10 +621,42 @@ public class helperFunctions {
             tank.setLimit(Integer.parseInt(jo_temp.get("Limit").toString()));
             tank.setFullness(Integer.parseInt(jo_temp.get("Fullness").toString()));
             tank.setNTank(Integer.parseInt(jo_temp.get("NTank").toString()));
-
             addTank(ses, tank);
+            JSONArray ja_milks = new JSONArray(jo_temp.get("Milks").toString());
+            parseMilks(ja_milks,ses, tank.getId());
         }
     }
+
+    private static void parseMilks(JSONArray ja_milks, DaoSession ses, long id) throws  Exception{
+        for(int i = 0; i < ja_milks.length() ; i++){
+            JSONObject jo = new JSONObject(ja_milks.get(i).toString());
+            MilkInf milk = new MilkInf();
+            milk.setIsWeighterClean(Integer.parseInt(jo.get("IsWeighterClean").toString()));
+            milk.setIsTankClean(Integer.parseInt(jo.get("IsTankClean").toString()));
+            milk.setIsPumpClean(Integer.parseInt(jo.get("IsPumpClean").toString()));
+            milk.setIsEnvClean(Integer.parseInt(jo.get("IsEnvClean").toString()));
+            milk.setSync(true);
+            milk.setTankFilled(Integer.parseInt(jo.get("TankFilled").toString()));
+            milk.setLeaveMilk(jo.get("LeaveMilk").toString().equalsIgnoreCase("true"));
+            milk.setLiter(Integer.parseInt(jo.get("Liter").toString()));
+            milk.setTankId(id);
+            milk.setRTemp(Double.parseDouble(jo.get("RTemp").toString()));
+            milk.setAntibioticInf(jo.get("AntibioticInf").toString().equalsIgnoreCase("true"));
+            milk.setAlcoholInf(jo.get("AlcoholInf").toString().equalsIgnoreCase("true"));
+            milk.setMilkType(jo.get("MilkType").toString());
+            milk.setComment(jo.get("Comment").toString());
+            milk.setTemp(Double.parseDouble(jo.get("Temp").toString()));
+            milk.setAlcoholType(jo.get("AlcoholType").toString());
+            milk.setId(Long.parseLong(jo.get("Id").toString()));
+            if(milk.getTankFilled() != 0){
+                addMilk(ses,milk);
+            }
+
+
+        }
+
+    }
+
 
 
 
